@@ -1,0 +1,18 @@
+.top-bar-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar-button span {
+  color: white;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.top-bar-button-icon {
+  color: white;
+  width: 8px;
+  padding-right: 15px;
+  padding-left: 5px;
+}

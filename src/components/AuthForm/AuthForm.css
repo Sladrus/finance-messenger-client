@@ -1,0 +1,27 @@
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+}
+
+.auth-form .logo {
+  border-radius: 25px;
+  width: 150px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.auth-form-title {
+  color: white;
+  font-size: 34px;
+  font-weight: 600;
+  padding: 40px 40px 10px 40px;
+}
+
+.auth-form-subtitle {
+  color: #868686;
+  font-size: 16px;
+  font-weight: 400;
+  padding-bottom: 40px;
+}

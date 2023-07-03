@@ -1,0 +1,28 @@
+.conversation-list {
+  grid-column-start: 1;
+  grid-column-start: 1;
+  grid-row-start: 3;
+  grid-row-end: 3;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  background: #101b25;
+}
+
+.conversation-list-container {
+  color: #eaeaeb;
+}
+
+.conversation-list::-webkit-scrollbar {
+  background-color: #778d9f57;
+  width: 5px; /* Ширина скроллбара */
+}
+
+.conversation-list::-webkit-scrollbar-track {
+  background: #101b25;
+}
+
+.conversation-list::-webkit-scrollbar-thumb {
+  background-color: #778d9f;
+  border-radius: 10px;
+}

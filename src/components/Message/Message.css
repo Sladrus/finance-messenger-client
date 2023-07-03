@@ -1,0 +1,214 @@
+.message {
+  display: flex;
+  flex-direction: column;
+  animation: fade-in 0.3s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  } /* Начальные значения */
+  to {
+    opacity: 1;
+    transform: none;
+  } /* Конечные значения */
+}
+
+.message-photo {
+  border-radius: 20px;
+  object-fit: fill;
+}
+
+.message .bubble-container {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 300;
+  display: flex;
+  justify-content: start;
+}
+
+.message.end .bubble-container .bubble-avatar::after {
+  content: '';
+  border-bottom: 10px solid #111f30;
+  border-left: 5px solid transparent;
+}
+
+.message .bubble-container:last-child {
+  padding-bottom: 2px;
+}
+
+.message.end .bubble-container:last-child {
+  /* padding-bottom: 5px; */
+}
+
+.message.mine .bubble-container {
+  justify-content: flex-end;
+}
+
+.message .bubble-container .bubble {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.message .bubble-container .bubble .bubble-title {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2px;
+  padding-left: 5px;
+}
+
+.message.mine .bubble-container .bubble .bubble-title {
+  padding-top: 0;
+  padding-left: 5px;
+}
+
+.message .bubble-container .bubble pre {
+  margin: 0;
+  padding: 0;
+  padding-top: 2px;
+  padding-bottom: 4px;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  white-space: pre-wrap;
+}
+
+.message .bubble-container .bubble .bubble-time {
+  position: relative;
+  font-size: 12px;
+  right: 0px;
+  font-weight: 400;
+  text-align: right;
+  color: #778d9f;
+  padding-left: 15px;
+}
+
+.message.mine .bubble-container .bubble .bubble-time {
+  color: #729bbd;
+  white-space: nowrap;
+}
+
+.message .bubble-container .bubble-avatar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+  width: 45px;
+}
+
+.message.end .bubble-container .bubble-avatar .bubble-image {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0;
+  background-color: white;
+}
+
+.message.end .bubble-container .bubble {
+  border-bottom-left-radius: 0px;
+}
+
+.message .bubble-container .bubble .bubble-name {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgb(248, 185, 66);
+}
+
+.bubble-unread {
+  /* width: 10px;
+  height: 10px; */
+  padding: 0px 5px;
+  color: #73b9f3;
+  font-weight: 500;
+  font-size: 12px;
+  /* border-radius: 50%; */
+}
+
+.message .bubble-container .bubble {
+  /* display: flex;
+  flex-direction: column; */
+  background: #111f30;
+  padding: 4px 10px;
+  border-radius: 15px;
+  max-width: 75%;
+  min-width: 70px;
+
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.message .bubble-container .bubble-photo {
+  display: flex;
+  flex-direction: column;
+  background: #111f30;
+  border-radius: 15px;
+  max-width: 75%;
+  min-width: 70px;
+
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.message .bubble-container .bubble-photo .message-photo {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.message .bubble-container .bubble-photo pre {
+  margin: 0;
+  padding: 5px 15px 7px 15px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  white-space: pre-wrap;
+}
+
+.message .bubble-container .bubble-photo .bubble-photo-time {
+  position: relative;
+  font-size: 12px;
+  right: 0px;
+  font-weight: 400;
+  text-align: right;
+  color: #778d9f;
+  padding: 0 15px;
+}
+
+.message.mine .bubble-container .bubble {
+  background: #255179;
+  color: white;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 0px;
+}
+
+.message.mine .bubble-container::after {
+  content: '';
+  border-bottom: 10px solid #255179;
+  border-right: 5px solid transparent;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #383636; /* Black */
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
+}

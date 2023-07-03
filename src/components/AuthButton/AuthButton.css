@@ -1,0 +1,20 @@
+.auth-button {
+  color: #73b9f3;
+
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 400px;
+  border-radius: 10px;
+  margin: 20px 10px 0px 10px;
+  outline: none;
+  word-break: break-word;
+  background-color: transparent;
+}
+
+.auth-button:hover {
+  color: white;
+  background-color: #6db8f5;
+}

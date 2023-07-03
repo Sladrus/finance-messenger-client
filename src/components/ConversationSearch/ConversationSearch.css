@@ -1,0 +1,50 @@
+.conversation-search {
+  grid-column-start: 1;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  align-items: center;
+  background: #101b25;
+  position: sticky;
+  width: calc(100% - 20px);
+  height: 30px;
+  top: 0px;
+}
+
+.conversation-search-input-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: #778d9f;
+  background: #1e2b39;
+  border-radius: 5px;
+  padding-left: 10px;
+}
+
+.conversation-search-input {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  border: none;
+  color: #778d9f;
+  background: transparent;
+  border-radius: 5px;
+  padding-left: 10px;
+}
+
+.conversation-expand-button {
+  color: #778d9f;
+  padding: 0 5px 0 15px;
+}
+
+.conversation-search-input::placeholder {
+  text-align: left;
+}
+
+.conversation-search-input:focus::placeholder {
+  text-align: left;
+}

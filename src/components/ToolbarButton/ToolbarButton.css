@@ -1,0 +1,11 @@
+.toolbar-button {
+  color: #2d3b46;
+  font-size: 24px;
+  transition: all 0.1s;
+  min-width: 50px;
+}
+
+.toolbar-button:active {
+  color: #2d3b46;
+  opacity: 0.25;
+}

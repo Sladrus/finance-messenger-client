@@ -1,0 +1,52 @@
+.conversation-bar {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  border-left: 1px solid #0000004f;
+  position: relative;
+  display: flex;
+  color: white;
+  height: 30px;
+  padding: 10px 15px;
+  background: #101b25;
+  top: 0px;
+  text-align: left;
+}
+
+.conversation-bar:hover {
+  cursor: pointer;
+}
+
+.conversation-bar .conversation-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.conversation-bar .conversation-container .conversation-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.conversation-bar .conversation-container .conversation-title-info {
+  font-size: 12px;
+  color: #778d9f;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #383636; /* Black */
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
+}

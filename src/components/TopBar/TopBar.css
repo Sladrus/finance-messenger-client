@@ -1,0 +1,14 @@
+.top-bar {
+  max-height: 50px;
+
+  max-height: 50px;
+  display: flex;
+  padding: 15px 15px;
+  border-bottom: 1px solid #0000004f;
+  display: flex;
+  background: #101b25;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  align-items: center;
+}

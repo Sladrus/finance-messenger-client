@@ -1,0 +1,43 @@
+.messenger {
+  display: grid;
+  width: 100%;
+  background: #08101d;
+
+
+  grid-template-rows: 50px 50px;
+}
+
+.container {
+  padding: 10px;
+}
+
+.topbar {
+  /* overflow-y: scroll; */
+  background: #08101d;
+  grid-row-start: 2;
+  grid-row-end: span 3;
+}
+
+.content {
+  background: #08101d;
+  grid-row-start: 2;
+  grid-row-end: span 3;
+}
+
+.footer {
+  grid-column: span 2;
+  background: #08101d;
+}
+
+.expanded,
+.collapsed {
+  transition: all 0.5s ease-out; /* Добавляем transition */
+}
+
+.expanded {
+  grid-template-columns: 700px auto;
+}
+
+.collapsed {
+  grid-template-columns: 350px auto;
+}

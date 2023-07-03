@@ -1,0 +1,133 @@
+.selected-conversation-list-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: #255179;
+  justify-content: space-between;
+}
+
+.selected-conversation-list-item:hover {
+  background: #255179;
+  cursor: pointer;
+}
+
+.conversation-list-item {
+  background: #101b25;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.conversation-status {
+  border-left: 1px solid #778d9f;
+  padding-left: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+}
+
+.conversation-status span {
+  font-size: 12px;
+  color: #778d9f;
+}
+
+.conversation-list-item:hover {
+  background: #2d3b46;
+  cursor: pointer;
+}
+
+.conversation-list-item .conversation-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 100%;
+  /* max-width: 260px; */
+  min-width: 260px;
+}
+
+.selected-conversation-list-item .conversation-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  /* max-width: 260px; */
+  min-width: 260px;
+}
+
+.conversation-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.conversation-title {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: capitalize;
+  margin: 0;
+  color: #eaeaeb;
+}
+
+.conversation-time {
+  font-size: 14px;
+  color: #778d9f;
+  margin: 0;
+  padding-left: 10px;
+}
+
+.selected-conversation-list-item .conversation-time {
+  font-size: 14px;
+  color: #729bbd;
+  margin: 0;
+  padding-left: 10px;
+}
+
+.conversation-list-item .conversation-snippet {
+  font-size: 14px;
+  color: #778d9f;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 220px;
+  display: inline-block;
+}
+
+.selected-conversation-list-item .conversation-snippet {
+  font-size: 14px;
+  color: white;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 220px;
+  display: inline-block;
+}
+
+.conversation-snippet-name {
+  padding-right: 3px;
+  color: #73b9f3;
+}
+.selected-conversation-list-item .conversation-snippet-name {
+  padding-right: 3px;
+  color: white;
+}
+
+.unread-conversation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  margin-top: 5px;
+  padding: 0 2px;
+  background: #4fa6ee;
+  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
