@@ -14,7 +14,7 @@ import ConversationListItem from '../components/ConversationListItem';
 
 // адрес сервера
 // требуется перенаправление запросов - смотрите ниже
-const SERVER_URL = 'http://localhost:5050';
+const SERVER_URL = 'http://localhost:5005';
 
 // хук принимает название комнаты
 export const useChat = (roomId) => {
