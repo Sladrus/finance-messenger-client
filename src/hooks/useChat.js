@@ -37,7 +37,7 @@ export const useChat = (roomId) => {
   const [username] = useLocalStorage('username');
 
   // useRef() используется не только для получения доступа к DOM-элементам,
-  // но и для хранения любых мутирующих значений в течение всего жизненного цикла компонента
+  // но и для хранения любых мутирующих значений в течение всего жизненного цикла компонента 
   const socketRef = useRef(null);
   const navigate = useNavigate();
 
