@@ -14,7 +14,7 @@ import ConversationListItem from '../components/ConversationListItem';
 
 // адрес сервера
 // требуется перенаправление запросов - смотрите ниже
-const SERVER_URL = 'http://localhost:5005';
+const SERVER_URL = 'http://socket.1210059-cn07082.tw1.ru';
 
 // хук принимает название комнаты
 export const useChat = (roomId) => {
@@ -37,7 +37,7 @@ export const useChat = (roomId) => {
   const [username] = useLocalStorage('username');
 
   // useRef() используется не только для получения доступа к DOM-элементам,
-  // но и для хранения любых мутирующих значений в течение всего жизненного цикла компонента 
+  // но и для хранения любых мутирующих значений в течение всего жизненного цикла компонента
   const socketRef = useRef(null);
   const navigate = useNavigate();
 
