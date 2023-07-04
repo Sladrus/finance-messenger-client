@@ -3,25 +3,20 @@ import { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import env from 'react-dotenv';
 
 import { useBeforeUnload } from './useBeforeUnload';
 import { useLocalStorage } from './useLocalStorage';
 import { useNavigate } from 'react-router-dom';
-import Message from '../components/Message';
-import ConversationListItem from '../components/ConversationListItem';
-// наши хуки
-// import { useLocalStorage, useBeforeUnload } from '';
-
-// адрес сервера
 // требуется перенаправление запросов - смотрите ниже
-const SERVER_URL = 'http://socket.1210059-cn07082.tw1.ru';
+// const SERVER_URL = 'http://socket.1210059-cn07082.tw1.ru';
 
 // хук принимает название комнаты
 export const useChat = (roomId) => {
   const notify = (text) => toast(text);
 
   // локальное состояние для пользователей
-  // const [users, setUsers] = useState([]);
+  const [user, setUser] = useState();
   const [statuses, setStatuses] = useState([]);
   const [isAuth, setAuth] = useState(false);
 
@@ -34,28 +29,40 @@ export const useChat = (roomId) => {
   // создаем и записываем в локальное хранинище идентификатор пользователя
   const [userId] = useLocalStorage('userId', roomId);
   // получаем из локального хранилища имя пользователя
-  const [username] = useLocalStorage('username');
 
-  // useRef() используется не только для получения доступа к DOM-элементам,
+  // useRef() используется не тоddлько для получения доступа к DOM-элементам,
   // но и для хранения любых мутирующих значений в течение всего жизненного цикла компонента
   const socketRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
-
-    socketRef.current = io(SERVER_URL, {
-      query: { roomId },
+    const token = localStorage.getItem('token');
+    socketRef.current = io(env.SERVER_URL, {
+      transports: ['websocket'],
+      query: token && `auth_token=${token}`,
+      auth: { roomId },
       cors: { origin: '*' },
     });
 
     // отправляем запрос на получение сообщений
     clearMessages();
 
-    socketRef.current.on('success', (user) => {
-      console.log(user);
+    socketRef.current.on('checkAuth', ({ user, logged_in }) => {
+      if (!logged_in) return setAuth(false);
+      setUser(user);
+      setAuth(true);
+    });
+
+    socketRef.current.on('success', ({ accessToken, user }) => {
+      window.localStorage.setItem('token', accessToken);
+      setUser(user);
       setAuth(true);
       navigate('/messenger');
+    });
+
+    socketRef.current.on('connect_error', (err) => {
+      console.log(err);
     });
 
     socketRef.current.on('error', (err) => {
@@ -96,19 +103,24 @@ export const useChat = (roomId) => {
     return () => {
       socketRef.current.disconnect();
     };
-  }, [roomId, userId, username, isAuth]);
+  }, [roomId, isAuth]);
 
   // функция отправки сообщения
   // принимает объект с текстом сообщения и именем отправителя
-  const sendMessage = ({ text, selectedConversation, type }) => {
+  const sendMessage = ({ user, text, selectedConversation, type }) => {
     setMessages([
       ...messages,
-      { from: { id: 5986400520 }, text, type: 'text', loading: true },
+      {
+        from: { id: user._id, first_name: user.username },
+        text,
+        type: 'text',
+        loading: true,
+      },
     ]);
     // добавляем в объект id пользователя при отправке на сервер
     socketRef.current.emit('message:add', {
       isBot: true,
-      userId,
+      user,
       text,
       selectedConversation,
       type,
@@ -117,11 +129,12 @@ export const useChat = (roomId) => {
     // socketRef.current.emit('conversation:get');
   };
 
-  const login = ({ username, password }) => {
+  const login = async ({ username, password }) => {
     socketRef.current.emit('login', { username: username, password: password });
   };
 
-  const logout = ({ username, password }) => {
+  const logout = () => {
+    localStorage.removeItem('token');
     socketRef.current.emit('logout');
   };
 
@@ -152,6 +165,7 @@ export const useChat = (roomId) => {
 
   // хук возвращает пользователей, сообщения и функции для отправки удаления сообщений
   return {
+    user,
     isAuth,
     login,
     logout,

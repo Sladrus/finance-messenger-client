@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { authRoutes, publicRoutes } from '../../routes';
 import Sidebar from '../Sidebar';
 import { useChat } from '../../hooks';
@@ -7,6 +13,7 @@ import { useChat } from '../../hooks';
 const AppRoutes = () => {
   const [selectedConversation, setSelectedConversation] = useState(0);
   const {
+    user,
     isAuth,
     login,
     logout,
@@ -20,6 +27,11 @@ const AppRoutes = () => {
     changeStage,
   } = useChat(selectedConversation);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.pathname !== '/auth') navigate(location.pathname);
+  }, []);
 
   return (
     <>
@@ -40,6 +52,7 @@ const AppRoutes = () => {
               path={path}
               element={
                 <Component
+                  user={user}
                   isLoading={isLoading}
                   statuses={statuses}
                   conversations={conversations}

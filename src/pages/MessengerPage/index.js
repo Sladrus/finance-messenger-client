@@ -2,6 +2,7 @@ import Messenger from '../../components/Messenger';
 import './MessengerPage.css';
 
 function MessengerPage({
+  user,
   isLoading,
   statuses,
   conversations,
@@ -14,6 +15,7 @@ function MessengerPage({
   return (
     <div className="messenger-page">
       <Messenger
+        user={user}
         isLoading={isLoading}
         statuses={statuses}
         conversations={conversations}

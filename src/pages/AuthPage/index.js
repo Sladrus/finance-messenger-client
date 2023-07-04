@@ -14,9 +14,9 @@ const AuthPage = ({ login }) => {
     setPassword(e.target.value);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    login({ username, password });
+    await login({ username, password });
   }
 
   return (

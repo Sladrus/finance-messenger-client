@@ -8,6 +8,7 @@ import TopBar from '../TopBar';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Messenger({
+  user,
   isLoading,
   statuses,
   conversations,
@@ -46,6 +47,7 @@ export default function Messenger({
         changeStage={changeStage}
       />
       <MessageList
+        user={user}
         isLoading={isLoading}
         selectedConversation={selectedConversation}
         messages={messages}

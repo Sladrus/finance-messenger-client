@@ -5,22 +5,19 @@ import Message from '../Message';
 import moment from 'moment';
 
 import './MessageList.css';
-const MY_USER_ID = 5986400520;
 
 export default function MessageList({
+  user,
   isLoading,
   selectedConversation,
   messages,
   sendMessage,
 }) {
+  const MY_USER_ID = user._id;
+
   const messagesEndRef = useRef(null);
-  const [unreadCount, setUnreadCount] = useState(0); // Добавляем состояние для хранения количества непрочитанных сообщений
 
   useEffect(() => {
-    const unreadMessages = messages.filter(
-      (message) => message.unread === true
-    );
-    setUnreadCount(unreadMessages.length);
     messagesEndRef.current?.scrollIntoView({
       behavior: 'smooth',
     });
@@ -87,7 +84,6 @@ export default function MessageList({
 
     return tempMessages;
   };
-
   return (
     <div className="message-list-container">
       {selectedConversation !== 0 ? (
@@ -99,11 +95,12 @@ export default function MessageList({
         </div>
       ) : (
         <div className="message-container-placeholder">
-          <span>Привет, USERNAME, выбери чат, чтобы начать общение.</span>
+          <span>{`Привет, ${user?.username}, выбери чат, чтобы начать общение.`}</span>
         </div>
       )}
       {selectedConversation !== 0 && (
         <Compose
+          user={user}
           selectedConversation={selectedConversation}
           sendMessage={sendMessage}
         />

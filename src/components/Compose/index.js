@@ -4,13 +4,12 @@ import ToolbarButton from '../ToolbarButton';
 import { faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
-export default function Compose({ selectedConversation, sendMessage }) {
+export default function Compose({ user, selectedConversation, sendMessage }) {
   const [text, setText] = useState('');
   const inputElement = useRef(null);
-
+  console.log(user);
   useEffect(() => {
     inputElement.current.focus();
-
   }, [selectedConversation]);
 
   const handleChangeText = (e) => {
@@ -22,6 +21,7 @@ export default function Compose({ selectedConversation, sendMessage }) {
     const trimmed = text.trim();
     if (trimmed) {
       sendMessage({
+        user: user,
         text: text,
         selectedConversation: selectedConversation,
         type: 'text',
