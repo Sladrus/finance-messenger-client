@@ -17,6 +17,7 @@ export default function Messenger({
   selectedConversation,
   setSelectedConversation,
   changeStage,
+  linkUserToConversation,
 }) {
   // const [username, setUsername] = useLocalStorage('username', 'John');
   const handleButtonClick = (id) => {
@@ -37,6 +38,8 @@ export default function Messenger({
         selectedConversation={selectedConversation}
         conversations={conversations}
         messagesCount={messages?.length}
+        user={user}
+        linkUserToConversation={linkUserToConversation}
       />
       <ConversationList
         isLoading={isLoading}

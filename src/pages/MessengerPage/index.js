@@ -11,6 +11,7 @@ function MessengerPage({
   selectedConversation,
   setSelectedConversation,
   changeStage,
+  linkUserToConversation,
 }) {
   return (
     <div className="messenger-page">
@@ -24,6 +25,7 @@ function MessengerPage({
         selectedConversation={selectedConversation}
         setSelectedConversation={setSelectedConversation}
         changeStage={changeStage}
+        linkUserToConversation={linkUserToConversation}
       />
     </div>
   );

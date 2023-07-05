@@ -38,7 +38,14 @@ const move = (source, destination, droppableSource, droppableDestination) => {
   return result;
 };
 
-const BoardPage = ({ statuses, updateStatuses, setStatuses }) => {
+const BoardPage = ({
+  statuses,
+  updateStatuses,
+  setStatuses,
+  setSelectedConversation,
+  linkUserToConversation,
+  user
+}) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
@@ -108,6 +115,9 @@ const BoardPage = ({ statuses, updateStatuses, setStatuses }) => {
                     provided={provided}
                     el={el}
                     isAnimating={isAnimating}
+                    setSelectedConversation={setSelectedConversation}
+                    linkUserToConversation={linkUserToConversation}
+                    user={user}
                   />
                 )}
               </Droppable>

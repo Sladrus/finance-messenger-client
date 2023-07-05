@@ -2,22 +2,66 @@ import React from 'react';
 import './BoardPageItem.css';
 import '../Message/Message.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLink, faPlus } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment-timezone';
-const BoardPageItem = ({ provided, item }) => {
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useEffect } from 'react';
+
+const BoardPageItem = ({
+  provided,
+  item,
+  setSelectedConversation,
+  linkUserToConversation,
+  user,
+}) => {
+  const [showButton, setShowButton] = useState(false);
+
+  const handleLinkButton = async (e) => {
+    e.stopPropagation();
+    if (item.user) {
+      item.user = null;
+      console.log(item);
+      await linkUserToConversation(item);
+    } else {
+      item.user = user._id;
+      await linkUserToConversation(item);
+      item.user = { username: user.username };
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setShowButton(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowButton(false);
+  };
+  const navigate = useNavigate();
+  console.log(item.createdAt);
   const dateToFormat = moment
     .unix(
       item?.messages?.length
         ? item?.messages[item?.messages?.length - 1]?.date
-        : item.createdAt
+        : moment(item.createdAt).unix()
     )
     .utcOffset(180); // Здесь вы можете использовать любую дату, которую необходимо отформатировать
   const today = moment().utcOffset(180); // Получаем текущее время, чтобы определить, является ли дата сегодняшней
   const formattedDate = dateToFormat.isSame(today, 'day')
-    ? dateToFormat.format('hh:mm')
+    ? dateToFormat.format('HH:mm')
     : dateToFormat.format('DD.MM.YY');
+
+  const navigateToConversation = (chat_id) => {
+    console.log(chat_id);
+    navigate('/messenger');
+    setSelectedConversation(chat_id);
+  };
+
   return (
     <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={() => navigateToConversation(item.chat_id)}
       className={'board-list-item'}
       ref={provided.innerRef}
       {...provided.draggableProps}
@@ -87,12 +131,28 @@ const BoardPageItem = ({ provided, item }) => {
           </div>
         </div>
       </div>
-      {item?.user && (
-        <div className="board-user">
-          <FontAwesomeIcon className="board-user-icon" icon={faUser} />
-          <span>{item?.user}</span>
-        </div>
-      )}
+      <div style={{ display: 'flex' }}>
+        {item?.user && (
+          <div className="board-user">
+            <FontAwesomeIcon className="board-user-icon" icon={faUser} />
+            <span>{item?.user.username}</span>
+          </div>
+        )}
+        {showButton && (
+          <div onClick={handleLinkButton} className="take-button">
+            <FontAwesomeIcon
+              style={item?.user && { color: '#73b9f3' }}
+              className="take-button-icon"
+              icon={faLink}
+            />
+          </div>
+        )}
+        {showButton && (
+          <div className="take-button">
+            <FontAwesomeIcon className="take-button-icon" icon={faPlus} />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

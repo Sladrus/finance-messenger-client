@@ -23,8 +23,10 @@
   padding: 10px;
   margin: 5px 0;
   border-radius: 10px;
-
+  min-height: 69px;
   box-shadow: -2px 2px 6px #050a13;
+  transition: min-height 0.1s ease-in-out;
+  overflow: hidden;
 
   /* width: 200px; */
 }
@@ -162,4 +164,22 @@
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
+}
+
+.take-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 10px;
+}
+
+.take-button-icon:hover {
+  color: #73b9f3;
+  cursor: pointer;
+}
+
+.take-button-icon {
+  color: white;
+  width: 18px;
+  height: 18px;
 }

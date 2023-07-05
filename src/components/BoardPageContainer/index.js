@@ -15,7 +15,14 @@ function chatCount(num) {
   }
 }
 
-const BoardPageContainer = ({ provided, el, isAnimating }) => {
+const BoardPageContainer = ({
+  provided,
+  el,
+  isAnimating,
+  setSelectedConversation,
+  linkUserToConversation,
+  user,
+}) => {
   return (
     <div className="board-page-list-block">
       <div className="board-page-list-container-info">
@@ -39,7 +46,15 @@ const BoardPageContainer = ({ provided, el, isAnimating }) => {
             index={index}
             isDragDisabled={isAnimating}
           >
-            {(provided2) => <BoardPageItem provided={provided2} item={item} />}
+            {(provided2) => (
+              <BoardPageItem
+                provided={provided2}
+                item={item}
+                setSelectedConversation={setSelectedConversation}
+                linkUserToConversation={linkUserToConversation}
+                user={user}
+              />
+            )}
           </Draggable>
         ))}
         {!el?.conversations?.length && <EmptyBoard />}

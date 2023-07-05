@@ -11,6 +11,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import { BOARD_ROUTE, MESSENGER_ROUTE, TASKS_ROUTE } from '../../utils/consts';
+import { useEffect } from 'react';
 
 const Sidebar = ({ logout }) => {
   const buttons = [
@@ -27,6 +28,11 @@ const Sidebar = ({ logout }) => {
 
   const location = buttons.find((o) => o.route === window.location.pathname);
   const [selectedButton, setSelectedButton] = useState(location?.id);
+  
+  useEffect(() => {
+    const location = buttons.find((o) => o.route === window.location.pathname);
+    setSelectedButton(location?.id);
+  }, [window.location.pathname]);
 
   const handleSideButtonClick = (id) => {
     setSelectedButton(id);

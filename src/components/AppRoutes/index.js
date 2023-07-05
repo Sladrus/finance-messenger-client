@@ -25,6 +25,7 @@ const AppRoutes = () => {
     updateStatuses,
     setStatuses,
     changeStage,
+    linkUserToConversation,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ const AppRoutes = () => {
                   selectedConversation={selectedConversation}
                   setSelectedConversation={setSelectedConversation}
                   changeStage={changeStage}
+                  linkUserToConversation={linkUserToConversation}
                 />
               }
               exact

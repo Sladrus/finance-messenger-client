@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Compose.css';
 import ToolbarButton from '../ToolbarButton';
-import { faPaperclip } from '@fortawesome/free-solid-svg-icons';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPaperclip,
+  faArrowRight,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
 
 export default function Compose({ user, selectedConversation, sendMessage }) {
   const [text, setText] = useState('');
@@ -32,7 +35,7 @@ export default function Compose({ user, selectedConversation, sendMessage }) {
 
   return (
     <form className="compose" onSubmit={handleSendMessage}>
-      <ToolbarButton icon={faPaperclip} />
+      <ToolbarButton icon={faPlus} />
       <input
         type="text"
         ref={inputElement}
@@ -44,6 +47,7 @@ export default function Compose({ user, selectedConversation, sendMessage }) {
       {text && (
         <ToolbarButton icon={faArrowRight} onClick={handleSendMessage} />
       )}
+      {/* {!text && <ToolbarButton icon={faPlus} />} */}
     </form>
   );
 }

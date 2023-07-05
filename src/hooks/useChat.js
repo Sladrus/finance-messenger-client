@@ -86,6 +86,8 @@ export const useChat = (roomId) => {
 
     socketRef.current.on('notification', (message) => {
       notify(message.text);
+      // socketRef.current.emit('conversation:get');
+      // socketRef.current.emit('status:get');
     });
 
     socketRef.current.emit('conversation:get');
@@ -158,6 +160,13 @@ export const useChat = (roomId) => {
     // await socketRef.current.emit('messages:get');
   };
 
+  const linkUserToConversation = async (conversation) => {
+    await socketRef?.current?.emit('conversation:update', conversation);
+    socketRef.current.emit('status:get');
+
+    // await socketRef.current.emit('messages:get');
+  };
+
   // отправляем на сервер событие "user:leave" перед перезагрузкой страницы
   useBeforeUnload(() => {
     socketRef.current.emit('user:leave', userId);
@@ -177,5 +186,6 @@ export const useChat = (roomId) => {
     updateStatuses,
     setStatuses,
     changeStage,
+    linkUserToConversation,
   };
 };

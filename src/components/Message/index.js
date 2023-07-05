@@ -4,6 +4,7 @@ import './Message.css';
 import Avatar from 'react-avatar';
 import ReplyButton from '../ReplyButton';
 import ClipLoader from 'react-spinners/ClipLoader';
+import env from 'react-dotenv';
 
 function getColorById(id) {
   // Например, простейшее правило: каждый пользователь получает свой уникальный цвет
@@ -27,7 +28,7 @@ export default function Message({
 }) {
   const [photoUrl, setPhotoUrl] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
-  const token = '5986400520:AAHd61GLW0C2TXQpSAtS4FSVkNvPWGn0MM0';
+  const token = env.BOT_TOKEN;
 
   useEffect(() => {
     if (data.type === 'photo') {

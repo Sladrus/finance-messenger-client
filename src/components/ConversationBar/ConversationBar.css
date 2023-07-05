@@ -6,6 +6,7 @@
   border-left: 1px solid #0000004f;
   position: relative;
   display: flex;
+  justify-content: space-between;
   color: white;
   height: 30px;
   padding: 10px 15px;
@@ -49,4 +50,9 @@
   border-top: 10px solid #383636; /* Black */
   border-radius: 50%;
   animation: spinner 1.5s linear infinite;
+}
+
+.conversation-toolbar {
+  display: flex;
+  align-items: center;
 }
