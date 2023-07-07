@@ -2,6 +2,7 @@ window.env = {
   "ALLUSERSPROFILE": "C:\\ProgramData",
   "AMDRMSDKPATH": "C:\\Program Files\\AMD\\RyzenMasterSDK\\",
   "APPDATA": "C:\\Users\\Yakov\\AppData\\Roaming",
+  "BOT_TOKEN": "5986400520:AAHd61GLW0C2TXQpSAtS4FSVkNvPWGn0MM0",
   "ChocolateyInstall": "C:\\ProgramData\\chocolatey",
   "ChocolateyLastPathUpdate": "133102319197299719",
   "CHROME_CRASHPAD_PIPE_NAME": "\\\\.\\pipe\\LOCAL\\crashpad_5520_RLCASYOPZAEWNDCL",

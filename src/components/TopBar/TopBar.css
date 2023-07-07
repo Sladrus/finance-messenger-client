@@ -1,6 +1,5 @@
 .top-bar {
-  max-height: 50px;
-
+  /* width: 100%; */
   max-height: 50px;
   display: flex;
   padding: 15px 15px;
@@ -11,4 +10,24 @@
   grid-column-end: 4;
   grid-row-start: 1;
   align-items: center;
+}
+
+.top-bar-button select {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  line-height: inherit;
+  z-index: 1;
+  outline: none;
+  color: white;
+  text-align: center;
+}
+
+.top-bar-button option {
+  white-space: normal;
+  outline-color: var(--select-focus);
+  background: #1f2c3b;
 }

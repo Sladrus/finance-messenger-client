@@ -44,7 +44,9 @@ const BoardPage = ({
   setStatuses,
   setSelectedConversation,
   linkUserToConversation,
-  user
+  user,
+  filter,
+  setFilter,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -100,10 +102,9 @@ const BoardPage = ({
 
   return (
     <div className="board-page">
-      <TopBar />
       <div
         style={{
-          height: 'calc(100% - 50px)',
+          height: '100%',
         }}
       >
         <div className="board-page-list">

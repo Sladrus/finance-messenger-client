@@ -21,7 +21,6 @@ const BoardPageItem = ({
     e.stopPropagation();
     if (item.user) {
       item.user = null;
-      console.log(item);
       await linkUserToConversation(item);
     } else {
       item.user = user._id;
@@ -38,7 +37,6 @@ const BoardPageItem = ({
     setShowButton(false);
   };
   const navigate = useNavigate();
-  console.log(item.createdAt);
   const dateToFormat = moment
     .unix(
       item?.messages?.length
@@ -52,7 +50,6 @@ const BoardPageItem = ({
     : dateToFormat.format('DD.MM.YY');
 
   const navigateToConversation = (chat_id) => {
-    console.log(chat_id);
     navigate('/messenger');
     setSelectedConversation(chat_id);
   };

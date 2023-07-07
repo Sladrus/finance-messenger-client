@@ -1,21 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 // получаем класс IO
 import io from 'socket.io-client';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 import env from 'react-dotenv';
 
-import { useBeforeUnload } from './useBeforeUnload';
 import { useLocalStorage } from './useLocalStorage';
 import { useNavigate } from 'react-router-dom';
-// требуется перенаправление запросов - смотрите ниже
+import { toast } from 'react-hot-toast';
+
 // const SERVER_URL = 'http://socket.1210059-cn07082.tw1.ru';
 
 // хук принимает название комнаты
 export const useChat = (roomId) => {
-  const notify = (text) => toast(text);
-
   // локальное состояние для пользователей
+  const [searchInput, setSearchInput] = useState('');
+  const [filter, setFilter] = useState({ user: '' });
   const [user, setUser] = useState();
   const [statuses, setStatuses] = useState([]);
   const [isAuth, setAuth] = useState(false);
@@ -35,6 +34,20 @@ export const useChat = (roomId) => {
   const socketRef = useRef(null);
   const navigate = useNavigate();
 
+  const getConversations = async () => {
+    socketRef.current.emit('conversation:get');
+  };
+
+  const getMessages = async () => {
+    socketRef.current.emit('message:get');
+  };
+
+  const getStages = async () => {
+    socketRef.current.emit('status:get');
+  };
+
+  const notify = (message) => toast('Wow so easy!');
+
   useEffect(() => {
     setIsLoading(true);
     const token = localStorage.getItem('token');
@@ -44,10 +57,8 @@ export const useChat = (roomId) => {
       auth: { roomId },
       cors: { origin: '*' },
     });
-
     // отправляем запрос на получение сообщений
     clearMessages();
-
     socketRef.current.on('checkAuth', ({ user, logged_in }) => {
       if (!logged_in) return setAuth(false);
       setUser(user);
@@ -74,29 +85,44 @@ export const useChat = (roomId) => {
         // при размонтировании компонента выполняем отключение сокета
         socketRef.current.disconnect();
       };
-    socketRef.current.emit('message:get');
+    getConversations();
+    getStages();
+    getMessages();
 
     // обрабатываем получение сообщений
+
+    socketRef.current.on('notification', (message) => {
+      // notify(message);
+    });
+
     socketRef.current.on('messages', (messages) => {
       setMessages(messages);
-      socketRef.current.emit('conversation:get');
-      socketRef.current.emit('status:get');
+      getConversations();
       setIsLoading(false);
     });
 
-    socketRef.current.on('notification', (message) => {
-      notify(message.text);
-      // socketRef.current.emit('conversation:get');
-      // socketRef.current.emit('status:get');
-    });
-
-    socketRef.current.emit('conversation:get');
-
     socketRef.current.on('conversations', (conversations) => {
-      setConversations(conversations);
-    });
+      console.log(conversations);
+      console.log(filter);
 
-    socketRef.current.emit('status:get');
+      const filteredConversations = conversations.filter((conversation) => {
+        // Check if the conversation's stage matches the filter's stage
+
+        const isStageMatched = filter?.stage
+          ? conversation?.stage.value === filter?.stage
+          : true;
+
+        // Check if the conversation's user matches the filter's user
+        const isUserMatched = filter?.user
+          ? conversation?.user?._id === filter?.user
+          : true;
+        console.log(conversation?.user?._id, filter?.user);
+        // Return true if both conditions are true, otherwise false
+        return isStageMatched && isUserMatched;
+      });
+
+      setConversations(filteredConversations);
+    });
 
     socketRef.current.on('statuses', (statuses) => {
       setStatuses(statuses);
@@ -105,7 +131,7 @@ export const useChat = (roomId) => {
     return () => {
       socketRef.current.disconnect();
     };
-  }, [roomId, isAuth]);
+  }, [roomId, isAuth, filter]);
 
   // функция отправки сообщения
   // принимает объект с текстом сообщения и именем отправителя
@@ -150,6 +176,7 @@ export const useChat = (roomId) => {
     // добавляем в объект id пользователя при отправке на сервер
     console.log('UPDATE');
     socketRef?.current?.emit('status:update', statuses);
+
     setIsLoading(false);
 
     // socketRef.current.emit('conversation:get');
@@ -157,6 +184,7 @@ export const useChat = (roomId) => {
 
   const changeStage = async (id, value) => {
     await socketRef?.current?.emit('status:change', { id, value });
+
     // await socketRef.current.emit('messages:get');
   };
 
@@ -168,12 +196,14 @@ export const useChat = (roomId) => {
   };
 
   // отправляем на сервер событие "user:leave" перед перезагрузкой страницы
-  useBeforeUnload(() => {
-    socketRef.current.emit('user:leave', userId);
-  });
+  // useBeforeUnload(() => {
+  //   socketRef.current.emit('user:leave', userId);
+  // });
 
   // хук возвращает пользователей, сообщения и функции для отправки удаления сообщений
   return {
+    filter,
+    setFilter,
     user,
     isAuth,
     login,
@@ -187,5 +217,7 @@ export const useChat = (roomId) => {
     setStatuses,
     changeStage,
     linkUserToConversation,
+    searchInput,
+    setSearchInput,
   };
 };

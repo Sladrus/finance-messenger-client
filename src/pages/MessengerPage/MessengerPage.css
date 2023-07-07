@@ -1,5 +1,6 @@
 .messenger-page {
   width: 100%;
-  display: flex;
-  flex-direction: row;
+  min-height: calc(100% - 50px);
+  /* display: flex; */
+  /* flex-direction: row; */
 }

@@ -9,10 +9,13 @@ import {
 import { authRoutes, publicRoutes } from '../../routes';
 import Sidebar from '../Sidebar';
 import { useChat } from '../../hooks';
+import TopBar from '../TopBar';
 
 const AppRoutes = () => {
   const [selectedConversation, setSelectedConversation] = useState(0);
   const {
+    filter,
+    setFilter,
     user,
     isAuth,
     login,
@@ -26,52 +29,79 @@ const AppRoutes = () => {
     setStatuses,
     changeStage,
     linkUserToConversation,
+    searchInput,
+    setSearchInput,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (location.pathname !== '/auth') navigate(location.pathname);
+    if (location.pathname === '/') return navigate('/messenger');
+
+    if (location.pathname !== '/auth') return navigate(location.pathname);
   }, []);
 
   return (
     <>
       {location.pathname !== '/auth' && <Sidebar logout={logout} />}
-      <Routes>
-        {publicRoutes.map(({ path, Component }) => (
-          <Route
-            key={path}
-            path={path}
-            element={<Component login={login} />}
-            exact
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: 'calc(100% - 85px)',
+          minHeight: '100%',
+          // overflow: 'hidden',
+        }}
+      >
+        {location.pathname !== '/auth' && (
+          <TopBar
+            filter={filter}
+            setFilter={setFilter}
+            user={user}
+            statuses={statuses}
           />
-        ))}
-        {isAuth &&
-          authRoutes.map(({ path, Component }) => (
+        )}
+
+        <Routes>
+          {publicRoutes.map(({ path, Component }) => (
             <Route
               key={path}
               path={path}
-              element={
-                <Component
-                  user={user}
-                  isLoading={isLoading}
-                  statuses={statuses}
-                  conversations={conversations}
-                  messages={messages}
-                  sendMessage={sendMessage}
-                  updateStatuses={updateStatuses}
-                  setStatuses={setStatuses}
-                  selectedConversation={selectedConversation}
-                  setSelectedConversation={setSelectedConversation}
-                  changeStage={changeStage}
-                  linkUserToConversation={linkUserToConversation}
-                />
-              }
+              element={<Component login={login} />}
               exact
             />
           ))}
-        <Route path="*" element={<Navigate to="/auth" replace />} />
-      </Routes>
+          {isAuth &&
+            authRoutes.map(({ path, Component }) => (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <Component
+                    filter={filter}
+                    setFilter={setFilter}
+                    user={user}
+                    isLoading={isLoading}
+                    statuses={statuses}
+                    conversations={conversations}
+                    messages={messages}
+                    sendMessage={sendMessage}
+                    updateStatuses={updateStatuses}
+                    setStatuses={setStatuses}
+                    selectedConversation={selectedConversation}
+                    setSelectedConversation={setSelectedConversation}
+                    changeStage={changeStage}
+                    linkUserToConversation={linkUserToConversation}
+                    searchInput={searchInput}
+                    setSearchInput={setSearchInput}
+                  />
+                }
+                exact
+              />
+            ))}
+          <Route path="*" element={<Navigate to="/auth" replace />} />
+        </Routes>
+      </div>
     </>
   );
 };

@@ -8,11 +8,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default function ConversationSearch({ isExpanded, setIsExpanded }) {
-  const [value, setValue] = useState('');
-
+export default function ConversationSearch({
+  isExpanded,
+  setIsExpanded,
+  searchInput,
+  setSearchInput,
+}) {
   const handleChange = (event) => {
-    setValue(event.target.value);
+    setSearchInput(event.target.value);
   };
 
   const handleClick = () => {
@@ -25,12 +28,14 @@ export default function ConversationSearch({ isExpanded, setIsExpanded }) {
         <FontAwesomeIcon width={15} height={15} icon={faSearch} />
         <input
           type="text"
-          value={value}
+          value={searchInput}
           onChange={handleChange}
           className="conversation-search-input"
           placeholder="Search"
         />
-        {value && <ToolbarButton icon={faXmark} />}
+        {searchInput && (
+          <ToolbarButton onClick={() => setSearchInput('')} icon={faXmark} />
+        )}
       </div>
       <div>
         <FontAwesomeIcon

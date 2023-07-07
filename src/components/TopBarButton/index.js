@@ -7,8 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const TopBarButton = ({ children }) => {
   return (
     <div className="top-bar-button">
-      <span>{children}</span>
-      <FontAwesomeIcon className="top-bar-button-icon" icon={faCaretDown} />
+      <span>
+        {children}
+      </span>
     </div>
   );
 };

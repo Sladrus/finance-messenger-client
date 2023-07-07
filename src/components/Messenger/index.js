@@ -6,8 +6,12 @@ import ConversationSearch from '../ConversationSearch';
 import ConversationBar from '../ConversationBar';
 import TopBar from '../TopBar';
 import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function Messenger({
+  filter,
+  setFilter,
   user,
   isLoading,
   statuses,
@@ -18,20 +22,30 @@ export default function Messenger({
   setSelectedConversation,
   changeStage,
   linkUserToConversation,
+  searchInput,
+  setSearchInput,
 }) {
   // const [username, setUsername] = useLocalStorage('username', 'John');
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
   };
+
   // const [roomId, setRoomId] = useState('free');
   // const linkRef = useRef(null);
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div className={`messenger ${isExpanded ? 'expanded' : 'collapsed'}`}>
-      <TopBar />
+      {/* <TopBar
+        filter={filter}
+        setFilter={setFilter}
+        user={user}
+        statuses={statuses}
+      /> */}
       <ConversationSearch
         isExpanded={isExpanded}
         setIsExpanded={setIsExpanded}
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
       />
       <ConversationBar
         isLoading={isLoading}
@@ -48,6 +62,8 @@ export default function Messenger({
         selectedConversation={selectedConversation}
         handleButtonClick={handleButtonClick}
         changeStage={changeStage}
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
       />
       <MessageList
         user={user}

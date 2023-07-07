@@ -2,8 +2,7 @@
   display: grid;
   width: 100%;
   background: #08101d;
-
-
+  height: 100%;
   grid-template-rows: 50px 50px;
 }
 
@@ -14,13 +13,13 @@
 .topbar {
   /* overflow-y: scroll; */
   background: #08101d;
-  grid-row-start: 2;
+  grid-row-start: 0;
   grid-row-end: span 3;
 }
 
 .content {
   background: #08101d;
-  grid-row-start: 2;
+  grid-row-start: 0;
   grid-row-end: span 3;
 }
 

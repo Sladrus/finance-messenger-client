@@ -1,12 +1,13 @@
 .conversation-list {
   grid-column-start: 1;
-  grid-column-start: 1;
-  grid-row-start: 3;
-  grid-row-end: 3;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 4;
   overflow-y: scroll;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   background: #101b25;
+  min-height: 50%;
 }
 
 .conversation-list-container {

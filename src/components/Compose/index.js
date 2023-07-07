@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Compose.css';
 import ToolbarButton from '../ToolbarButton';
-import {
-  faPaperclip,
-  faArrowRight,
-  faPlus,
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function Compose({ user, selectedConversation, sendMessage }) {
   const [text, setText] = useState('');
   const inputElement = useRef(null);
-  console.log(user);
   useEffect(() => {
     inputElement.current.focus();
   }, [selectedConversation]);

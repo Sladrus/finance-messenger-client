@@ -28,7 +28,7 @@ const Sidebar = ({ logout }) => {
 
   const location = buttons.find((o) => o.route === window.location.pathname);
   const [selectedButton, setSelectedButton] = useState(location?.id);
-  
+
   useEffect(() => {
     const location = buttons.find((o) => o.route === window.location.pathname);
     setSelectedButton(location?.id);

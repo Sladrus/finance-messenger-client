@@ -4,8 +4,8 @@ import './AuthPage.css';
 import AuthForm from '../../components/AuthForm';
 
 const AuthPage = ({ login }) => {
-  const [username, setUsername] = useState('example@example.com');
-  const [password, setPassword] = useState('example');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   function handleUsername(e) {
     setUsername(e.target.value);
   }

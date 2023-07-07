@@ -11,12 +11,20 @@ export default function ConversationList({
   selectedConversation,
   handleButtonClick,
   changeStage,
+  searchInput,
+  setSearchInput,
 }) {
+  const filteredConversations = searchInput
+    ? conversations.filter((o) => {
+        console.log(o.title, searchInput);
+        return o.title.toLowerCase().includes(searchInput.toLowerCase());
+      })
+    : conversations;
   return (
     <div className="conversation-list">
       <div className="topbar">
         <div className="conversation-list-container">
-          {conversations.map((conversation) => (
+          {filteredConversations.map((conversation) => (
             <ConversationListItem
               key={conversation.chat_id}
               statuses={statuses}

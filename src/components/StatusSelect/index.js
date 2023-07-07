@@ -10,7 +10,7 @@ const StatusSelect = ({ statuses, data, changeStage }) => {
     event.stopPropagation();
     // другой код, который нужно выполнить при клике на внутренний блок
   }
-  
+
   const handleSelectChange = async (event) => {
     const status = statuses.find((o) => o.value === event.target.value);
     // console.log(status);
@@ -28,7 +28,6 @@ const StatusSelect = ({ statuses, data, changeStage }) => {
         &#8226;
       </span>
       <select
-        onClick={handleClick}
         className="status-select"
         value={data.stage.value}
         onChange={handleSelectChange}
