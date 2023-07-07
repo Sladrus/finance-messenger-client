@@ -126,6 +126,7 @@ export const useChat = (roomId) => {
 
     socketRef.current.on('statuses', (statuses) => {
       setStatuses(statuses);
+      getConversations();
       setIsLoading(false);
     });
     return () => {
@@ -178,7 +179,6 @@ export const useChat = (roomId) => {
     socketRef?.current?.emit('status:update', statuses);
 
     setIsLoading(false);
-
     // socketRef.current.emit('conversation:get');
   };
 
