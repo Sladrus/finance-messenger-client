@@ -24,12 +24,12 @@ const StatusSelect = ({ statuses, data, changeStage }) => {
 
   return (
     <div className="status-div">
-      <span style={{ color: data.stage.color }} className="status-dot">
+      <span style={{ color: data.stage?.color }} className="status-dot">
         &#8226;
       </span>
       <select
         className="status-select"
-        value={data.stage.value}
+        value={data.stage?.value}
         onChange={handleSelectChange}
       >
         {statuses.map((option, index) => (

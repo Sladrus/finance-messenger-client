@@ -4,6 +4,11 @@ import BoardPageContainer from '../../components/BoardPageContainer';
 import EmptyBoardPageContainer from '../../components/EmptyBoardPageContainer';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TopBar from '../../components/TopBar';
+import Modal from 'react-modal';
+import AuthButton from '../../components/AuthButton';
+import AuthInput from '../../components/AuthInput';
+import { HexColorPicker } from 'react-colorful';
+import ModalForm from '../../components/ModalForm';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -38,6 +43,21 @@ const move = (source, destination, droppableSource, droppableDestination) => {
   return result;
 };
 
+// const customStyles = {
+//   content: {
+//     width: '250px',
+//     height: '350px',
+//     borderRadius: '25px',
+//     backgroundColor: '#101b25',
+//     top: '50%',
+//     left: '50%',
+//     right: 'auto',
+//     bottom: 'auto',
+//     marginRight: '-50%',
+//     transform: 'translate(-50%, -50%)',
+//   },
+// };
+
 const BoardPage = ({
   statuses,
   updateStatuses,
@@ -47,7 +67,24 @@ const BoardPage = ({
   user,
   filter,
   setFilter,
+  createStatus,
 }) => {
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal(e) {
+    // e.stopPropagation();
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    // subtitle?.style?.color = '#f00';
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
@@ -124,9 +161,25 @@ const BoardPage = ({
               </Droppable>
             ))}
           </DragDropContext>
-          <EmptyBoardPageContainer />
+          <EmptyBoardPageContainer openModal={openModal} />
         </div>
       </div>
+      <Modal
+        ariaHideApp={false}
+        className="modal-item"
+        overlayClassName="modal-overlay"
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        // style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <ModalForm createStatus={createStatus} closeModal={closeModal} />
+        {/* <AuthInput placeholder={'Введите новый статус'} />
+        <AuthInput placeholder={'Введите ключ статуса'} />
+        <HexColorPicker color={color} onChange={setColor} />
+        <AuthButton>{'Создать новый статус'}</AuthButton> */}
+      </Modal>
     </div>
   );
 };

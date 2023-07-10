@@ -64,12 +64,26 @@
   margin-right: 10px;
 }
 
-.conversation-title {
+.conversation-bar-title {
+  text-overflow: ellipsis;
   font-size: 14px;
   font-weight: bold;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   margin: 0;
   color: #eaeaeb;
+  white-space: nowrap;
+}
+
+.conversation-title {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: bold;
+  /* text-transform: capitalize; */
+  margin: 0;
+  color: #eaeaeb;
+  white-space: nowrap;
 }
 
 .conversation-time {
@@ -124,7 +138,7 @@
   min-width: 18px;
   height: 18px;
   margin-top: 5px;
-  padding: 0 2px;
+  /* padding: 0 2px; */
   background: #4fa6ee;
   color: white;
   border-radius: 20px;

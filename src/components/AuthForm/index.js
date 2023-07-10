@@ -34,7 +34,7 @@ const AuthForm = ({
         value={password}
         isPassword={true}
       />
-      <AuthButton handleSubmit={handleSubmit} />
+      <AuthButton handleSubmit={handleSubmit}>Войти</AuthButton>
     </div>
   );
 };

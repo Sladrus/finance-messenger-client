@@ -34,6 +34,20 @@ export default function ConversationList({
               changeStage={changeStage}
             />
           ))}
+          {!isLoading && !filteredConversations.length && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#101b25',
+                paddingTop: '20px',
+              }}
+            >
+              <span>Нет таких чатов</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

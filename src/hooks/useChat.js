@@ -92,7 +92,7 @@ export const useChat = (roomId) => {
     // обрабатываем получение сообщений
 
     socketRef.current.on('notification', (message) => {
-      // notify(message);
+      getStages();
     });
 
     socketRef.current.on('messages', (messages) => {
@@ -109,7 +109,7 @@ export const useChat = (roomId) => {
         // Check if the conversation's stage matches the filter's stage
 
         const isStageMatched = filter?.stage
-          ? conversation?.stage.value === filter?.stage
+          ? conversation?.stage?.value === filter?.stage
           : true;
 
         // Check if the conversation's user matches the filter's user
@@ -164,6 +164,8 @@ export const useChat = (roomId) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    setUser({});
+    setAuth(false);
     socketRef.current.emit('logout');
   };
 
@@ -188,10 +190,17 @@ export const useChat = (roomId) => {
     // await socketRef.current.emit('messages:get');
   };
 
+  const createStatus = async (status) => {
+    console.log(status);
+    await socketRef?.current?.emit('status:add', status);
+    await getStages();
+
+    // await socketRef.current.emit('messages:get');
+  };
+
   const linkUserToConversation = async (conversation) => {
     await socketRef?.current?.emit('conversation:update', conversation);
-    socketRef.current.emit('status:get');
-
+    await getStages();
     // await socketRef.current.emit('messages:get');
   };
 
@@ -219,5 +228,6 @@ export const useChat = (roomId) => {
     linkUserToConversation,
     searchInput,
     setSearchInput,
+    createStatus,
   };
 };

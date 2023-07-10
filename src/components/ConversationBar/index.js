@@ -43,7 +43,7 @@ const ConversationBar = ({
   return (
     <div className="conversation-bar">
       <div className="conversation-container">
-        <span className="conversation-title">
+        <span className="conversation-bar-title">
           {!conversation ? 'Выберите чат для общения' : conversation?.title}
         </span>
         {!isLoading ? (

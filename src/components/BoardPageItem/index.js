@@ -2,11 +2,18 @@ import React from 'react';
 import './BoardPageItem.css';
 import '../Message/Message.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLink, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUser,
+  faLink,
+  faPlus,
+  faInfo,
+  faInfoCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment-timezone';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import ModalConversationItem from '../ModalConversationItem';
 
 const BoardPageItem = ({
   provided,
@@ -14,6 +21,7 @@ const BoardPageItem = ({
   setSelectedConversation,
   linkUserToConversation,
   user,
+  openModal,
 }) => {
   const [showButton, setShowButton] = useState(false);
 
@@ -116,9 +124,10 @@ const BoardPageItem = ({
               </span>
               <p className="board-snippet">
                 {item.messages?.length > 0
-                  ? item.messages[item.messages?.length - 1].type === 'text'
-                    ? item.messages[item.messages?.length - 1].text
-                    : 'Photo'
+                  ? item.messages[item.messages?.length - 1].type === 'photo' ||
+                    item.messages[item.messages?.length - 1].type === 'document'
+                    ? 'Photo/Document'
+                    : item.messages[item.messages?.length - 1].text
                   : 'Вы вошли в чат'}
               </p>
             </div>
@@ -145,10 +154,13 @@ const BoardPageItem = ({
           </div>
         )}
         {showButton && (
-          <div className="take-button">
+          <div onClick={(e) => e.stopPropagation()} className="take-button">
             <FontAwesomeIcon className="take-button-icon" icon={faPlus} />
           </div>
         )}
+        <div onClick={(e) => e.stopPropagation()} className="take-button">
+          <FontAwesomeIcon className="take-button-icon" icon={faInfoCircle} />
+        </div>
       </div>
     </div>
   );

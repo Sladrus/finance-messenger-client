@@ -78,7 +78,7 @@ export default function ConversationListItem({
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ color: data.stage.color }} className="status-dot">
+              <span style={{ color: data.stage?.color }} className="status-dot">
                 &#8226;
               </span>
               <h1 className="conversation-title">{data.title}</h1>
@@ -113,9 +113,10 @@ export default function ConversationListItem({
               </span>
               <p className="conversation-snippet">
                 {data.messages?.length > 0
-                  ? data.messages[data.messages?.length - 1].type === 'text'
-                    ? data.messages[data.messages?.length - 1].text
-                    : 'Photo'
+                  ? data.messages[data.messages?.length - 1].type === 'photo' ||
+                    data.messages[data.messages?.length - 1].type === 'document'
+                    ? 'Photo/Document'
+                    : data.messages[data.messages?.length - 1].text
                   : 'Вы вошли в чат'}
               </p>
             </div>

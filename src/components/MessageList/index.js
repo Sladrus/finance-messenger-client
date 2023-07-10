@@ -5,6 +5,7 @@ import Message from '../Message';
 import moment from 'moment';
 
 import './MessageList.css';
+import { ClipLoader } from 'react-spinners';
 
 export default function MessageList({
   user,

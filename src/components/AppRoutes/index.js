@@ -31,6 +31,7 @@ const AppRoutes = () => {
     linkUserToConversation,
     searchInput,
     setSearchInput,
+    createStatus,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -94,6 +95,7 @@ const AppRoutes = () => {
                     linkUserToConversation={linkUserToConversation}
                     searchInput={searchInput}
                     setSearchInput={setSearchInput}
+                    createStatus={createStatus}
                   />
                 }
                 exact
