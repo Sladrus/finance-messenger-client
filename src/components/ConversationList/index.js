@@ -42,10 +42,11 @@ export default function ConversationList({
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: '#101b25',
-                paddingTop: '20px',
               }}
             >
-              <span>Нет таких чатов</span>
+              <span style={{ padding: '15px', textAlign: 'center' }}>
+                По данному запросу результатов не найдено
+              </span>
             </div>
           )}
         </div>

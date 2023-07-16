@@ -22,6 +22,9 @@ const AppRoutes = () => {
     logout,
     isLoading,
     statuses,
+    stages,
+    boardSections,
+    setBoardSections,
     conversations,
     messages,
     sendMessage,
@@ -32,6 +35,8 @@ const AppRoutes = () => {
     searchInput,
     setSearchInput,
     createStatus,
+    getStages,
+    managers,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -51,7 +56,6 @@ const AppRoutes = () => {
           flexDirection: 'column',
           width: 'calc(100% - 85px)',
           minHeight: '100%',
-          // overflow: 'hidden',
         }}
       >
         {location.pathname !== '/auth' && (
@@ -59,7 +63,9 @@ const AppRoutes = () => {
             filter={filter}
             setFilter={setFilter}
             user={user}
-            statuses={statuses}
+            stages={stages}
+            managers={managers}
+            setSelectedConversation={setSelectedConversation}
           />
         )}
 
@@ -84,6 +90,8 @@ const AppRoutes = () => {
                     user={user}
                     isLoading={isLoading}
                     statuses={statuses}
+                    boardSections={boardSections}
+                    setBoardSections={setBoardSections}
                     conversations={conversations}
                     messages={messages}
                     sendMessage={sendMessage}
@@ -96,6 +104,7 @@ const AppRoutes = () => {
                     searchInput={searchInput}
                     setSearchInput={setSearchInput}
                     createStatus={createStatus}
+                    getStages={getStages}
                   />
                 }
                 exact

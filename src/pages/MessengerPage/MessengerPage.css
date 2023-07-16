@@ -1,6 +1,6 @@
 .messenger-page {
   width: 100%;
-  min-height: calc(100% - 50px);
+  min-height: calc(100% - 70px);
   /* display: flex; */
   /* flex-direction: row; */
 }

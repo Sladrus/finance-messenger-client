@@ -1,142 +1,216 @@
 import React, { useRef, useState, useEffect } from 'react';
 import './BoardPage.css';
 import BoardPageContainer from '../../components/BoardPageContainer';
+import {
+  useSensors,
+  useSensor,
+  PointerSensor,
+  KeyboardSensor,
+  DndContext,
+  closestCorners,
+  DragOverlay,
+  defaultDropAnimation,
+  MouseSensor,
+  TouchSensor,
+} from '@dnd-kit/core';
+import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
+import BoardPageItem from '../../components/BoardPageItem';
+// import BoardPageContainer from '../../components/BoardPageContainer';
 import EmptyBoardPageContainer from '../../components/EmptyBoardPageContainer';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import TopBar from '../../components/TopBar';
-import Modal from 'react-modal';
-import AuthButton from '../../components/AuthButton';
-import AuthInput from '../../components/AuthInput';
-import { HexColorPicker } from 'react-colorful';
-import ModalForm from '../../components/ModalForm';
 
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
+export const getTasksByStatus = (tasks, status) => {
+  return tasks.filter((task) => task.stage.value === status.value);
 };
 
-const move = (source, destination, droppableSource, droppableDestination) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-  // console.log(source, destination);
-  //TODO: тут говно
-  // added check to ignore moving if item already exists
-  if (!destClone.find((item) => item?._id === removed?._id)) {
-    destClone.splice(droppableDestination.index, 0, removed);
+export const initializeBoard = (statuses) => {
+  const boardSections = {};
+
+  statuses.forEach((boardSectionKey) => {
+    boardSections[boardSectionKey.value] = boardSectionKey.conversations;
+  });
+  return boardSections;
+};
+
+export const findBoardSectionContainer = (boardSections, id) => {
+  if (id in boardSections) {
+    return id;
   }
 
-  const result = {};
-  console.log(
-    droppableSource.droppableId,
-    droppableDestination.droppableId,
-    source,
-    destination
+  const container = Object.keys(boardSections).find((key) =>
+    boardSections[key].find((item) => item._id === id)
   );
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
-
-  // moveConversation(droppableSource.droppableId, droppableDestination.droppableId);
-  return result;
+  return container;
 };
 
-// const customStyles = {
-//   content: {
-//     width: '250px',
-//     height: '350px',
-//     borderRadius: '25px',
-//     backgroundColor: '#101b25',
-//     top: '50%',
-//     left: '50%',
-//     right: 'auto',
-//     bottom: 'auto',
-//     marginRight: '-50%',
-//     transform: 'translate(-50%, -50%)',
-//   },
-// };
+export const getTaskById = (statuses, id) => {
+  const foundTask = statuses.find((status) => {
+    const foundConversation = status.conversations.find(
+      (conversation) => conversation._id === id
+    );
+    return foundConversation;
+  });
+
+  return foundTask?.conversations.find(
+    (conversation) => conversation._id === id
+  );
+};
 
 const BoardPage = ({
   statuses,
   updateStatuses,
-  setStatuses,
   setSelectedConversation,
   linkUserToConversation,
   user,
   filter,
   setFilter,
   createStatus,
+  changeStage,
+  getStages,
 }) => {
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [boardSections, setBoardSections] = useState(initializeBoard(statuses));
+  const [activeTaskId, setActiveTaskId] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  function openModal(e) {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    setBoardSections(initializeBoard(statuses));
+  }, [statuses]);
+
+  const sensors = useSensors(
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+    useSensor(TouchSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        delay: 100,
+        tolerance: 500,
+      },
+      pointer: true,
+    })
+  );
+
+  const openModal = (e) => {
     // e.stopPropagation();
     setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    // subtitle?.style?.color = '#f00';
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    if (!isAnimating) updateStatuses();
-  }, [isAnimating]);
-
-  const onDragStart = () => {
-    setIsAnimating(true);
   };
 
-  const onDragEnd = (result) => {
-    const { source, destination } = result;
-    // dropped outside the list
-    if (!destination) {
-      setIsAnimating(false);
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const handleDragStart = ({ active }) => {
+    // console.log(active);
+    setActiveTaskId(active.id);
+    setIsDragging(true);
+  };
+
+  const handleDragOver = ({ active, over }) => {
+    // Найти контейнеры
+    const activeContainer = findBoardSectionContainer(boardSections, active.id);
+    const overContainer = findBoardSectionContainer(boardSections, over?.id);
+
+    if (
+      !activeContainer ||
+      !overContainer ||
+      activeContainer === overContainer
+    ) {
       return;
     }
 
-    const sInd = +source.droppableId;
-    const dInd = +destination.droppableId;
+    setBoardSections((prevBoardSections) => {
+      const newBoardSections = { ...prevBoardSections };
 
-    if (sInd === dInd) {
-      const conversations = reorder(
-        statuses[sInd].conversations,
-        source.index,
-        destination.index
+      const activeContainer = findBoardSectionContainer(
+        boardSections,
+        active.id
       );
-      const newState = [...statuses];
-      newState[sInd] = { ...newState[sInd], conversations };
-      setStatuses(newState);
-      setIsAnimating(false);
-    } else {
-      const result = move(
-        statuses[sInd].conversations,
-        statuses[dInd].conversations,
-        source,
-        destination
-      );
-      const newState = [...statuses];
-      newState[sInd] = { ...newState[sInd], conversations: result[sInd] };
-      newState[dInd] = { ...newState[dInd], conversations: result[dInd] };
+      const overContainer = findBoardSectionContainer(boardSections, over?.id);
 
-      setStatuses(
-        newState.filter(
-          (group) =>
-            group?.conversations && !group?.conversations.includes(undefined)
-        )
+      if (
+        !activeContainer ||
+        !overContainer ||
+        activeContainer === overContainer
+      ) {
+        return prevBoardSections;
+      }
+
+      const activeItems = [...newBoardSections[activeContainer]];
+      const overItems = [...newBoardSections[overContainer]];
+
+      const activeIndex = activeItems.findIndex(
+        (item) => item._id === active.id
       );
-      setIsAnimating(false);
+
+      // Удалить активный элемент из исходного столбца
+      activeItems.splice(activeIndex, 1);
+
+      // Вставить активный элемент в новый столбец
+      if (overItems.length === 0) {
+        overItems.push(prevBoardSections[activeContainer][activeIndex]);
+      } else {
+        overItems.splice(
+          overItems.length,
+          0,
+          prevBoardSections[activeContainer][activeIndex]
+        );
+      }
+
+      newBoardSections[activeContainer] = activeItems;
+      newBoardSections[overContainer] = overItems;
+
+      return newBoardSections;
+    });
+    // changeStage(, activeContainer);
+    // console.log(activeContainer, overContainer);
+  };
+  const handleDragEnd = ({ active, over }) => {
+    const activeContainer = findBoardSectionContainer(boardSections, active.id);
+    const overContainer = findBoardSectionContainer(boardSections, over?.id);
+
+    if (
+      !activeContainer ||
+      !overContainer ||
+      activeContainer !== overContainer
+    ) {
+      return setIsDragging(false);
     }
+
+    const activeIndex = boardSections[activeContainer].findIndex(
+      (task) => task._id === active.id
+    );
+    const overIndex = boardSections[overContainer].findIndex(
+      (task) => task._id === over?.id
+    );
+
+    if (activeIndex !== overIndex) {
+      setBoardSections((boardSection) => ({
+        ...boardSection,
+        [overContainer]: arrayMove(
+          boardSection[overContainer],
+          activeIndex,
+          overIndex
+        ),
+      }));
+    }
+    console.log(activeIndex, overIndex);
+
+    changeStage(
+      boardSections[activeContainer][activeIndex]._id,
+      activeContainer,
+      overIndex
+    );
+
+    setActiveTaskId(null);
+    setIsDragging(false);
   };
 
+  const dropAnimation = {
+    ...defaultDropAnimation,
+  };
+
+  const task = activeTaskId ? getTaskById(statuses, activeTaskId) : null;
+  // console.log(task);
   return (
     <div className="board-page">
       <div
@@ -145,41 +219,36 @@ const BoardPage = ({
         }}
       >
         <div className="board-page-list">
-          <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-            {statuses?.map((el, ind) => (
-              <Droppable key={ind} droppableId={`${ind}`}>
-                {(provided) => (
-                  <BoardPageContainer
-                    provided={provided}
-                    el={el}
-                    isAnimating={isAnimating}
-                    setSelectedConversation={setSelectedConversation}
-                    linkUserToConversation={linkUserToConversation}
-                    user={user}
-                  />
-                )}
-              </Droppable>
-            ))}
-          </DragDropContext>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
+          >
+            {Object.keys(boardSections).map((boardSectionKey) => {
+              return (
+                <BoardPageContainer
+                  key={boardSectionKey}
+                  id={boardSectionKey}
+                  status={statuses.find((o) => o.value === boardSectionKey)}
+                  tasks={boardSections[boardSectionKey]}
+                  setSelectedConversation={setSelectedConversation}
+                  linkUserToConversation={linkUserToConversation}
+                  user={user}
+                  isDragging={isDragging}
+                  isEmpty={false}
+                />
+              );
+            })}
+            <DragOverlay dropAnimation={dropAnimation}>
+              {task ? <BoardPageItem task={task} isEmpty /> : null}
+            </DragOverlay>
+          </DndContext>
+
           <EmptyBoardPageContainer openModal={openModal} />
         </div>
       </div>
-      <Modal
-        ariaHideApp={false}
-        className="modal-item"
-        overlayClassName="modal-overlay"
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        // style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <ModalForm createStatus={createStatus} closeModal={closeModal} />
-        {/* <AuthInput placeholder={'Введите новый статус'} />
-        <AuthInput placeholder={'Введите ключ статуса'} />
-        <HexColorPicker color={color} onChange={setColor} />
-        <AuthButton>{'Создать новый статус'}</AuthButton> */}
-      </Modal>
     </div>
   );
 };

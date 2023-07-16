@@ -14,26 +14,28 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import ModalConversationItem from '../ModalConversationItem';
+import { useDraggable } from '@dnd-kit/core';
 
 const BoardPageItem = ({
-  provided,
-  item,
+  task,
   setSelectedConversation,
   linkUserToConversation,
   user,
   openModal,
+  isEmpty,
 }) => {
   const [showButton, setShowButton] = useState(false);
 
   const handleLinkButton = async (e) => {
+    console.log('CLICK');
     e.stopPropagation();
-    if (item.user) {
-      item.user = null;
-      await linkUserToConversation(item);
+    if (task.user && !isEmpty) {
+      task.user = null;
+      await linkUserToConversation(task);
     } else {
-      item.user = user._id;
-      await linkUserToConversation(item);
-      item.user = { username: user.username };
+      task.user = user._id;
+      await linkUserToConversation(task);
+      task.user = { username: user.username };
     }
   };
 
@@ -47,9 +49,9 @@ const BoardPageItem = ({
   const navigate = useNavigate();
   const dateToFormat = moment
     .unix(
-      item?.messages?.length
-        ? item?.messages[item?.messages?.length - 1]?.date
-        : moment(item.createdAt).unix()
+      task?.messages?.length
+        ? task?.messages[task?.messages?.length - 1]?.date
+        : moment(task?.createdAt).unix()
     )
     .utcOffset(180); // Здесь вы можете использовать любую дату, которую необходимо отформатировать
   const today = moment().utcOffset(180); // Получаем текущее время, чтобы определить, является ли дата сегодняшней
@@ -66,11 +68,10 @@ const BoardPageItem = ({
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={() => navigateToConversation(item.chat_id)}
+      onClick={(e) => {
+        !isEmpty && navigateToConversation(task.chat_id);
+      }}
       className={'board-list-item'}
-      ref={provided.innerRef}
-      {...provided.draggableProps}
-      {...provided.dragHandleProps}
     >
       <div
         style={{
@@ -94,7 +95,7 @@ const BoardPageItem = ({
               justifyContent: 'space-between',
             }}
           >
-            <h1 className="board-title">{item.title}</h1>
+            <h1 className="board-title">{task?.title}</h1>
             <div className="board-time">{formattedDate}</div>
           </div>
           <div
@@ -117,48 +118,60 @@ const BoardPageItem = ({
               }}
             >
               <span className="board-snippet-name">
-                {item.messages?.length > 0
-                  ? item.messages[item.messages?.length - 1].from?.first_name +
-                    ':'
+                {task?.messages?.length > 0
+                  ? task?.messages[task?.messages?.length - 1].from
+                      ?.first_name + ':'
                   : 'Group:'}
               </span>
               <p className="board-snippet">
-                {item.messages?.length > 0
-                  ? item.messages[item.messages?.length - 1].type === 'photo' ||
-                    item.messages[item.messages?.length - 1].type === 'document'
+                {task?.messages?.length > 0
+                  ? task?.messages[task?.messages?.length - 1].type ===
+                      'photo' ||
+                    task?.messages[task?.messages?.length - 1].type ===
+                      'document'
                     ? 'Photo/Document'
-                    : item.messages[item.messages?.length - 1].text
+                    : task?.messages[task?.messages?.length - 1].text
                   : 'Вы вошли в чат'}
               </p>
             </div>
-            {item.unreadCount > 0 && (
-              <div className="unread-conversation">{item.unreadCount}</div>
+            {task?.unreadCount > 0 && (
+              <div className="unread-conversation">{task?.unreadCount}</div>
             )}
           </div>
         </div>
       </div>
       <div style={{ display: 'flex' }}>
-        {item?.user && (
+        {task?.user && (
           <div className="board-user">
             <FontAwesomeIcon className="board-user-icon" icon={faUser} />
-            <span>{item?.user.username}</span>
+            <span>{task?.user?.username}</span>
           </div>
         )}
         {showButton && (
           <div onClick={handleLinkButton} className="take-button">
             <FontAwesomeIcon
-              style={item?.user && { color: '#73b9f3' }}
+              style={task?.user && { color: '#73b9f3' }}
               className="take-button-icon"
               icon={faLink}
             />
           </div>
         )}
         {showButton && (
-          <div onClick={(e) => e.stopPropagation()} className="take-button">
+          <div
+            onClick={(e) => !isEmpty && e.stopPropagation()}
+            className="take-button"
+          >
             <FontAwesomeIcon className="take-button-icon" icon={faPlus} />
           </div>
         )}
-        <div onClick={(e) => e.stopPropagation()} className="take-button">
+        <div
+          onClick={(e) => {
+            if (isEmpty) return;
+            e.stopPropagation();
+            navigateToConversation(task.chat_id);
+          }}
+          className="take-button"
+        >
           <FontAwesomeIcon className="take-button-icon" icon={faInfoCircle} />
         </div>
       </div>

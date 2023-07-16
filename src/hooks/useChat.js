@@ -7,6 +7,7 @@ import env from 'react-dotenv';
 import { useLocalStorage } from './useLocalStorage';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { initializeBoard } from '../pages/BoardPage';
 
 // const SERVER_URL = 'http://socket.1210059-cn07082.tw1.ru';
 
@@ -14,11 +15,15 @@ import { toast } from 'react-hot-toast';
 export const useChat = (roomId) => {
   // локальное состояние для пользователей
   const [searchInput, setSearchInput] = useState('');
-  const [filter, setFilter] = useState({ user: '' });
+  const [filter, setFilter] = useState({ user: '', stage: '', unread: '' });
   const [user, setUser] = useState();
-  const [statuses, setStatuses] = useState([]);
-  const [isAuth, setAuth] = useState(false);
+  const [managers, setManagers] = useState([]);
 
+  const [statuses, setStatuses] = useState([]);
+  const [stages, setStages] = useState([]);
+
+  const [isAuth, setAuth] = useState(false);
+  const [boardSections, setBoardSections] = useState({});
   // локальное состояние для диалогов
   const [conversations, setConversations] = useState([]);
   // локальное состояние для сообщений
@@ -44,6 +49,10 @@ export const useChat = (roomId) => {
 
   const getStages = async () => {
     socketRef.current.emit('status:get');
+  };
+
+  const getManagers = async () => {
+    socketRef.current.emit('user:get');
   };
 
   const notify = (message) => toast('Wow so easy!');
@@ -88,8 +97,11 @@ export const useChat = (roomId) => {
     getConversations();
     getStages();
     getMessages();
-
+    getManagers();
     // обрабатываем получение сообщений
+    socketRef.current.on('users', (users) => {
+      setManagers(users);
+    });
 
     socketRef.current.on('notification', (message) => {
       getStages();
@@ -106,27 +118,53 @@ export const useChat = (roomId) => {
       console.log(filter);
 
       const filteredConversations = conversations.filter((conversation) => {
-        // Check if the conversation's stage matches the filter's stage
+        // Check if the conversations stage matches the filters stage
 
         const isStageMatched = filter?.stage
           ? conversation?.stage?.value === filter?.stage
           : true;
 
-        // Check if the conversation's user matches the filter's user
+        // Check if the conversations user matches the filters user
         const isUserMatched = filter?.user
           ? conversation?.user?._id === filter?.user
           : true;
-        console.log(conversation?.user?._id, filter?.user);
+
+        const unread = conversation?.unreadCount > 0 ? true : false;
+        // console.log(unread, filter?.unread);
+
+        const isUnreadMatched =
+          filter?.unread !== '' ? unread === filter?.unread : true;
+        console.log(isUnreadMatched);
         // Return true if both conditions are true, otherwise false
-        return isStageMatched && isUserMatched;
+        return isStageMatched && isUserMatched && isUnreadMatched;
       });
 
       setConversations(filteredConversations);
     });
 
-    socketRef.current.on('statuses', (statuses) => {
-      setStatuses(statuses);
-      getConversations();
+    socketRef.current.on('statuses', (stages) => {
+      setStages(stages);
+      const filteredStages = stages
+        .filter((stage) => {
+          return filter?.stage ? stage.value === filter?.stage : true;
+        })
+        .map((stage) => {
+          const filteredConversations = stage.conversations
+            .filter((conversation) => {
+              return filter?.user
+                ? conversation?.user?._id === filter?.user
+                : true;
+            })
+            .filter((conversation) => {
+              const unread = conversation?.unreadCount > 0 ? true : false;
+
+              return filter?.unread !== '' ? unread === filter?.unread : true;
+            });
+          return { ...stage, conversations: filteredConversations };
+        });
+      // console.log(filteredStages);
+      setStatuses(filteredStages);
+      // getConversations();
       setIsLoading(false);
     });
     return () => {
@@ -184,8 +222,8 @@ export const useChat = (roomId) => {
     // socketRef.current.emit('conversation:get');
   };
 
-  const changeStage = async (id, value) => {
-    await socketRef?.current?.emit('status:change', { id, value });
+  const changeStage = async (id, value, position) => {
+    await socketRef?.current?.emit('status:change', { id, value, position });
 
     // await socketRef.current.emit('messages:get');
   };
@@ -199,7 +237,13 @@ export const useChat = (roomId) => {
   };
 
   const linkUserToConversation = async (conversation) => {
-    await socketRef?.current?.emit('conversation:update', conversation);
+    await socketRef?.current?.emit('conversation:link', conversation);
+    await getStages();
+    // await socketRef.current.emit('messages:get');
+  };
+
+  const unlinkUserToConversation = async (conversation) => {
+    await socketRef?.current?.emit('conversation:unlink', conversation);
     await getStages();
     // await socketRef.current.emit('messages:get');
   };
@@ -219,6 +263,9 @@ export const useChat = (roomId) => {
     logout,
     isLoading,
     statuses,
+    stages,
+    boardSections,
+    setBoardSections,
     conversations,
     messages,
     sendMessage,
@@ -229,5 +276,7 @@ export const useChat = (roomId) => {
     searchInput,
     setSearchInput,
     createStatus,
+    getStages,
+    managers,
   };
 };

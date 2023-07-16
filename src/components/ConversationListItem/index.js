@@ -15,7 +15,8 @@ export default function ConversationListItem({
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef(null);
-
+  const number =
+    data?.title?.match(/\[(\d+)\]/) && data.title.match(/\[(\d+)\]/)[1];
   const dateToFormat = moment
     .unix(
       data?.messages?.length
@@ -44,6 +45,8 @@ export default function ConversationListItem({
       observer.disconnect();
     };
   }, [elementRef]);
+
+  // console.log(data?.title?.match(/\[(.*?)\]/));
   return (
     <div
       ref={elementRef}
@@ -60,7 +63,6 @@ export default function ConversationListItem({
           alignItems: 'start',
           justifyContent: 'start',
           width: '350px',
-          paddingRight: '25px',
         }}
       >
         <img
@@ -150,7 +152,7 @@ export default function ConversationListItem({
           </div> */}
         </div>
       </div>
-      {isVisible && (
+      {/* {isVisible && (
         <div className="conversation-status">
           <StatusSelect
             statuses={statuses}
@@ -158,7 +160,7 @@ export default function ConversationListItem({
             changeStage={changeStage}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 }

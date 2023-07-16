@@ -1,23 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './BoardPageContainer.css';
 import BoardPageItem from '../BoardPageItem';
-import { Draggable } from 'react-beautiful-dnd';
 import EmptyBoard from '../EmptyBoard';
-import {
-  faAlignLeft,
-  faAngleLeft,
-  faArrowAltCircleLeft,
-  faArrowCircleLeft,
-  faArrowLeftLong,
-  faArrowsLeftRightToLine,
-  faCircleArrowLeft,
-  faDeleteLeft,
-  faGear,
-  faLeftLong,
-  faQuoteLeft,
-  faTentArrowTurnLeft,
-} from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faGear } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDroppable } from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import SortableTaskItem from '../SortableTaskItem';
+
 function chatCount(num) {
   const lastDigit = num % 10;
   if (lastDigit === 1 && num !== 11) {
@@ -30,14 +23,18 @@ function chatCount(num) {
 }
 
 const BoardPageContainer = ({
-  provided,
-  el,
-  isAnimating,
+  id,
+  status,
+  tasks,
   setSelectedConversation,
   linkUserToConversation,
   user,
-  openModal,
+  isDragging,
 }) => {
+  const { setNodeRef } = useDroppable({
+    id,
+  });
+
   return (
     <div className="board-page-list-block">
       <div className="board-page-list-container-info">
@@ -48,9 +45,11 @@ const BoardPageContainer = ({
             justifyContent: 'space-between',
           }}
         >
-          <span className="board-page-list-container-label">{el?.label}</span>
+          <span className="board-page-list-container-label">
+            {status?.label}
+          </span>
           <div>
-            {!el.default && (
+            {!status?.default && (
               <FontAwesomeIcon className="take-button-icon" icon={faGear} />
             )}
             <FontAwesomeIcon
@@ -60,39 +59,32 @@ const BoardPageContainer = ({
             />
           </div>
         </div>
-        <span>
-          {`${el?.conversations?.length} ${chatCount(
-            el?.conversations?.length
-          )}`}
-        </span>
-        <div style={{ background: el?.color }} className="color-line"></div>
+        <span>{`${tasks?.length} ${chatCount(tasks?.length)}`}</span>
+        <div style={{ background: status?.color }} className="color-line"></div>
       </div>
-      <div
-        className="board-page-list-container"
-        ref={provided.innerRef}
-        {...provided.droppableProps}
-      >
-        {el?.conversations?.map((item, index) => (
-          <Draggable
-            key={item?._id}
-            draggableId={item?._id}
-            index={index}
-            isDragDisabled={isAnimating}
-          >
-            {(provided2) => (
-              <BoardPageItem
-                provided={provided2}
-                item={item}
-                setSelectedConversation={setSelectedConversation}
-                linkUserToConversation={linkUserToConversation}
-                user={user}
-                openModal={openModal}
-              />
-            )}
-          </Draggable>
-        ))}
-        {!el?.conversations?.length && <EmptyBoard />}
-        {provided.placeholder}
+      <div className="board-page-list-container">
+        <SortableContext
+          id={id}
+          items={tasks || []}
+          strategy={verticalListSortingStrategy}
+        >
+          <div ref={setNodeRef}>
+            {tasks?.map((task) => (
+              <div key={task?._id}>
+                <SortableTaskItem id={task?._id}>
+                  <BoardPageItem
+                    task={task}
+                    setSelectedConversation={setSelectedConversation}
+                    linkUserToConversation={linkUserToConversation}
+                    user={user}
+                    isDraggin={isDragging}
+                  />
+                </SortableTaskItem>
+              </div>
+            ))}
+          </div>
+        </SortableContext>
+        {!tasks?.length && <EmptyBoard />}
       </div>
     </div>
   );

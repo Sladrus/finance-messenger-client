@@ -12,6 +12,7 @@ const StatusSelect = ({ statuses, data, changeStage }) => {
   }
 
   const handleSelectChange = async (event) => {
+    event.stopPropagation();
     const status = statuses.find((o) => o.value === event.target.value);
     // console.log(status);
     await changeStage(data._id, status.value);

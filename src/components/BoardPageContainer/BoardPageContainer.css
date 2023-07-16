@@ -3,6 +3,7 @@
   height: 100%;
   border-right: 1px solid #0000004f;
   min-width: 385px;
+  max-width: 385px;
 }
 
 .board-page-list-container-info {

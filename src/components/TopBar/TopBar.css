@@ -2,7 +2,7 @@
   /* width: 100%; */
   max-height: 50px;
   display: flex;
-  padding: 15px 15px;
+  padding: 10px 10px 5px 10px;
   border-bottom: 1px solid #0000004f;
   display: flex;
   background: #101b25;
@@ -30,4 +30,54 @@
   white-space: normal;
   outline-color: var(--select-focus);
   background: #1f2c3b;
+}
+
+.filter-select {
+  display: inline-block;
+  position: relative;
+  width: 250px;
+}
+
+.filter-select-control {
+  background-color: #101b25;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.filter-select-value-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filter-select-placeholder {
+  color: #999;
+}
+
+.filter-select-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  border: 1px solid #ccc;
+  background-color: #101b25;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.filter-select-option {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.filter-select-option--is-selected {
+  background-color: #101b25;
+  color: #fff;
+}
+
+.filter-select-option--is-focused {
+  background-color: #101b25;
 }
