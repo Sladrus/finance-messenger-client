@@ -9,12 +9,24 @@ import {
   faInfo,
   faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  faComment,
+  faPhotoVideo,
+  faTag,
+  faTags,
+  faFile,
+  faToggleOff,
+  faTasks,
+} from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment-timezone';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import ModalConversationItem from '../ModalConversationItem';
 import { useDraggable } from '@dnd-kit/core';
+import { AnimatePresence, motion } from 'framer-motion';
+import PopoverInput from '../PopoverInput';
+import { useLayer } from 'react-laag';
 
 const BoardPageItem = ({
   task,
@@ -25,6 +37,7 @@ const BoardPageItem = ({
   isEmpty,
 }) => {
   const [showButton, setShowButton] = useState(false);
+  const [isOpen, setOpen] = useState(false);
 
   const handleLinkButton = async (e) => {
     console.log('CLICK');
@@ -63,6 +76,22 @@ const BoardPageItem = ({
     navigate('/messenger');
     setSelectedConversation(chat_id);
   };
+
+  function close() {
+    setOpen(false);
+  }
+
+  const { renderLayer, triggerProps, layerProps } = useLayer({
+    isOpen,
+    onOutsideClick: close, // close the menu when the user clicks outside
+    onDisappear: close, // close the menu when the menu gets scrolled out of sight
+    overflowContainer: false, // keep the menu positioned inside the container
+    auto: true, // automatically find the best placement
+    placement: 'top-start', // we prefer to place the menu "top-end"
+    triggerOffset: 10, // keep some distance to the trigger
+    containerOffset: 10, // give the menu some room to breath relative to the container
+    arrowOffset: 0, // let the arrow have some room to breath also
+  });
 
   return (
     <div
@@ -161,19 +190,69 @@ const BoardPageItem = ({
             onClick={(e) => !isEmpty && e.stopPropagation()}
             className="take-button"
           >
-            <FontAwesomeIcon className="take-button-icon" icon={faPlus} />
+            <div>
+              <FontAwesomeIcon
+                {...triggerProps}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(!isOpen);
+                }}
+                className="take-button-icon"
+                icon={faPlus}
+              />
+
+              {renderLayer(
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="toolbar-popover"
+                      {...layerProps}
+                    >
+                      <PopoverInput
+                        icon={faLink}
+                        placeholder={'Закрепить'}
+                        // onChange={handleStatus}
+                        // value={label}
+                        // onKeyPress={handleKeyPress}
+                      />
+                      <PopoverInput
+                        icon={faTasks}
+                        placeholder={'Задача'}
+                        // onChange={handleStatus}
+                        // value={label}
+                        // onKeyPress={handleKeyPress}
+                      />
+                      <PopoverInput
+                        icon={faTags}
+                        placeholder={'Тэги'}
+                        // onChange={handleStatus}
+                        // value={label}
+                        // onKeyPress={handleKeyPress}
+                      />
+                      <PopoverInput
+                        icon={faComment}
+                        placeholder={'Комментарий'}
+                        // onChange={handleStatus}
+                        // value={label}
+                        // onKeyPress={handleKeyPress}
+                      />
+                      <PopoverInput
+                        icon={faInfoCircle}
+                        placeholder={'Статистика'}
+                        // onChange={handleStatus}
+                        // value={label}
+                        // onKeyPress={handleKeyPress}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              )}
+            </div>
           </div>
         )}
-        <div
-          onClick={(e) => {
-            if (isEmpty) return;
-            e.stopPropagation();
-            navigateToConversation(task.chat_id);
-          }}
-          className="take-button"
-        >
-          <FontAwesomeIcon className="take-button-icon" icon={faInfoCircle} />
-        </div>
       </div>
     </div>
   );

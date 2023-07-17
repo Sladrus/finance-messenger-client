@@ -17,6 +17,8 @@ import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
 import BoardPageItem from '../../components/BoardPageItem';
 // import BoardPageContainer from '../../components/BoardPageContainer';
 import EmptyBoardPageContainer from '../../components/EmptyBoardPageContainer';
+import ReactModal from 'react-modal';
+import CreateBoardPageItemModal from '../../components/CreateBoardPageItemModal';
 
 export const getTasksByStatus = (tasks, status) => {
   return tasks.filter((task) => task.stage.value === status.value);
@@ -57,7 +59,7 @@ export const getTaskById = (statuses, id) => {
 
 const BoardPage = ({
   statuses,
-  updateStatuses,
+  updateStage,
   setSelectedConversation,
   linkUserToConversation,
   user,
@@ -66,12 +68,13 @@ const BoardPage = ({
   createStatus,
   changeStage,
   getStages,
+  deleteStage,
 }) => {
   const [boardSections, setBoardSections] = useState(initializeBoard(statuses));
   const [activeTaskId, setActiveTaskId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [createBoardModalIsOpen, createBoardSetIsOpen] = useState(false);
   useEffect(() => {
     setBoardSections(initializeBoard(statuses));
   }, [statuses]);
@@ -90,13 +93,14 @@ const BoardPage = ({
     })
   );
 
-  const openModal = (e) => {
-    // e.stopPropagation();
-    setIsOpen(true);
+  const createBoardOpenModal = (e) => {
+    console.log('OPEN MODAL');
+    createBoardSetIsOpen(true);
   };
 
-  const closeModal = () => {
-    setIsOpen(false);
+  const createBoardCloseModal = (e) => {
+    console.log('CLOSE MODAL');
+    createBoardSetIsOpen(false);
   };
 
   const handleDragStart = ({ active }) => {
@@ -164,6 +168,7 @@ const BoardPage = ({
     // changeStage(, activeContainer);
     // console.log(activeContainer, overContainer);
   };
+
   const handleDragEnd = ({ active, over }) => {
     const activeContainer = findBoardSectionContainer(boardSections, active.id);
     const overContainer = findBoardSectionContainer(boardSections, over?.id);
@@ -210,7 +215,7 @@ const BoardPage = ({
   };
 
   const task = activeTaskId ? getTaskById(statuses, activeTaskId) : null;
-  // console.log(task);
+
   return (
     <div className="board-page">
       <div
@@ -238,6 +243,8 @@ const BoardPage = ({
                   user={user}
                   isDragging={isDragging}
                   isEmpty={false}
+                  updateStage={updateStage}
+                  deleteStage={deleteStage}
                 />
               );
             })}
@@ -246,9 +253,14 @@ const BoardPage = ({
             </DragOverlay>
           </DndContext>
 
-          <EmptyBoardPageContainer openModal={openModal} />
+          <EmptyBoardPageContainer openModal={createBoardOpenModal} />
         </div>
       </div>
+      <CreateBoardPageItemModal
+        modalIsOpen={createBoardModalIsOpen}
+        closeModal={createBoardCloseModal}
+        createStatus={createStatus}
+      />
     </div>
   );
 };

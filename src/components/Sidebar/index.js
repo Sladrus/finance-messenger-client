@@ -22,7 +22,7 @@ const Sidebar = ({ logout }) => {
       icon: faDiagramPredecessor,
       route: BOARD_ROUTE,
     },
-    { id: 2, text: 'Задачи', icon: faListCheck, route: TASKS_ROUTE },
+    // { id: 2, text: 'Задачи', icon: faListCheck, route: TASKS_ROUTE },
   ];
   const navigate = useNavigate();
 

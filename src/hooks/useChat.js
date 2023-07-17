@@ -211,15 +211,20 @@ export const useChat = (roomId) => {
     setMessages([]);
   };
 
-  const updateStatuses = () => {
+  const deleteStage = (id) => {
     setIsLoading(true);
 
-    // добавляем в объект id пользователя при отправке на сервер
-    console.log('UPDATE');
-    socketRef?.current?.emit('status:update', statuses);
+    socketRef?.current?.emit('status:delete', { id });
 
     setIsLoading(false);
-    // socketRef.current.emit('conversation:get');
+  };
+
+  const updateStage = (status) => {
+    setIsLoading(true);
+
+    socketRef?.current?.emit('status:update', status);
+
+    setIsLoading(false);
   };
 
   const changeStage = async (id, value, position) => {
@@ -269,7 +274,6 @@ export const useChat = (roomId) => {
     conversations,
     messages,
     sendMessage,
-    updateStatuses,
     setStatuses,
     changeStage,
     linkUserToConversation,
@@ -278,5 +282,7 @@ export const useChat = (roomId) => {
     createStatus,
     getStages,
     managers,
+    updateStage,
+    deleteStage,
   };
 };

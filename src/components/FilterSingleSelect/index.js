@@ -80,7 +80,17 @@ const FilterSingleSelect = ({ onChange, label, options }) => {
   };
   return (
     <div style={{ display: 'inline-block', fontSize: '12px', color: '#999' }}>
-      <label style={{ padding: '0 10px' }}>{label}</label>
+      <label
+        style={{
+          overflow: 'hidden',
+          padding: '0 10px',
+          outline: 'none',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+        }}
+      >
+        {label}
+      </label>
       <Select
         onChange={onChange}
         defaultValue={options[0]}

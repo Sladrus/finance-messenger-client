@@ -1,9 +1,11 @@
 import React from 'react';
 import './ModalInput.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const ModalInput = ({ placeholder, value, onChange, onKeyPress }) => {
+const ModalInput = ({ icon, placeholder, value, onChange, onKeyPress }) => {
   return (
     <div className="modal-input">
+      <FontAwesomeIcon className="modal-input-icon" icon={icon} />
       <input
         placeholder={placeholder}
         value={value}

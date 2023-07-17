@@ -36,3 +36,30 @@
 .compose .toolbar-button:hover {
   color: #778d9f;
 }
+
+.toolbar-popover {
+  margin-left: 10px;
+  width: 200px;
+  color: #778d9f;
+  background: #101b25;
+  border-radius: 5px;
+}
+
+.toolbar-tool-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.toolbar-tool-button span {
+  font-size: 16px;
+  text-align: center;
+  padding-right: 10px;
+}
+
+.toolbar-tool-icon {
+  width: 20px;
+  height: 20px;
+  /* padding: 5px px; */
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './BoardPageContainer.css';
 import BoardPageItem from '../BoardPageItem';
 import EmptyBoard from '../EmptyBoard';
@@ -10,6 +10,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import SortableTaskItem from '../SortableTaskItem';
+import SettingsBoardItemModal from '../SettingsBoardItemModal';
 
 function chatCount(num) {
   const lastDigit = num % 10;
@@ -30,10 +31,22 @@ const BoardPageContainer = ({
   linkUserToConversation,
   user,
   isDragging,
+  updateStage,
+  deleteStage,
 }) => {
   const { setNodeRef } = useDroppable({
     id,
   });
+
+  const [settingsBoardModalisOpen, setSettingsBoardModalIsOpen] =
+    useState(false);
+
+  const openSettingsBoardModal = () => {
+    setSettingsBoardModalIsOpen(true);
+  };
+  const closeSettingsBoardModal = () => {
+    setSettingsBoardModalIsOpen(false);
+  };
 
   return (
     <div className="board-page-list-block">
@@ -50,7 +63,11 @@ const BoardPageContainer = ({
           </span>
           <div>
             {!status?.default && (
-              <FontAwesomeIcon className="take-button-icon" icon={faGear} />
+              <FontAwesomeIcon
+                onClick={openSettingsBoardModal}
+                className="take-button-icon"
+                icon={faGear}
+              />
             )}
             <FontAwesomeIcon
               style={{ paddingLeft: '10px' }}
@@ -86,6 +103,13 @@ const BoardPageContainer = ({
         </SortableContext>
         {!tasks?.length && <EmptyBoard />}
       </div>
+      <SettingsBoardItemModal
+        status={status}
+        modalIsOpen={settingsBoardModalisOpen}
+        closeModal={closeSettingsBoardModal}
+        updateStage={updateStage}
+        deleteStage={deleteStage}
+      />
     </div>
   );
 };

@@ -28,7 +28,6 @@ const AppRoutes = () => {
     conversations,
     messages,
     sendMessage,
-    updateStatuses,
     setStatuses,
     changeStage,
     linkUserToConversation,
@@ -37,6 +36,8 @@ const AppRoutes = () => {
     createStatus,
     getStages,
     managers,
+    updateStage,
+    deleteStage,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ const AppRoutes = () => {
                     conversations={conversations}
                     messages={messages}
                     sendMessage={sendMessage}
-                    updateStatuses={updateStatuses}
+                    updateStage={updateStage}
                     setStatuses={setStatuses}
                     selectedConversation={selectedConversation}
                     setSelectedConversation={setSelectedConversation}
@@ -105,6 +106,7 @@ const AppRoutes = () => {
                     setSearchInput={setSearchInput}
                     createStatus={createStatus}
                     getStages={getStages}
+                    deleteStage={deleteStage}
                   />
                 }
                 exact

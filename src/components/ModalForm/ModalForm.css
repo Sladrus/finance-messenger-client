@@ -10,3 +10,11 @@
   font-size: 16px;
   padding: 10px 10px;
 }
+
+.modal-title-icon {
+  cursor: pointer;
+}
+
+.modal-title-icon:hover {
+  color: white;
+}
