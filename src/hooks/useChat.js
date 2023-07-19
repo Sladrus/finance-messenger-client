@@ -61,10 +61,11 @@ export const useChat = (roomId) => {
     setIsLoading(true);
     const token = localStorage.getItem('token');
     socketRef.current = io(env.SERVER_URL, {
-      transports: ['websocket'],
+      transports: ['websocket', 'polling'],
       query: token && `auth_token=${token}`,
       auth: { roomId },
       cors: { origin: '*' },
+      path: '/socket',
     });
     // отправляем запрос на получение сообщений
     clearMessages();
