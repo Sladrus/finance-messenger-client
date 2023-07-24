@@ -20,10 +20,23 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import 'react-dropdown/style.css';
 import PopoverInput from '../PopoverInput';
+import PopoverButton from '../PopoverButton';
+import PopoverModal from '../PopoverModal';
+import PopoverSelect from '../PopoverSelect';
 
-export default function Compose({ user, selectedConversation, sendMessage }) {
+export default function Compose({
+  user,
+  selectedConversation,
+  sendMessage,
+  readConversation,
+  linkUserToConversation,
+  conversations,
+  statuses,
+}) {
   const [text, setText] = useState('');
   const [isOpen, setOpen] = useState(false);
+  const [popoverModalIsOpen, setPopoverModalIsOpen] = useState(false);
+  const [modalValue, setModalValue] = useState();
 
   const inputElement = useRef(null);
   useEffect(() => {
@@ -64,6 +77,17 @@ export default function Compose({ user, selectedConversation, sendMessage }) {
     arrowOffset: 0, // let the arrow have some room to breath also
   });
 
+  const conversation = conversations.find(
+    (o) => o.chat_id === selectedConversation
+  );
+  // console.log(modalValue);
+
+  const handleModalValue = (value, type) => {
+    console.log(value, type);
+    setModalValue({ type, value });
+    setPopoverModalIsOpen(true);
+  };
+
   return (
     <form className="compose" onSubmit={handleSendMessage}>
       <div>
@@ -82,52 +106,78 @@ export default function Compose({ user, selectedConversation, sendMessage }) {
                 className="toolbar-popover"
                 {...layerProps}
               >
-                <PopoverInput
+                <PopoverButton
                   icon={faCheck}
-                  placeholder={'Прочитано'}
+                  placeholder={
+                    conversation?.unreadCount > 0 ? 'Прочитать' : 'Прочитано'
+                  }
+                  onClick={() => readConversation(selectedConversation)}
+                  isEnabled={conversation?.unreadCount > 0 ? false : true}
+
                   // onChange={handleStatus}
                   // value={label}
                   // onKeyPress={handleKeyPress}
                 />
-                <PopoverInput
+
+                {/* <PopoverInput
+                  icon={faDollar}
+                  placeholder={'Баланс'}
+                  // onChange={handleStatus}
+                  // value={label}
+                  // onKeyPress={handleKeyPress}
+                /> */}
+                <PopoverButton
+                  icon={faLink}
+                  placeholder={
+                    conversation?.user ? 'Отвязать чат' : 'Привязать чат'
+                  }
+                  onClick={() =>
+                    linkUserToConversation(selectedConversation, user)
+                  }
+                  isEnabled={conversation?.user ? true : false}
+
+                  // onChange={handleStatus}
+                  // value={label}
+                  // onKeyPress={handleKeyPress}
+                />
+                <PopoverButton
                   icon={faChartLine}
                   placeholder={'Курсы валют'}
                   // onChange={handleStatus}
                   // value={label}
                   // onKeyPress={handleKeyPress}
                 />
-                <PopoverInput
-                  icon={faDollar}
-                  placeholder={'Баланс'}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
-                />
-                <PopoverInput
-                  icon={faLink}
-                  placeholder={'Закрепить'}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
-                />
-
-                <PopoverInput
+                {/* <PopoverInput
                   icon={faToggleOff}
                   placeholder={'Активировать'}
+                  // onChange={handleStatus}
+                  // value={label}
+                  // onKeyPress={handleKeyPress}
+                /> */}
+                <PopoverInput
+                  icon={faComment}
+                  placeholder={'Добавить комментарий'}
+                  type={'comment'}
+                  onSubmit={handleModalValue}
+                  sendMessage={sendMessage}
+                  // setModalValue={setModalValue}
                   // onChange={handleStatus}
                   // value={label}
                   // onKeyPress={handleKeyPress}
                 />
                 <PopoverInput
                   icon={faTasks}
-                  placeholder={'Задача'}
+                  placeholder={'Добавить задачу'}
+                  onSubmit={handleModalValue}
+
                   // onChange={handleStatus}
                   // value={label}
                   // onKeyPress={handleKeyPress}
                 />
-                <PopoverInput
+                <PopoverSelect
                   icon={faTag}
-                  placeholder={'Статус'}
+                  options={[...statuses]}
+                  conversation={conversation}
                   // onChange={handleStatus}
                   // value={label}
                   // onKeyPress={handleKeyPress}
@@ -139,13 +189,7 @@ export default function Compose({ user, selectedConversation, sendMessage }) {
                   // value={label}
                   // onKeyPress={handleKeyPress}
                 />
-                <PopoverInput
-                  icon={faComment}
-                  placeholder={'Комментарий'}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
-                />
+
                 <PopoverInput
                   icon={faPhotoVideo}
                   placeholder={'Фото или видео'}
@@ -177,6 +221,14 @@ export default function Compose({ user, selectedConversation, sendMessage }) {
       {text && (
         <ToolbarButton icon={faArrowRight} onClick={handleSendMessage} />
       )}
+      <PopoverModal
+        sendMessage={sendMessage}
+        modalIsOpen={popoverModalIsOpen}
+        closeModal={() => setPopoverModalIsOpen(false)}
+        modalValue={modalValue}
+        user={user}
+        selectedConversation={selectedConversation}
+      />
       {/* {!text && <ToolbarButton icon={faPlus} />} */}
     </form>
   );

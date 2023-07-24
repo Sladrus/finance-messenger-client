@@ -1,12 +1,9 @@
-.popover-input {
+.popover-button {
   display: flex;
   align-items: center;
   justify-content: start;
   width: 100%;
   padding: 0;
-}
-
-.popover-input input {
   /* float: right; */
   /* text-align: left; */
   /* direction: ltr; */
@@ -16,7 +13,7 @@
   /* border: 1px solid #ffffff13; */
   height: 35px;
   /* min-width: 180px; */
-  width: 200px;
+  width: 100%;
   /* border-radius: 10px; */
   border: none;
   /* margin: 10px 10px; */
@@ -33,7 +30,16 @@
   /* text-align: center; */
 }
 
-.popover-input-color {
+.popover-button .enabled {
+  color: #73b9f3;
+}
+
+.popover-button span {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.popover-button-color {
   display: flex;
   align-items: center;
   /* float: right; */
@@ -63,41 +69,24 @@
   /* text-align: center; */
 }
 
-.popover-input:hover {
+.popover-button:hover {
+  cursor: pointer;
   background-color: #2d3b46;
   /* color: ; */
   border-radius: 5px;
 }
 
-.popover-input input::placeholder {
-  /* float: left;
-  clear: both; */
-
-  font-size: 14px;
-  /* font-weight: 100; */
-  /* background-color: #2d3b46; */
-  color: #cccccc;
-  /* text-align: left; */
-
-  /* color: ; */
-}
-
-.popover-input-icon {
+.popover-button-icon {
   width: 20px;
   height: 20px;
   color: #cccccc;
   padding: 0px 15px;
 }
 
-.popover-input-icon-caret {
+.popover-button-icon-caret {
   cursor: pointer;
   width: 20px;
   height: 20px;
   color: #cccccc;
   padding: 0px 30px;
-}
-
-.popover-input input:focus::placeholder {
-  /* text-align: left; */
-  color: transparent;
 }

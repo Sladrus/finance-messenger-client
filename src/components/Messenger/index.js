@@ -24,6 +24,7 @@ export default function Messenger({
   linkUserToConversation,
   searchInput,
   setSearchInput,
+  readConversation,
 }) {
   // const [username, setUsername] = useLocalStorage('username', 'John');
   const handleButtonClick = (id) => {
@@ -71,6 +72,10 @@ export default function Messenger({
         selectedConversation={selectedConversation}
         messages={messages}
         sendMessage={sendMessage}
+        readConversation={readConversation}
+        linkUserToConversation={linkUserToConversation}
+        conversations={conversations}
+        statuses={statuses}
       />
     </div>
   );

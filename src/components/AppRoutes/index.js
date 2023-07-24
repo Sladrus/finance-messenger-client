@@ -38,6 +38,7 @@ const AppRoutes = () => {
     managers,
     updateStage,
     deleteStage,
+    readConversation,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -104,9 +105,12 @@ const AppRoutes = () => {
                     linkUserToConversation={linkUserToConversation}
                     searchInput={searchInput}
                     setSearchInput={setSearchInput}
+                    //stages
                     createStatus={createStatus}
                     getStages={getStages}
                     deleteStage={deleteStage}
+                    //conversations
+                    readConversation={readConversation}
                   />
                 }
                 exact

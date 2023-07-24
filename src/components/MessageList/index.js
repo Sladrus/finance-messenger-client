@@ -13,6 +13,10 @@ export default function MessageList({
   selectedConversation,
   messages,
   sendMessage,
+  readConversation,
+  linkUserToConversation,
+  conversations,
+  statuses,
 }) {
   const MY_USER_ID = user._id;
 
@@ -104,6 +108,10 @@ export default function MessageList({
           user={user}
           selectedConversation={selectedConversation}
           sendMessage={sendMessage}
+          readConversation={readConversation}
+          linkUserToConversation={linkUserToConversation}
+          conversations={conversations}
+          statuses={statuses}
         />
       )}
     </div>

@@ -6,24 +6,14 @@ import {
   faUser,
   faLink,
   faPlus,
-  faInfo,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
-import {
   faComment,
-  faPhotoVideo,
-  faTag,
   faTags,
-  faFile,
-  faToggleOff,
   faTasks,
+  faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment-timezone';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useEffect } from 'react';
-import ModalConversationItem from '../ModalConversationItem';
-import { useDraggable } from '@dnd-kit/core';
 import { AnimatePresence, motion } from 'framer-motion';
 import PopoverInput from '../PopoverInput';
 import { useLayer } from 'react-laag';

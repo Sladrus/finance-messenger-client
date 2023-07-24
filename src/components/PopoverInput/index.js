@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './PopoverInput.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-const PopoverInput = ({ icon, placeholder, value, onChange, onKeyPress }) => {
+const PopoverInput = ({
+  icon,
+  placeholder,
+  type,
+  onSubmit,
+
+}) => {
+  const [value, setValue] = useState('');
+
+  const handleKeyPress = (event) => {
+    if (event.keyCode === 13) {
+      // keyCode 13 corresponds to the Enter key
+      onSubmit(value, type);
+    }
+  };
+
+
+
+  const handleValueChange = (e) => {
+    setValue(e.target.value);
+    // setModalValue({ type: 'comment', value: e.target.value });
+  };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -15,8 +36,8 @@ const PopoverInput = ({ icon, placeholder, value, onChange, onKeyPress }) => {
       <input
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
-        onKeyDown={onKeyPress}
+        onChange={handleValueChange}
+        onKeyDown={handleKeyPress}
       />
     </motion.div>
   );

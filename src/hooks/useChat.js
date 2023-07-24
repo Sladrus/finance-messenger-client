@@ -242,15 +242,24 @@ export const useChat = (roomId) => {
     // await socketRef.current.emit('messages:get');
   };
 
-  const linkUserToConversation = async (conversation) => {
-    await socketRef?.current?.emit('conversation:link', conversation);
-    await getStages();
+  const linkUserToConversation = async (chat_id, user) => {
+    console.log(chat_id, user);
+    await socketRef?.current?.emit('conversation:link', { chat_id, user });
+    // await getStages();
     // await socketRef.current.emit('messages:get');
   };
 
   const unlinkUserToConversation = async (conversation) => {
     await socketRef?.current?.emit('conversation:unlink', conversation);
     await getStages();
+    // await socketRef.current.emit('messages:get');
+  };
+
+  const readConversation = async (chat_id) => {
+    console.log(chat_id);
+    await socketRef?.current?.emit('conversation:read', { chat_id });
+    // await getStages();
+    // await getMessages();
     // await socketRef.current.emit('messages:get');
   };
 
@@ -285,5 +294,6 @@ export const useChat = (roomId) => {
     managers,
     updateStage,
     deleteStage,
+    readConversation,
   };
 };

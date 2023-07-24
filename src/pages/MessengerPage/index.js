@@ -18,6 +18,7 @@ function MessengerPage({
   linkUserToConversation,
   searchInput,
   setSearchInput,
+  readConversation,
 }) {
   const navigate = useNavigate();
 
@@ -38,6 +39,7 @@ function MessengerPage({
         linkUserToConversation={linkUserToConversation}
         searchInput={searchInput}
         setSearchInput={setSearchInput}
+        readConversation={readConversation}
       />
     </div>
   );
