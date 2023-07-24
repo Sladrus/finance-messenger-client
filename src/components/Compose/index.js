@@ -32,6 +32,7 @@ export default function Compose({
   linkUserToConversation,
   conversations,
   statuses,
+  sendComment,
 }) {
   const [text, setText] = useState('');
   const [isOpen, setOpen] = useState(false);
@@ -222,7 +223,7 @@ export default function Compose({
         <ToolbarButton icon={faArrowRight} onClick={handleSendMessage} />
       )}
       <PopoverModal
-        sendMessage={sendMessage}
+        sendComment={sendComment}
         modalIsOpen={popoverModalIsOpen}
         closeModal={() => setPopoverModalIsOpen(false)}
         modalValue={modalValue}

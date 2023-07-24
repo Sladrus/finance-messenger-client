@@ -17,6 +17,7 @@ export default function MessageList({
   linkUserToConversation,
   conversations,
   statuses,
+  sendComment,
 }) {
   const MY_USER_ID = user._id;
 
@@ -37,6 +38,7 @@ export default function MessageList({
     while (i < messageCount) {
       let previous = messages[i - 1];
       let current = messages[i];
+      console.log(current);
       let next = messages[i + 1];
       let isMine = current.from.id === MY_USER_ID;
       let currentMoment = moment(current.date);
@@ -112,6 +114,7 @@ export default function MessageList({
           linkUserToConversation={linkUserToConversation}
           conversations={conversations}
           statuses={statuses}
+          sendComment={sendComment}
         />
       )}
     </div>

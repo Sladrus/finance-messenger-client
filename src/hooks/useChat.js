@@ -175,13 +175,37 @@ export const useChat = (roomId) => {
 
   // функция отправки сообщения
   // принимает объект с текстом сообщения и именем отправителя
+  const sendComment = ({
+    type,
+    text,
+    from,
+    selectedConversation,
+    isBot,
+    unread,
+    date,
+  }) => {
+    socketRef.current.emit(
+      'message:add',
+      {
+        type,
+        text,
+        from,
+        isBot,
+        unread,
+        date,
+      },
+      selectedConversation
+    );
+  };
+
   const sendMessage = ({ user, text, selectedConversation, type }) => {
+    // console.log('msg');
     setMessages([
       ...messages,
       {
         from: { id: user._id, first_name: user.username },
         text,
-        type: 'text',
+        type: type,
         loading: true,
       },
     ]);
@@ -295,5 +319,6 @@ export const useChat = (roomId) => {
     updateStage,
     deleteStage,
     readConversation,
+    sendComment,
   };
 };

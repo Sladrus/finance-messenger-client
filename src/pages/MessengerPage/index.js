@@ -19,6 +19,7 @@ function MessengerPage({
   searchInput,
   setSearchInput,
   readConversation,
+  sendComment,
 }) {
   const navigate = useNavigate();
 
@@ -40,6 +41,7 @@ function MessengerPage({
         searchInput={searchInput}
         setSearchInput={setSearchInput}
         readConversation={readConversation}
+        sendComment={sendComment}
       />
     </div>
   );

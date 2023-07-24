@@ -4,21 +4,16 @@ import ReactModal from 'react-modal';
 import PopoverConfirmationForm from '../PopoverConfirmationForm';
 
 const PopoverModal = ({
-  sendMessage,
+  sendComment,
   modalIsOpen,
   closeModal,
   modalValue,
   user,
   selectedConversation,
 }) => {
-  const handleSendMessage = async (data) => {
+  const handleSendComment = async (data) => {
     console.log(data);
-    // await sendMessage({
-    //   user: user,
-    //   text: text,
-    //   selectedConversation: selectedConversation,
-    //   type: 'text',
-    // });
+    await sendComment(data);
   };
   return (
     <ReactModal
@@ -34,7 +29,7 @@ const PopoverModal = ({
       <PopoverConfirmationForm
         closeModal={closeModal}
         modalValue={modalValue}
-        handleSendMessage={handleSendMessage}
+        handleSendComment={handleSendComment}
         user={user}
         selectedConversation={selectedConversation}
       />

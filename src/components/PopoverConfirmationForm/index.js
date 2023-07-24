@@ -7,7 +7,7 @@ import ModalButton from '../ModalButton';
 const PopoverConfirmationForm = ({
   closeModal,
   modalValue,
-  handleSendMessage,
+  handleSendComment,
   user,
   selectedConversation,
 }) => {
@@ -16,14 +16,18 @@ const PopoverConfirmationForm = ({
     modalValue.type === 'comment'
       ? `Добавить комментарий "${modalValue.value}?"`
       : ``;
+
   const submit = async () => {
+    console.log('send message');
     if (modalValue.type === 'comment') {
-      await handleSendMessage({
+      await handleSendComment({
         type: 'comment',
         text: modalValue.value,
-        user: user,
+        from: { id: 1274681231, first_name: user.username },
         selectedConversation: selectedConversation,
-        isBot: true,
+        isBot: false,
+        unread: false,
+        date: Date.now(),
       });
     }
     closeModal();

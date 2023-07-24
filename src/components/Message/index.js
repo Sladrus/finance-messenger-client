@@ -107,13 +107,40 @@ export default function Message({
           </div> */}
         </div>
       )}
+      {data?.type === 'comment' && (
+        <div
+          className="bubble-container"
+          style={{ alignItems: 'center', justifyContent: 'center' }}
+        >
+          <pre
+            style={{
+              fontSize: '14px',
+              background: '#111f30',
+              borderRadius: '20px',
+              margin: '0',
+              padding: '5px 15px',
+              fontWeight: '600',
+            }}
+          >
+            {data.text}
+          </pre>
 
+          {/* <div
+            style={{
+              display: 'flex',
+            }}
+            className="bubble-time"
+          >
+            <span>{formattedDate}</span>
+          </div> */}
+        </div>
+      )}
       <div
         className="bubble-container"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {data?.type !== 'event' && !isMine && (
+        {data?.type !== 'event' && data?.type !== 'comment' && !isMine && (
           <div className="bubble-avatar">
             {endsSequence && (
               <Avatar

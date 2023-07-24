@@ -39,6 +39,7 @@ const AppRoutes = () => {
     updateStage,
     deleteStage,
     readConversation,
+    sendComment,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -111,6 +112,7 @@ const AppRoutes = () => {
                     deleteStage={deleteStage}
                     //conversations
                     readConversation={readConversation}
+                    sendComment={sendComment}
                   />
                 }
                 exact
