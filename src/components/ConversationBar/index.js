@@ -36,14 +36,15 @@ const ConversationBar = ({
 }) => {
   const handleLinkButton = async (e) => {
     e.stopPropagation();
-    if (conversation.user) {
-      conversation.user = null;
-      await linkUserToConversation(conversation);
-    } else {
-      conversation.user = user._id;
-      await linkUserToConversation(conversation);
-      conversation.user = { username: user.username };
-    }
+    await linkUserToConversation(selectedConversation, user);
+    // if (conversation.user) {
+    //   conversation.user = null;
+    //   await linkUserToConversation(conversation);
+    // } else {
+    //   conversation.user = user._id;
+    //   await linkUserToConversation(conversation);
+    //   conversation.user = { username: user.username };
+    // }
   };
   const conversation = conversations.find(
     (o) => o.chat_id === selectedConversation

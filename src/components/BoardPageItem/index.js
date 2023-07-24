@@ -25,6 +25,7 @@ const BoardPageItem = ({
   user,
   openModal,
   isEmpty,
+  selectedConversation,
 }) => {
   const [showButton, setShowButton] = useState(false);
   const [isOpen, setOpen] = useState(false);
@@ -32,14 +33,15 @@ const BoardPageItem = ({
   const handleLinkButton = async (e) => {
     console.log('CLICK');
     e.stopPropagation();
-    if (task.user && !isEmpty) {
-      task.user = null;
-      await linkUserToConversation(task);
-    } else {
-      task.user = user._id;
-      await linkUserToConversation(task);
-      task.user = { username: user.username };
-    }
+    await linkUserToConversation(selectedConversation, user);
+    //
+    // if (task.user && !isEmpty) {
+    //   task.user = null;
+    // } else {
+    //   task.user = user._id;
+    //   await linkUserToConversation(task);
+    //   task.user = { username: user.username };
+    // }
   };
 
   const handleMouseEnter = () => {

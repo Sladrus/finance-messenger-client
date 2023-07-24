@@ -28,6 +28,7 @@ const BoardPageContainer = ({
   status,
   tasks,
   setSelectedConversation,
+  selectedConversation,
   linkUserToConversation,
   user,
   isDragging,
@@ -95,6 +96,7 @@ const BoardPageContainer = ({
                     linkUserToConversation={linkUserToConversation}
                     user={user}
                     isDraggin={isDragging}
+                    selectedConversation={selectedConversation}
                   />
                 </SortableTaskItem>
               </div>

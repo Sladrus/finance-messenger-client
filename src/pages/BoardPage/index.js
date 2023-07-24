@@ -69,6 +69,7 @@ const BoardPage = ({
   changeStage,
   getStages,
   deleteStage,
+  selectedConversation,
 }) => {
   const [boardSections, setBoardSections] = useState(initializeBoard(statuses));
   const [activeTaskId, setActiveTaskId] = useState(null);
@@ -239,6 +240,7 @@ const BoardPage = ({
                   status={statuses.find((o) => o.value === boardSectionKey)}
                   tasks={boardSections[boardSectionKey]}
                   setSelectedConversation={setSelectedConversation}
+                  selectedConversation={selectedConversation}
                   linkUserToConversation={linkUserToConversation}
                   user={user}
                   isDragging={isDragging}
