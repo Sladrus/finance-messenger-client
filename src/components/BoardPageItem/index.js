@@ -33,7 +33,7 @@ const BoardPageItem = ({
   const handleLinkButton = async (e) => {
     console.log('CLICK');
     e.stopPropagation();
-    await linkUserToConversation(selectedConversation, user);
+    await linkUserToConversation(task.chat_id, user);
     //
     // if (task.user && !isEmpty) {
     //   task.user = null;
