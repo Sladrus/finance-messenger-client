@@ -153,7 +153,7 @@ const BoardPageItem = ({
             <span>{task?.user?.username}</span>
           </div>
         )}
-        {user.role === 'ADMIN' && task?.user && showButton && (
+        {user?.role === 'ADMIN' && task?.user && showButton && (
           <div
             onClick={(e) => {
               e.stopPropagation();
@@ -168,7 +168,7 @@ const BoardPageItem = ({
             />
           </div>
         )}
-        {user.role === 'ADMIN' && !task?.user && showButton && (
+        {user?.role === 'ADMIN' && !task?.user && showButton && (
           <div
             onClick={(e) => !isEmpty && e.stopPropagation()}
             className="take-button"
