@@ -27,7 +27,7 @@ const PopoverConfirmationForm = ({
         selectedConversation: selectedConversation,
         isBot: false,
         unread: false,
-        date: Date.now(),
+        date: Date.now() / 1000,
       });
     }
     closeModal();

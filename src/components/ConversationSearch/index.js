@@ -37,13 +37,6 @@ export default function ConversationSearch({
           <ToolbarButton onClick={() => setSearchInput('')} icon={faXmark} />
         )}
       </div>
-      <div>
-        <FontAwesomeIcon
-          onClick={handleClick}
-          className="conversation-expand-button"
-          icon={faRightLeft}
-        />
-      </div>
     </div>
   );
 }

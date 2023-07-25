@@ -7,7 +7,7 @@
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   background: #101b25;
-  min-height: 50%;
+  min-height: 100%;
 }
 
 .conversation-list-container {

@@ -20,7 +20,7 @@ export default function ConversationListItem({
   const dateToFormat = moment
     .unix(
       data?.messages?.length
-        ? data?.messages[data?.messages?.length - 1]?.date
+        ? moment(data?.messages[data?.messages?.length - 1]?.date)
         : moment(data.createdAt).unix()
     )
     .utcOffset(180); // Здесь вы можете использовать любую дату, которую необходимо отформатировать
