@@ -11,10 +11,8 @@ import {
   faTag,
   faTags,
   faFile,
-  faToggleOff,
   faLink,
   faTasks,
-  faDollar,
   faChartLine,
   faCheck,
 } from '@fortawesome/free-solid-svg-icons';
@@ -44,11 +42,8 @@ export default function Compose({
     inputElement.current.focus();
   }, [selectedConversation]);
 
-  const handleChangeText = (e) => {
-    setText(e.target.value);
-  };
-
   const handleSendMessage = (e) => {
+    console.log(e);
     e.preventDefault();
     const trimmed = text.trim();
     if (trimmed) {
@@ -81,12 +76,34 @@ export default function Compose({
   const conversation = conversations.find(
     (o) => o.chat_id === selectedConversation
   );
-  // console.log(modalValue);
 
   const handleModalValue = (value, type) => {
     console.log(value, type);
     setModalValue({ type, value });
     setPopoverModalIsOpen(true);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && event.shiftKey) {
+      event.preventDefault();
+      setText((prevValue) => prevValue + '\n');
+      inputElement.current.style.height = '20px';
+      inputElement.current.style.height = `${event.target.scrollHeight - 10}px`;
+    }
+
+    if (event.key === 'Enter' && event.shiftKey === false) {
+      event.preventDefault(); // Отменяем стандартное поведение клавиши Enter
+      event.stopPropagation();
+      handleSendMessage(event);
+      inputElement.current.style.height = '20px';
+    }
+  };
+
+  const handleChangeText = (e) => {
+    inputElement.current.style.height = '20px';
+    inputElement.current.style.height = `${e.target.scrollHeight - 10}px`;
+    const updatedText = e.target.value;
+    setText(updatedText);
   };
 
   return (
@@ -127,7 +144,7 @@ export default function Compose({
                   // value={label}
                   // onKeyPress={handleKeyPress}
                 /> */}
-                <PopoverButton
+                {/* <PopoverButton
                   icon={faLink}
                   placeholder={
                     conversation?.user ? 'Отвязать чат' : 'Привязать чат'
@@ -140,7 +157,7 @@ export default function Compose({
                   // onChange={handleStatus}
                   // value={label}
                   // onKeyPress={handleKeyPress}
-                />
+                /> */}
                 <PopoverButton
                   icon={faChartLine}
                   placeholder={'Курсы валют'}
@@ -211,10 +228,15 @@ export default function Compose({
         )}
       </div>
 
-      <input
-        type="text"
+      <textarea
+        type="textarea"
         ref={inputElement}
+        rows={1}
+        cols={1}
         value={text}
+        fullWidth
+        multiline
+        onKeyDown={handleKeyDown}
         onChange={handleChangeText}
         className="compose-input"
         placeholder="Write a message..."

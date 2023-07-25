@@ -1,4 +1,4 @@
-.modal-overlay {
+.conversation-modal-overlay {
   background-color: rgba(0, 0, 0, 0.548);
   position: fixed;
   top: 0;
@@ -7,13 +7,13 @@
   bottom: 0;
 }
 
-.modal-item {
+.conversation-modal-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: absolute;
-  width: 450px;
+  width: 400px;
   /* height: 220px; */
   border-radius: 10px;
   background-color: #101b25;
@@ -23,23 +23,4 @@
   bottom: auto;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-}
-
-.modal-item .react-colorful {
-  height: 120px;
-}
-
-.modal-title {
-  text-align: center;
-  color: white;
-  font-size: 17px;
-  font-weight: 500;
-  /* margin: 10px 15px; */
-}
-
-.modal-title-icon {
-  color: grey;
-  width: 20px;
-  height: 20px;
-  /* margin: 10px 15px; */
 }

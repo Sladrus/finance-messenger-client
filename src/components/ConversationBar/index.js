@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import './ConversationBar.css';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLink } from '@fortawesome/free-solid-svg-icons';
+import ConversationModal from '../ConversationModal';
+import { useState } from 'react';
 
 function chatCount(num) {
   const lastDigit = num % 10;
@@ -37,21 +39,28 @@ const ConversationBar = ({
   const handleLinkButton = async (e) => {
     e.stopPropagation();
     await linkUserToConversation(selectedConversation, user);
-    // if (conversation.user) {
-    //   conversation.user = null;
-    //   await linkUserToConversation(conversation);
-    // } else {
-    //   conversation.user = user._id;
-    //   await linkUserToConversation(conversation);
-    //   conversation.user = { username: user.username };
-    // }
   };
+
   const conversation = conversations.find(
     (o) => o.chat_id === selectedConversation
   );
 
+  const [conversationModalIsOpen, setConversationModalIsOpen] = useState(false);
+
+  function openModal() {
+    console.log('OPEN', conversationModalIsOpen);
+
+    if (selectedConversation) setConversationModalIsOpen(true);
+  }
+
+  function closeModal(e) {
+    e.stopPropagation();
+    console.log('CLOSE', conversationModalIsOpen);
+    setConversationModalIsOpen(!conversationModalIsOpen);
+  }
+
   return (
-    <div className="conversation-bar">
+    <div onClick={openModal} className="conversation-bar">
       <div className="conversation-container">
         <span className="conversation-bar-title">
           {!conversation
@@ -77,8 +86,7 @@ const ConversationBar = ({
           </div>
         )}
       </div>
-
-      {conversation && !isLoading && (
+      {/* {conversation && !isLoading && (
         <div className="conversation-toolbar">
           {conversation?.user && (
             <div className="board-user">
@@ -94,7 +102,12 @@ const ConversationBar = ({
             />
           </div>
         </div>
-      )}
+      )} */}
+      <ConversationModal
+        conversationModalIsOpen={conversationModalIsOpen}
+        closeModal={closeModal}
+        conversation={conversation}
+      />
     </div>
   );
 };

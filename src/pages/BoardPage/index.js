@@ -70,6 +70,7 @@ const BoardPage = ({
   getStages,
   deleteStage,
   selectedConversation,
+  managers,
 }) => {
   const [boardSections, setBoardSections] = useState(initializeBoard(statuses));
   const [activeTaskId, setActiveTaskId] = useState(null);
@@ -247,6 +248,7 @@ const BoardPage = ({
                   isEmpty={false}
                   updateStage={updateStage}
                   deleteStage={deleteStage}
+                  managers={managers}
                 />
               );
             })}

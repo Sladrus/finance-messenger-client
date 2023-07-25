@@ -113,6 +113,7 @@ const AppRoutes = () => {
                     //conversations
                     readConversation={readConversation}
                     sendComment={sendComment}
+                    managers={managers}
                   />
                 }
                 exact

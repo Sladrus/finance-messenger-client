@@ -19,8 +19,6 @@ const PopoverInput = ({
     }
   };
 
-
-
   const handleValueChange = (e) => {
     setValue(e.target.value);
     // setModalValue({ type: 'comment', value: e.target.value });

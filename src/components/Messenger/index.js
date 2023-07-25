@@ -27,22 +27,13 @@ export default function Messenger({
   readConversation,
   sendComment,
 }) {
-  // const [username, setUsername] = useLocalStorage('username', 'John');
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
   };
 
-  // const [roomId, setRoomId] = useState('free');
-  // const linkRef = useRef(null);
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <div className={`messenger ${isExpanded ? 'expanded' : 'collapsed'}`}>
-      {/* <TopBar
-        filter={filter}
-        setFilter={setFilter}
-        user={user}
-        statuses={statuses}
-      /> */}
       <ConversationSearch
         isExpanded={isExpanded}
         setIsExpanded={setIsExpanded}

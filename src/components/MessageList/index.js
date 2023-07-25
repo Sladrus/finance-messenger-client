@@ -38,7 +38,6 @@ export default function MessageList({
     while (i < messageCount) {
       let previous = messages[i - 1];
       let current = messages[i];
-      console.log(current);
       let next = messages[i + 1];
       let isMine = current.from.id === MY_USER_ID;
       let currentMoment = moment(current.date);

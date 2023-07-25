@@ -2,20 +2,11 @@ import React from 'react';
 import './BoardPageItem.css';
 import '../Message/Message.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faUser,
-  faLink,
-  faPlus,
-  faComment,
-  faTags,
-  faTasks,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLink, faPlus } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment-timezone';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import PopoverInput from '../PopoverInput';
 import { useLayer } from 'react-laag';
 
 const BoardPageItem = ({
@@ -26,22 +17,16 @@ const BoardPageItem = ({
   openModal,
   isEmpty,
   selectedConversation,
+  managers,
 }) => {
   const [showButton, setShowButton] = useState(false);
   const [isOpen, setOpen] = useState(false);
 
-  const handleLinkButton = async (e) => {
-    console.log('CLICK');
-    e.stopPropagation();
+  const handleLinkButton = async (user) => {
     await linkUserToConversation(task.chat_id, user);
-    //
-    // if (task.user && !isEmpty) {
-    //   task.user = null;
-    // } else {
-    //   task.user = user._id;
-    //   await linkUserToConversation(task);
-    //   task.user = { username: user.username };
-    // }
+    if (!task?.user) task.user = user;
+    else task.user = null;
+    close();
   };
 
   const handleMouseEnter = () => {
@@ -51,6 +36,7 @@ const BoardPageItem = ({
   const handleMouseLeave = () => {
     setShowButton(false);
   };
+
   const navigate = useNavigate();
   const dateToFormat = moment
     .unix(
@@ -84,7 +70,6 @@ const BoardPageItem = ({
     containerOffset: 10, // give the menu some room to breath relative to the container
     arrowOffset: 0, // let the arrow have some room to breath also
   });
-
   return (
     <div
       onMouseEnter={handleMouseEnter}
@@ -168,8 +153,14 @@ const BoardPageItem = ({
             <span>{task?.user?.username}</span>
           </div>
         )}
-        {showButton && (
-          <div onClick={handleLinkButton} className="take-button">
+        {user.role === 'ADMIN' && task?.user && showButton && (
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              handleLinkButton(user);
+            }}
+            className="take-button"
+          >
             <FontAwesomeIcon
               style={task?.user && { color: '#73b9f3' }}
               className="take-button-icon"
@@ -177,7 +168,7 @@ const BoardPageItem = ({
             />
           </div>
         )}
-        {showButton && (
+        {user.role === 'ADMIN' && !task?.user && showButton && (
           <div
             onClick={(e) => !isEmpty && e.stopPropagation()}
             className="take-button"
@@ -192,7 +183,6 @@ const BoardPageItem = ({
                 className="take-button-icon"
                 icon={faPlus}
               />
-
               {renderLayer(
                 <AnimatePresence>
                   {isOpen && (
@@ -203,7 +193,36 @@ const BoardPageItem = ({
                       className="toolbar-popover"
                       {...layerProps}
                     >
-                      <PopoverInput
+                      {
+                        managers?.map((item, index) => (
+                          <div
+                            onClick={() => handleLinkButton(item)}
+                            key={index}
+                            className="popover-input"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              className="popover-input-icon"
+                              icon={faUser}
+                            />
+                            <span
+                              style={{
+                                color: 'white',
+                                padding: '10px 10px',
+                                fontSize: '14px',
+                                width: '100%',
+                              }}
+                            >
+                              {item.username}
+                            </span>
+                          </div>
+                        ))
+                        /* <PopoverInput
                         icon={faLink}
                         placeholder={'Закрепить'}
                         // onChange={handleStatus}
@@ -237,7 +256,8 @@ const BoardPageItem = ({
                         // onChange={handleStatus}
                         // value={label}
                         // onKeyPress={handleKeyPress}
-                      />
+                      /> */
+                      }
                     </motion.div>
                   )}
                 </AnimatePresence>
