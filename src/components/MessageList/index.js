@@ -18,6 +18,7 @@ export default function MessageList({
   conversations,
   statuses,
   sendComment,
+  moneysend,
 }) {
   const MY_USER_ID = user._id;
 
@@ -114,6 +115,7 @@ export default function MessageList({
           conversations={conversations}
           statuses={statuses}
           sendComment={sendComment}
+          moneysend={moneysend}
         />
       )}
     </div>

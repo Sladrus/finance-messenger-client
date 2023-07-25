@@ -1,10 +1,14 @@
 import React from 'react';
 import './ConversationModalForm.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose, faLink, faIdCard } from '@fortawesome/free-solid-svg-icons';
-import ModalButton from '../ModalButton';
+import {
+  faClose,
+  faLink,
+  faIdCard,
+  faRefresh,
+} from '@fortawesome/free-solid-svg-icons';
 
-const ConversationModalForm = ({ closeModal, conversation }) => {
+const ConversationModalForm = ({ closeModal, conversation, refreshLink }) => {
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <div
@@ -43,9 +47,14 @@ const ConversationModalForm = ({ closeModal, conversation }) => {
               href={conversation?.link}
               target="_blank"
             >
-              {conversation?.link}
+              {conversation?.link ? conversation?.link : 'Ссылка отсутствует'}
             </a>
           </span>
+          <FontAwesomeIcon
+            onClick={() => refreshLink(conversation.chat_id)}
+            className="popover-confiramtion-form-icon"
+            icon={faRefresh}
+          />
         </div>
         <div
           style={{

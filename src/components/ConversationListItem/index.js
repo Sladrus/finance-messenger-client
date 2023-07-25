@@ -28,7 +28,7 @@ export default function ConversationListItem({
   const formattedDate = dateToFormat.isSame(today, 'day')
     ? dateToFormat.format('HH:mm')
     : dateToFormat.format('DD.MM.YY');
-
+  // console.log(data);
   useEffect(() => {
     const checkWidth = () => {
       const containerWidth = elementRef.current?.offsetWidth;

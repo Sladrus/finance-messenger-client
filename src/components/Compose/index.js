@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLayer, Arrow } from 'react-laag';
+import { useLayer, Arrow, useHover } from 'react-laag';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Compose.css';
 import ToolbarButton from '../ToolbarButton';
@@ -12,15 +12,29 @@ import {
   faTags,
   faFile,
   faLink,
+  faCaretRight,
   faTasks,
   faChartLine,
   faCheck,
+  faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
 import 'react-dropdown/style.css';
 import PopoverInput from '../PopoverInput';
 import PopoverButton from '../PopoverButton';
 import PopoverModal from '../PopoverModal';
 import PopoverSelect from '../PopoverSelect';
+import { evaluate } from 'mathjs';
+import CoursePopover from '../CoursePopover';
+import { hover } from '@testing-library/user-event/dist/hover';
+import axios from 'axios';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import MoneysendModal from '../MoneysendModal';
+
+function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 export default function Compose({
   user,
@@ -31,17 +45,36 @@ export default function Compose({
   conversations,
   statuses,
   sendComment,
+  moneysend,
 }) {
   const [text, setText] = useState('');
   const [isOpen, setOpen] = useState(false);
+  const [currency, setCurrency] = useState('');
+  const [expression, setExpression] = useState('');
+  const [isCommand, setIsCommand] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [finalCourse, setFinalCourse] = useState('');
+  const [hoverProps, hoverState] = useHover();
+
+  const [courseOpen, setCourseOpen] = useState(false);
+
   const [popoverModalIsOpen, setPopoverModalIsOpen] = useState(false);
   const [modalValue, setModalValue] = useState();
+  const [isMoneysendOpen, setIsMoneysendOpen] = useState(false);
 
   const inputElement = useRef(null);
   useEffect(() => {
     inputElement.current.focus();
   }, [selectedConversation]);
 
+  const openMoneysend = (e) => {
+    e.stopPropagation();
+    setIsMoneysendOpen(true);
+  };
+  const closeMoneysend = (e) => {
+    e.stopPropagation();
+    setIsMoneysendOpen(false);
+  };
   const handleSendMessage = (e) => {
     console.log(e);
     e.preventDefault();
@@ -54,28 +87,52 @@ export default function Compose({
         type: 'text',
       });
       setText('');
+      setCourseOpen(false);
+      setIsCommand(false);
+      setFinalCourse('');
     }
+  };
+
+  const sendCourse = (e) => {
+    const halfLength = Math.ceil(currency.length / 2);
+    const firstHalf = currency.slice(0, halfLength);
+
+    e.preventDefault();
+    sendMessage({
+      user: user,
+      text: `${expression} ${firstHalf} = ${finalCourse?.course}`,
+      selectedConversation: selectedConversation,
+      type: 'text',
+    });
+    setText('');
   };
 
   function close() {
     setOpen(false);
   }
-
-  const { renderLayer, triggerProps, layerProps } = useLayer({
+  const {
+    renderLayer: renderLayer,
+    triggerProps: triggerProps,
+    layerProps: layerProps,
+  } = useLayer({
     isOpen,
-    onOutsideClick: close, // close the menu when the user clicks outside
-    onDisappear: close, // close the menu when the menu gets scrolled out of sight
-    overflowContainer: true, // keep the menu positioned inside the container
-    auto: false, // automatically find the best placement
-    placement: 'top-start', // we prefer to place the menu "top-end"
-    triggerOffset: 20, // keep some distance to the trigger
-    containerOffset: 20, // give the menu some room to breath relative to the container
-    arrowOffset: 0, // let the arrow have some room to breath also
+    onOutsideClick: close,
+    onDisappear: close,
+    overflowContainer: true,
+    auto: true,
+    placement: 'top-start',
+    triggerOffset: 20,
+    containerOffset: 20,
+    arrowOffset: 0,
   });
 
   const conversation = conversations.find(
     (o) => o.chat_id === selectedConversation
   );
+
+  const isValidCommand = (input) => {
+    return /^\/[a-z]{6}[ ]?\d*([+\-*\/]\d+|\d*[.,]?\d+)*%?/.test(input);
+  };
 
   const handleModalValue = (value, type) => {
     console.log(value, type);
@@ -99,12 +156,113 @@ export default function Compose({
     }
   };
 
-  const handleChangeText = (e) => {
+  async function convertCurrencyEx(currencies, amount) {
+    const exchangeApi = axios.create({
+      baseURL: 'http://converter.1210059-cn07082.tw1.ru',
+    });
+
+    const count = amount || 1;
+    try {
+      const response = await exchangeApi.get(
+        `/convert?from=${currencies[0].toUpperCase()}&to=${currencies[1].toUpperCase()}&amount=${count}`
+      );
+      return response.data;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function convertCurrencyMoex(currencies, amount) {
+    const exchangeApi = axios.create({
+      baseURL: 'http://converter.1210059-cn07082.tw1.ru',
+    });
+
+    const count = amount || 1;
+    try {
+      const response = await exchangeApi.get(
+        `/convert_moex?from=${currencies[0].toUpperCase()}&to=${currencies[1].toUpperCase()}&amount=${count}`
+      );
+      return response.data;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  const fetchCurrencyRate = async (currency, expression) => {
+    const currency_codes = ['EURRUB', 'USDRUB'];
+    let type;
+    if (currency_codes.includes(currency.toUpperCase())) {
+      type = 'moex.com';
+    } else {
+      type = 'xe.com';
+    }
+    console.log(type);
+    const halfLength = Math.ceil(currency.length / 2);
+    const firstHalf = currency.slice(0, halfLength);
+    const secondHalf = currency.slice(halfLength);
+
+    const currencies = [firstHalf, secondHalf];
+    const fakeAmount = randomIntFromInterval(1000, 100000);
+
+    setIsLoading(true);
+    console.log(currencies, expression);
+    try {
+      const data =
+        type === 'xe.com'
+          ? await convertCurrencyEx(currencies, fakeAmount)
+          : await convertCurrencyMoex(currencies, fakeAmount);
+      const course = Number(data.course.split(' ')[0]);
+      console.log(course);
+      const realAmount = expression
+        ? (course / fakeAmount) * evaluate(expression)
+        : course / fakeAmount;
+      console.log(realAmount);
+      setFinalCourse({
+        course: `${realAmount.toFixed(4)} ${currencies[1]}`,
+        updated: data.updated,
+        type,
+      });
+    } catch (e) {
+      console.log(e);
+      setFinalCourse('');
+    }
+    setIsLoading(false);
+  };
+
+  const processCommand = async (inputCommand) => {
+    const [cur, expr] = inputCommand.slice(1).split(' ');
+    setCurrency(cur.toUpperCase());
+    try {
+      evaluate(expr);
+      setExpression(expr);
+    } catch (e) {
+      setExpression('NaN');
+    }
+  };
+
+  const handleChangeText = async (e) => {
     inputElement.current.style.height = '20px';
     inputElement.current.style.height = `${e.target.scrollHeight - 10}px`;
     const updatedText = e.target.value;
+    console.log(updatedText);
     setText(updatedText);
+    setFinalCourse('');
+    setIsCommand(isValidCommand(updatedText));
+    await processCommand(updatedText);
   };
+
+  console.log('isCommand', isCommand);
+  useEffect(() => {
+    setCourseOpen(isCommand);
+  }, [isCommand]);
+
+  // useEffect(() => {
+  //   if (isCommand) processCommand(text);
+  // }, [text]);
+
+  // useEffect(() => {
+  //   console.log(finalCourse);
+  // }, [finalCourse]);
 
   return (
     <form className="compose" onSubmit={handleSendMessage}>
@@ -131,103 +289,44 @@ export default function Compose({
                   }
                   onClick={() => readConversation(selectedConversation)}
                   isEnabled={conversation?.unreadCount > 0 ? false : true}
-
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
                 />
 
-                {/* <PopoverInput
-                  icon={faDollar}
-                  placeholder={'Баланс'}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
-                /> */}
-                {/* <PopoverButton
-                  icon={faLink}
-                  placeholder={
-                    conversation?.user ? 'Отвязать чат' : 'Привязать чат'
-                  }
-                  onClick={() =>
-                    linkUserToConversation(selectedConversation, user)
-                  }
-                  isEnabled={conversation?.user ? true : false}
-
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
-                /> */}
                 <PopoverButton
-                  icon={faChartLine}
-                  placeholder={'Курсы валют'}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
+                  icon={faPaperPlane}
+                  placeholder={'Moneysend'}
+                  onClick={openMoneysend}
+                  // onClick={() => readConversation(selectedConversation)}
+                  // isEnabled={conversation?.unreadCount > 0 ? false : true}
                 />
-                {/* <PopoverInput
-                  icon={faToggleOff}
-                  placeholder={'Активировать'}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
-                /> */}
+
                 <PopoverInput
                   icon={faComment}
                   placeholder={'Добавить комментарий'}
                   type={'comment'}
                   onSubmit={handleModalValue}
                   sendMessage={sendMessage}
-                  // setModalValue={setModalValue}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
                 />
                 <PopoverInput
                   icon={faTasks}
                   placeholder={'Добавить задачу'}
                   onSubmit={handleModalValue}
-
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
                 />
                 <PopoverSelect
                   icon={faTag}
                   options={[...statuses]}
                   conversation={conversation}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
                 />
-                <PopoverInput
-                  icon={faTags}
-                  placeholder={'Тэги'}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
-                />
-
+                <PopoverInput icon={faTags} placeholder={'Тэги'} />
                 <PopoverInput
                   icon={faPhotoVideo}
                   placeholder={'Фото или видео'}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
                 />
-                <PopoverInput
-                  icon={faFile}
-                  placeholder={'Документ'}
-                  // onChange={handleStatus}
-                  // value={label}
-                  // onKeyPress={handleKeyPress}
-                />
+                <PopoverInput icon={faFile} placeholder={'Документ'} />
               </motion.div>
             )}
           </AnimatePresence>
         )}
       </div>
-
       <textarea
         type="textarea"
         ref={inputElement}
@@ -241,6 +340,120 @@ export default function Compose({
         className="compose-input"
         placeholder="Write a message..."
       />
+      {isCommand && (
+        <AnimatePresence {...hoverProps}>
+          {courseOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: 'absolute',
+                top: `${
+                  expression !== 'NaN'
+                    ? !isLoading
+                      ? finalCourse?.course
+                        ? '-125px'
+                        : '-85px'
+                      : '-105px'
+                    : '-55px'
+                }`,
+                left: '10px',
+                background: 'white',
+                border: '1px solid gray',
+                minWidth: '230px',
+                color: '#778d9f',
+                background: '#101b25',
+                borderRadius: '5px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  padding: '10px',
+                }}
+              >
+                <span>
+                  {expression !== 'NaN'
+                    ? `${currency}: ${expression}`
+                    : 'Ошибка, проверьте правильность ввода'}
+                </span>
+                <>
+                  <span>
+                    {isLoading ? (
+                      <ClipLoader
+                        color={'#729bbd'}
+                        loading={isLoading}
+                        size={10}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                      />
+                    ) : (
+                      <>
+                        {finalCourse?.course && <span>Результат: </span>}
+                        <span style={{ color: 'white' }}>
+                          {finalCourse?.course}
+                        </span>
+                      </>
+                    )}
+                  </span>
+                  <span
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {!isLoading && (
+                      <span style={{ paddingRight: '10px' }}>
+                        {finalCourse?.updated}
+                      </span>
+                    )}
+                    {!isLoading && <span>{finalCourse?.type}</span>}
+                  </span>
+                </>
+                {expression !== 'NaN' && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      paddingTop: '5px',
+                    }}
+                  >
+                    <span
+                      onClick={() => fetchCurrencyRate(currency, expression)}
+                      style={{
+                        fontSize: '18px',
+                        color: 'white',
+                        fontWeight: '500',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Рассчитать курс
+                    </span>
+                    {finalCourse?.course && (
+                      <FontAwesomeIcon
+                        // className={`toolbar-button`}
+
+                        style={{
+                          width: '25px',
+                          height: '25px',
+                          cursor: 'pointer',
+                          paddingTop: '3px',
+                        }}
+                        icon={faCaretRight}
+                        onClick={sendCourse}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
       {text && (
         <ToolbarButton icon={faArrowRight} onClick={handleSendMessage} />
       )}
@@ -252,7 +465,14 @@ export default function Compose({
         user={user}
         selectedConversation={selectedConversation}
       />
-      {/* {!text && <ToolbarButton icon={faPlus} />} */}
+      <MoneysendModal
+        modalIsOpen={isMoneysendOpen}
+        closeModal={closeMoneysend}
+        moneysend={moneysend}
+        conversation={conversation}
+        user={user}
+        sendMessage={sendMessage}
+      />
     </form>
   );
 }

@@ -40,6 +40,8 @@ const AppRoutes = () => {
     deleteStage,
     readConversation,
     sendComment,
+    refreshLink,
+    moneysend,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -114,6 +116,8 @@ const AppRoutes = () => {
                     readConversation={readConversation}
                     sendComment={sendComment}
                     managers={managers}
+                    refreshLink={refreshLink}
+                    moneysend={moneysend}
                   />
                 }
                 exact

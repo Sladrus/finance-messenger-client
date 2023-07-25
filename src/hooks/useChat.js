@@ -198,6 +198,11 @@ export const useChat = (roomId) => {
     );
   };
 
+  const moneysend = (chat_id, data) => {
+    console.log(chat_id, data);
+    socketRef.current.emit('message:moneysend', { chat_id, data });
+  };
+
   const sendMessage = ({ user, text, selectedConversation, type }) => {
     // console.log('msg');
     setMessages([
@@ -266,6 +271,12 @@ export const useChat = (roomId) => {
     // await socketRef.current.emit('messages:get');
   };
 
+  const refreshLink = async (chat_id) => {
+    await socketRef?.current?.emit('conversation:refresh', { chat_id });
+    // await getStages();
+    // await socketRef.current.emit('messages:get');
+  };
+
   const linkUserToConversation = async (chat_id, user) => {
     console.log(chat_id, user);
     await socketRef?.current?.emit('conversation:link', { chat_id, user });
@@ -320,5 +331,7 @@ export const useChat = (roomId) => {
     deleteStage,
     readConversation,
     sendComment,
+    refreshLink,
+    moneysend,
   };
 };

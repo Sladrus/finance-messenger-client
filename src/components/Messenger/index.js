@@ -26,6 +26,8 @@ export default function Messenger({
   setSearchInput,
   readConversation,
   sendComment,
+  refreshLink,
+  moneysend,
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
@@ -47,6 +49,7 @@ export default function Messenger({
         messagesCount={messages?.length}
         user={user}
         linkUserToConversation={linkUserToConversation}
+        refreshLink={refreshLink}
       />
       <ConversationList
         isLoading={isLoading}
@@ -69,6 +72,7 @@ export default function Messenger({
         conversations={conversations}
         statuses={statuses}
         sendComment={sendComment}
+        moneysend={moneysend}
       />
     </div>
   );

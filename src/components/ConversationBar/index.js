@@ -35,6 +35,7 @@ const ConversationBar = ({
   messagesCount,
   user,
   linkUserToConversation,
+  refreshLink,
 }) => {
   const handleLinkButton = async (e) => {
     e.stopPropagation();
@@ -107,6 +108,7 @@ const ConversationBar = ({
         conversationModalIsOpen={conversationModalIsOpen}
         closeModal={closeModal}
         conversation={conversation}
+        refreshLink={refreshLink}
       />
     </div>
   );

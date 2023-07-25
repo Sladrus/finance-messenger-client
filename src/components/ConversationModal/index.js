@@ -7,6 +7,7 @@ const ConversationModal = ({
   conversationModalIsOpen,
   closeModal,
   conversation,
+  refreshLink,
 }) => {
   return (
     <ReactModal
@@ -20,6 +21,7 @@ const ConversationModal = ({
       <ConversationModalForm
         closeModal={closeModal}
         conversation={conversation}
+        refreshLink={refreshLink}
       />
     </ReactModal>
   );
