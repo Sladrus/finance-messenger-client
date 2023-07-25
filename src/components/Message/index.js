@@ -17,6 +17,15 @@ function getColorById(id) {
     '#1560BD',
     '#34C999',
     '#FFDC33',
+    '#20603D',
+    '#82898F',
+    '#497E76',
+    '#2271B3',
+    '#47402E',
+    '#FFA420',
+    '#008F39',
+    '#025669',
+    '#1E5945',
   ];
   const output = parseInt(id, 16) % Math.pow(10, 8);
   return colors[output % colors.length];
