@@ -76,8 +76,8 @@ export default function Message({
   const dateToFormat = moment.unix(data.date).utcOffset(180); // Здесь вы можете использовать любую дату, которую необходимо отформатировать
   const today = moment().utcOffset(180); // Получаем текущее время, чтобы определить, является ли дата сегодняшней
   const formattedDate = dateToFormat.isSame(today, 'day')
-    ? dateToFormat.format('hh:mm')
-    : dateToFormat.format('hh:mm DD.MM');
+    ? dateToFormat.format('HH:mm')
+    : dateToFormat.format('HH:mm DD.MM');
 
   return (
     <div
