@@ -88,7 +88,7 @@ const BoardPage = ({
     useSensor(TouchSensor),
     useSensor(PointerSensor, {
       activationConstraint: {
-        delay: 100,
+        delay: 230,
         tolerance: 500,
       },
       pointer: true,
