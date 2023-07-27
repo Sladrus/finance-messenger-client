@@ -81,3 +81,21 @@
 .filter-select-option--is-focused {
   background-color: #101b25;
 }
+
+.date-range-container {
+  position: relative;
+}
+
+.date-range-wrapper {
+  position: absolute;
+  top: 30px; /* This will position the DateRange below the container */
+  right: 0;
+  z-index: 1; /* Adjust the z-index value as needed */
+  background-color: white; /* Optional - change the background color of the DateRange container */
+  border: 1px solid #ccc; /* Optional - add border to the DateRange container */
+  padding: 0; /* Optional - add padding to the DateRange container */
+}
+
+.date-range {
+  /* Add any additional styles as needed for the DateRange component */
+}

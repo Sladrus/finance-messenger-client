@@ -263,7 +263,7 @@ export default function Compose({
   // useEffect(() => {
   //   console.log(finalCourse);
   // }, [finalCourse]);
-
+  console.log(conversation);
   return (
     <form className="compose" onSubmit={handleSendMessage}>
       <div>
@@ -333,8 +333,7 @@ export default function Compose({
         rows={1}
         cols={1}
         value={text}
-        fullWidth
-        multiline
+        multiline={true}
         onKeyDown={handleKeyDown}
         onChange={handleChangeText}
         className="compose-input"

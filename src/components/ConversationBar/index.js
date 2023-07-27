@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import './ConversationBar.css';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLink, faTag } from '@fortawesome/free-solid-svg-icons';
 import ConversationModal from '../ConversationModal';
 import { useState } from 'react';
 
@@ -59,7 +59,7 @@ const ConversationBar = ({
     console.log('CLOSE', conversationModalIsOpen);
     setConversationModalIsOpen(!conversationModalIsOpen);
   }
-
+  console.log(conversation);
   return (
     <div onClick={openModal} className="conversation-bar">
       <div className="conversation-container">
@@ -87,6 +87,22 @@ const ConversationBar = ({
           </div>
         )}
       </div>
+      {conversation && (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <FontAwesomeIcon
+            style={{
+              color: conversation?.stage?.color,
+              // paddingTop: '2px',
+              paddingRight: '10px',
+              width: '15px',
+              height: '15px',
+            }}
+            icon={faTag}
+          />
+          <span style={{ fontSize: '14px' }}>{conversation?.stage?.label}</span>
+        </div>
+      )}
+
       {/* {conversation && !isLoading && (
         <div className="conversation-toolbar">
           {conversation?.user && (

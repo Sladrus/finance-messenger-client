@@ -30,6 +30,13 @@ export const useChat = (roomId) => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(new Date().getFullYear() - 20),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
   // создаем и записываем в локальное хранинище идентификатор пользователя
   const [userId] = useLocalStorage('userId', roomId);
   // получаем из локального хранилища имя пользователя
@@ -135,9 +142,16 @@ export const useChat = (roomId) => {
 
         const isUnreadMatched =
           filter?.unread !== '' ? unread === filter?.unread : true;
-        console.log(isUnreadMatched);
-        // Return true if both conditions are true, otherwise false
-        return isStageMatched && isUserMatched && isUnreadMatched;
+
+        const conversationDate = new Date(conversation?.workAt).getTime();
+        const startDate = new Date(dateRange[0].startDate).getTime();
+        const endDate = new Date(dateRange[0].endDate).getTime();
+        const isDateMatched =
+          conversationDate >= startDate && conversationDate <= endDate;
+
+        return (
+          isStageMatched && isUserMatched && isUnreadMatched && isDateMatched
+        );
       });
 
       setConversations(filteredConversations);
@@ -160,21 +174,26 @@ export const useChat = (roomId) => {
               const unread = conversation?.unreadCount > 0 ? true : false;
 
               return filter?.unread !== '' ? unread === filter?.unread : true;
+            })
+            .filter((conversation) => {
+              const conversationDate = new Date(conversation?.workAt).getTime();
+              const startDate = new Date(dateRange[0].startDate).getTime();
+              const endDate = new Date(dateRange[0].endDate).getTime();
+              return (
+                conversationDate >= startDate && conversationDate <= endDate
+              );
             });
+
           return { ...stage, conversations: filteredConversations };
         });
-      // console.log(filteredStages);
       setStatuses(filteredStages);
-      // getConversations();
       setIsLoading(false);
     });
     return () => {
       socketRef.current.disconnect();
     };
-  }, [roomId, isAuth, filter]);
+  }, [roomId, isAuth, filter, dateRange]);
 
-  // функция отправки сообщения
-  // принимает объект с текстом сообщения и именем отправителя
   const sendComment = ({
     type,
     text,
@@ -199,12 +218,10 @@ export const useChat = (roomId) => {
   };
 
   const moneysend = (chat_id, data) => {
-    console.log(chat_id, data);
     socketRef.current.emit('message:moneysend', { chat_id, data });
   };
 
   const sendMessage = ({ user, text, selectedConversation, type }) => {
-    // console.log('msg');
     setMessages([
       ...messages,
       {
@@ -214,7 +231,6 @@ export const useChat = (roomId) => {
         loading: true,
       },
     ]);
-    // добавляем в объект id пользователя при отправке на сервер
     socketRef.current.emit('message:add', {
       isBot: true,
       user,
@@ -222,8 +238,6 @@ export const useChat = (roomId) => {
       selectedConversation,
       type,
     });
-
-    // socketRef.current.emit('conversation:get');
   };
 
   const login = async ({ username, password }) => {
@@ -259,8 +273,6 @@ export const useChat = (roomId) => {
 
   const changeStage = async (id, value, position) => {
     await socketRef?.current?.emit('status:change', { id, value, position });
-
-    // await socketRef.current.emit('messages:get');
   };
 
   const moveStatus = async (position, value) => {
@@ -268,46 +280,22 @@ export const useChat = (roomId) => {
   };
 
   const createStatus = async (status) => {
-    console.log(status);
     await socketRef?.current?.emit('status:add', status);
     await getStages();
-
-    // await socketRef.current.emit('messages:get');
   };
 
   const refreshLink = async (chat_id) => {
     await socketRef?.current?.emit('conversation:refresh', { chat_id });
-    // await getStages();
-    // await socketRef.current.emit('messages:get');
   };
 
   const linkUserToConversation = async (chat_id, user) => {
-    console.log(chat_id, user);
     await socketRef?.current?.emit('conversation:link', { chat_id, user });
-    // await getStages();
-    // await socketRef.current.emit('messages:get');
-  };
-
-  const unlinkUserToConversation = async (conversation) => {
-    await socketRef?.current?.emit('conversation:unlink', conversation);
-    await getStages();
-    // await socketRef.current.emit('messages:get');
   };
 
   const readConversation = async (chat_id) => {
-    console.log(chat_id);
     await socketRef?.current?.emit('conversation:read', { chat_id });
-    // await getStages();
-    // await getMessages();
-    // await socketRef.current.emit('messages:get');
   };
 
-  // отправляем на сервер событие "user:leave" перед перезагрузкой страницы
-  // useBeforeUnload(() => {
-  //   socketRef.current.emit('user:leave', userId);
-  // });
-
-  // хук возвращает пользователей, сообщения и функции для отправки удаления сообщений
   return {
     filter,
     setFilter,
@@ -337,6 +325,8 @@ export const useChat = (roomId) => {
     sendComment,
     refreshLink,
     moneysend,
-    moveStatus
+    moveStatus,
+    dateRange,
+    setDateRange,
   };
 };

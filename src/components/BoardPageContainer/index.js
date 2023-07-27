@@ -59,7 +59,6 @@ const BoardPageContainer = ({
     await moveStatus(position, value);
   };
 
-  console.log(status);
   return (
     <div className="board-page-list-block">
       <div className="board-page-list-container-info">

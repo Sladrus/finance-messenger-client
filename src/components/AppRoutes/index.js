@@ -43,6 +43,8 @@ const AppRoutes = () => {
     refreshLink,
     moneysend,
     moveStatus,
+    dateRange,
+    setDateRange,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -72,6 +74,8 @@ const AppRoutes = () => {
             stages={stages}
             managers={managers}
             setSelectedConversation={setSelectedConversation}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
           />
         )}
 
