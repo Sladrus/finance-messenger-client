@@ -263,6 +263,10 @@ export const useChat = (roomId) => {
     // await socketRef.current.emit('messages:get');
   };
 
+  const moveStatus = async (position, value) => {
+    await socketRef?.current?.emit('status:move', { position, value });
+  };
+
   const createStatus = async (status) => {
     console.log(status);
     await socketRef?.current?.emit('status:add', status);
@@ -333,5 +337,6 @@ export const useChat = (roomId) => {
     sendComment,
     refreshLink,
     moneysend,
+    moveStatus
   };
 };

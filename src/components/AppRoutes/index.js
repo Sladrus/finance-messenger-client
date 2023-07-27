@@ -42,6 +42,7 @@ const AppRoutes = () => {
     sendComment,
     refreshLink,
     moneysend,
+    moveStatus,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -118,6 +119,7 @@ const AppRoutes = () => {
                     managers={managers}
                     refreshLink={refreshLink}
                     moneysend={moneysend}
+                    moveStatus={moveStatus}
                   />
                 }
                 exact

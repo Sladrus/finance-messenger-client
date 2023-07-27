@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import './BoardPageContainer.css';
 import BoardPageItem from '../BoardPageItem';
 import EmptyBoard from '../EmptyBoard';
-import { faAngleLeft, faGear } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleLeft,
+  faAngleRight,
+  faGear,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDroppable } from '@dnd-kit/core';
 import {
@@ -35,6 +39,7 @@ const BoardPageContainer = ({
   updateStage,
   deleteStage,
   managers,
+  moveStatus,
 }) => {
   const { setNodeRef } = useDroppable({
     id,
@@ -50,6 +55,11 @@ const BoardPageContainer = ({
     setSettingsBoardModalIsOpen(false);
   };
 
+  const handleMove = async (position, value) => {
+    await moveStatus(position, value);
+  };
+
+  console.log(status);
   return (
     <div className="board-page-list-block">
       <div className="board-page-list-container-info">
@@ -64,22 +74,40 @@ const BoardPageContainer = ({
             {status?.label}
           </span>
           <div>
-            {!status?.default && (
+            {!status?.default && user?.role === 'ADMIN' && (
               <FontAwesomeIcon
                 onClick={openSettingsBoardModal}
                 className="take-button-icon"
                 icon={faGear}
               />
             )}
-            <FontAwesomeIcon
-              style={{ paddingLeft: '10px' }}
-              className="take-button-icon"
-              icon={faAngleLeft}
-            />
           </div>
         </div>
         <span>{`${tasks?.length} ${chatCount(tasks?.length)}`}</span>
-        <div style={{ background: status?.color }} className="color-line"></div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <FontAwesomeIcon
+            style={{ paddingLeft: '0', paddingRight: '15px' }}
+            className="take-button-icon"
+            icon={faAngleLeft}
+            onClick={() => moveStatus(status.position - 1, status.value)}
+          />
+          <div
+            style={{ background: status?.color }}
+            className="color-line"
+          ></div>
+          <FontAwesomeIcon
+            style={{ paddingLeft: '15px', paddingRight: '0' }}
+            className="take-button-icon"
+            icon={faAngleRight}
+            onClick={() => moveStatus(status.position + 1, status.value)}
+          />
+        </div>
       </div>
       <div className="board-page-list-container">
         <SortableContext

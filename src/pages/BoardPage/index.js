@@ -71,6 +71,7 @@ const BoardPage = ({
   deleteStage,
   selectedConversation,
   managers,
+  moveStatus,
 }) => {
   const [boardSections, setBoardSections] = useState(initializeBoard(statuses));
   const [activeTaskId, setActiveTaskId] = useState(null);
@@ -249,6 +250,7 @@ const BoardPage = ({
                   updateStage={updateStage}
                   deleteStage={deleteStage}
                   managers={managers}
+                  moveStatus={moveStatus}
                 />
               );
             })}
@@ -256,8 +258,9 @@ const BoardPage = ({
               {task ? <BoardPageItem task={task} isEmpty /> : null}
             </DragOverlay>
           </DndContext>
-
-          <EmptyBoardPageContainer openModal={createBoardOpenModal} />
+          {user?.role === 'ADMIN' && (
+            <EmptyBoardPageContainer openModal={createBoardOpenModal} />
+          )}
         </div>
       </div>
       <CreateBoardPageItemModal
