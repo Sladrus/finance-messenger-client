@@ -64,11 +64,25 @@ const TopBar = ({
       hasCustomRendering: true,
       range: () => ({
         startDate: new Date(new Date().getFullYear() - 20),
-        endDate: new Date(),
+        endDate: new Date(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate(),
+          23,
+          59,
+          59
+        ),
       }),
       isSelected() {
         const startDate = new Date(new Date().getFullYear() - 20);
-        const endDate = new Date();
+        const endDate = new Date(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate(),
+          23,
+          59,
+          59
+        );
 
         const startDateString = dateRange[0].startDate
           .toISOString()

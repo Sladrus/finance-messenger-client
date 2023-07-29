@@ -218,7 +218,7 @@ const BoardPage = ({
   };
 
   const task = activeTaskId ? getTaskById(statuses, activeTaskId) : null;
-
+  // console.log(statuses);
   return (
     <div className="board-page">
       <div

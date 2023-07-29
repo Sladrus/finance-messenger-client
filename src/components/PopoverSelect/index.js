@@ -93,16 +93,19 @@ const PopoverSelect = ({
       className={`popover-button ${isEnabled ? 'enabled' : 'disabled'}`}
     >
       <FontAwesomeIcon
-        style={{ color: conversation.stage.color, paddingRight: '13px' }}
+        style={{
+          color: conversation?.stage?.color,
+          paddingRight: '13px',
+        }}
         className={`popover-button-icon ${isEnabled ? 'enabled' : 'disabled'}`}
         icon={icon}
       />
       <Select
         onChange={() => {}}
         defaultValue={{
-          value: conversation.stage.value,
-          label: conversation.stage.label,
-          color: conversation.stage.color,
+          value: conversation?.stage?.value,
+          label: conversation?.stage?.label,
+          color: conversation?.stage?.color,
         }}
         options={options}
         styles={colourStyles}

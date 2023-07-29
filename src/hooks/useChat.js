@@ -29,20 +29,24 @@ export const useChat = (roomId) => {
   // локальное состояние для сообщений
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
   const [dateRange, setDateRange] = useState([
     {
       startDate: new Date(new Date().getFullYear() - 20),
-      endDate: new Date(),
+      endDate: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate(),
+        23,
+        59,
+        59
+      ),
       key: 'selection',
     },
   ]);
+
   // создаем и записываем в локальное хранинище идентификатор пользователя
   const [userId] = useLocalStorage('userId', roomId);
-  // получаем из локального хранилища имя пользователя
 
-  // useRef() используется не тоddлько для получения доступа к DOM-элементам,
-  // но и для хранения любых мутирующих значений в течение всего жизненного цикла компонента
   const socketRef = useRef(null);
   const navigate = useNavigate();
 
@@ -62,7 +66,13 @@ export const useChat = (roomId) => {
     socketRef.current.emit('user:get');
   };
 
-  const notify = (message) => toast('Wow so easy!');
+  // const updateEndDate = () => {
+  //   const updatedDateRange = [...dateRange]; // Create a copy of the original dateRange
+  //   updatedDateRange[0].endDate = new Date(); // Update the endDate in the copied array
+
+  //   setDateRange(updatedDateRange); // Set the updated dateRange using the setter function
+  // };
+  // const notify = (message) => toast('Wow so easy!');
 
   useEffect(() => {
     setIsLoading(true);
@@ -114,7 +124,7 @@ export const useChat = (roomId) => {
     socketRef.current.on('notification', (message) => {
       getStages();
     });
-
+    console.log(dateRange[0]);
     socketRef.current.on('messages', (messages) => {
       setMessages(messages);
       getConversations();
@@ -123,7 +133,6 @@ export const useChat = (roomId) => {
 
     socketRef.current.on('conversations', (conversations) => {
       console.log(conversations);
-      console.log(filter);
 
       const filteredConversations = conversations.filter((conversation) => {
         // Check if the conversations stage matches the filters stage
@@ -154,6 +163,7 @@ export const useChat = (roomId) => {
         );
       });
 
+      console.log(filteredConversations);
       setConversations(filteredConversations);
     });
 
@@ -179,6 +189,13 @@ export const useChat = (roomId) => {
               const conversationDate = new Date(conversation?.workAt).getTime();
               const startDate = new Date(dateRange[0].startDate).getTime();
               const endDate = new Date(dateRange[0].endDate).getTime();
+              console.log(conversation);
+              console.log(
+                startDate,
+                conversationDate,
+                endDate,
+                conversationDate >= startDate && conversationDate <= endDate
+              );
               return (
                 conversationDate >= startDate && conversationDate <= endDate
               );

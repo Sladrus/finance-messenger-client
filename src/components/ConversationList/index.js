@@ -16,7 +16,6 @@ export default function ConversationList({
 }) {
   const filteredConversations = searchInput
     ? conversations.filter((o) => {
-        console.log(o.title, searchInput);
         return o.title.toLowerCase().includes(searchInput.toLowerCase());
       })
     : conversations;
