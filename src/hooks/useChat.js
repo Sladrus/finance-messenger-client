@@ -154,9 +154,12 @@ export const useChat = (roomId) => {
 
         const conversationDate = new Date(conversation?.workAt).getTime();
         const startDate = new Date(dateRange[0].startDate).getTime();
+        const conversationDay = new Date(conversationDate).getDate();
+        const startDay = new Date(startDate).getDate();
         const endDate = new Date(dateRange[0].endDate).getTime();
         const isDateMatched =
-          conversationDate >= startDate && conversationDate <= endDate;
+          (conversationDate >= startDate && conversationDate <= endDate) ||
+          startDay === conversationDay;
 
         return (
           isStageMatched && isUserMatched && isUnreadMatched && isDateMatched
@@ -186,18 +189,28 @@ export const useChat = (roomId) => {
               return filter?.unread !== '' ? unread === filter?.unread : true;
             })
             .filter((conversation) => {
-              const conversationDate = new Date(conversation?.workAt).getTime();
-              const startDate = new Date(dateRange[0].startDate).getTime();
-              const endDate = new Date(dateRange[0].endDate).getTime();
-              console.log(conversation);
+              const conversationDate = new Date(conversation?.workAt);
+              const startDate = new Date(dateRange[0].startDate);
+              const conversationDay = new Date(conversationDate).getDate();
+              const startDay = new Date(startDate).getDate();
+              if (startDay === conversationDay) {
+                console.log('Два таймстампа находятся в один день');
+              } else {
+                console.log('Два таймстампа находятся в разные дни');
+              }
+              const endDate = new Date(dateRange[0].endDate);
               console.log(
-                startDate,
-                conversationDate,
-                endDate,
-                conversationDate >= startDate && conversationDate <= endDate
+                startDate.getTime(),
+                conversationDate.getTime(),
+                endDate.getTime(),
+                (conversationDate >= startDate &&
+                  conversationDate <= endDate) ||
+                  startDay === conversationDay
               );
               return (
-                conversationDate >= startDate && conversationDate <= endDate
+                (conversationDate >= startDate &&
+                  conversationDate <= endDate) ||
+                startDay === conversationDay
               );
             });
 
