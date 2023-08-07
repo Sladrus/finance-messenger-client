@@ -101,6 +101,8 @@ export const useChat = (roomId) => {
 
     socketRef.current.on('connect_error', (err) => {
       console.log(err);
+      window.localStorage.removeItem('token');
+      setAuth(false);
     });
 
     socketRef.current.on('error', (err) => {
