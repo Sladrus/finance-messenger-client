@@ -28,7 +28,6 @@ const BoardPageItem = ({
     else task.user = null;
     close();
   };
-
   const handleMouseEnter = () => {
     setShowButton(true);
   };

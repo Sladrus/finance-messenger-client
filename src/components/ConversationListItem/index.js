@@ -45,7 +45,6 @@ export default function ConversationListItem({
       observer.disconnect();
     };
   }, [elementRef]);
-
   // console.log(data?.title?.match(/\[(.*?)\]/));
   return (
     <div
@@ -122,45 +121,12 @@ export default function ConversationListItem({
                   : 'Вы вошли в чат'}
               </p>
             </div>
-            {/* //TODO: ДОБАВИТЬ СЧЕТЧИК НЕПРОЧИТАННЫХ СООБЩЕНИЙ */}
             {data.unreadCount > 0 && (
               <div className="unread-conversation">{data.unreadCount}</div>
             )}
           </div>
-          {/* <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'end',
-            }}
-          >
-            {data?.user && (
-              <div className="board-user">
-                <FontAwesomeIcon className="board-user-icon" icon={faUser} />
-                <span>{data?.user.username}</span>
-              </div>
-            )}
-            {
-              <div className="take-button">
-                <FontAwesomeIcon
-                  style={data?.user && { color: '#73b9f3' }}
-                  className="take-button-icon"
-                  icon={faLink}
-                />
-              </div>
-            }
-          </div> */}
         </div>
       </div>
-      {/* {isVisible && (
-        <div className="conversation-status">
-          <StatusSelect
-            statuses={statuses}
-            data={data}
-            changeStage={changeStage}
-          />
-        </div>
-      )} */}
     </div>
   );
 }

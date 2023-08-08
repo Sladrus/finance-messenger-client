@@ -13,12 +13,51 @@ export default function ConversationList({
   changeStage,
   searchInput,
   setSearchInput,
+  filter,
+  dateRange,
 }) {
-  const filteredConversations = searchInput
-    ? conversations.filter((o) => {
-        return o.title.toLowerCase().includes(searchInput.toLowerCase());
-      })
-    : conversations;
+  console.log(filter, dateRange);
+  const [filteredConversations, setFilteredConversations] = useState([]);
+
+  useEffect(() => {
+    const filteredData = conversations?.filter((conversation) => {
+      // Check if the conversations stage matches the filters stage
+
+      const isStageMatched = filter?.stage
+        ? conversation?.stage?.value === filter?.stage
+        : true;
+
+      // Check if the conversations user matches the filters user
+      const isUserMatched = filter?.user
+        ? conversation?.user?._id === filter?.user
+        : true;
+
+      const unread = conversation?.unreadCount > 0 ? true : false;
+
+      const isUnreadMatched =
+        filter?.unread !== '' ? unread === filter?.unread : true;
+      const conversationDate = new Date(conversation?.workAt).getTime();
+      const startDate = new Date(dateRange[0].startDate).getTime();
+      const conversationDay = new Date(conversationDate).getDate();
+      const startDay = new Date(startDate).getDate();
+      const endDate = new Date(dateRange[0].endDate).getTime();
+      const isDateMatched =
+        (conversationDate >= startDate && conversationDate <= endDate) ||
+        startDay === conversationDay;
+
+      return (
+        isStageMatched && isUserMatched && isUnreadMatched && isDateMatched
+      );
+    });
+    const searchedConversations = searchInput
+      ? filteredData.filter((o) => {
+          return o.title.toLowerCase().includes(searchInput.toLowerCase());
+        })
+      : filteredData;
+    console.log(filteredData);
+    setFilteredConversations(searchedConversations);
+  }, [filter, dateRange, searchInput, conversations]);
+
   return (
     <div className="conversation-list">
       <div className="topbar">

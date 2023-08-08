@@ -83,6 +83,8 @@ export const useChat = (roomId) => {
       auth: { roomId },
       cors: { origin: '*' },
       path: '/socket',
+      reconnection: true,
+      compress: true,
     });
     // отправляем запрос на получение сообщений
     clearMessages();
@@ -90,6 +92,10 @@ export const useChat = (roomId) => {
       if (!logged_in) return setAuth(false);
       setUser(user);
       setAuth(true);
+    });
+
+    socketRef.current.on('reconnect', () => {
+      console.log('Trying to reconnect');
     });
 
     socketRef.current.on('success', ({ accessToken, user }) => {
@@ -124,107 +130,154 @@ export const useChat = (roomId) => {
     });
 
     socketRef.current.on('notification', (message) => {
-      getStages();
+      // getStages();
     });
-    console.log(dateRange[0]);
+
     socketRef.current.on('messages', (messages) => {
       setMessages(messages);
-      getConversations();
+      // getConversations();
       setIsLoading(false);
     });
 
     socketRef.current.on('conversations', (conversations) => {
-      console.log(conversations);
-
-      const filteredConversations = conversations.filter((conversation) => {
-        // Check if the conversations stage matches the filters stage
-
-        const isStageMatched = filter?.stage
-          ? conversation?.stage?.value === filter?.stage
-          : true;
-
-        // Check if the conversations user matches the filters user
-        const isUserMatched = filter?.user
-          ? conversation?.user?._id === filter?.user
-          : true;
-
-        const unread = conversation?.unreadCount > 0 ? true : false;
-        // console.log(unread, filter?.unread);
-
-        const isUnreadMatched =
-          filter?.unread !== '' ? unread === filter?.unread : true;
-
-        const conversationDate = new Date(conversation?.workAt).getTime();
-        const startDate = new Date(dateRange[0].startDate).getTime();
-        const conversationDay = new Date(conversationDate).getDate();
-        const startDay = new Date(startDate).getDate();
-        const endDate = new Date(dateRange[0].endDate).getTime();
-        const isDateMatched =
-          (conversationDate >= startDate && conversationDate <= endDate) ||
-          startDay === conversationDay;
-
-        return (
-          isStageMatched && isUserMatched && isUnreadMatched && isDateMatched
-        );
-      });
-
-      console.log(filteredConversations);
-      setConversations(filteredConversations);
+      setConversations(conversations);
     });
-
-    socketRef.current.on('statuses', (stages) => {
+    // console.log(stages);
+    socketRef.current.on('statuses', async (stages) => {
+      console.log(stages);
       setStages(stages);
-      const filteredStages = stages
-        .filter((stage) => {
-          return filter?.stage ? stage.value === filter?.stage : true;
-        })
-        .map((stage) => {
-          const filteredConversations = stage.conversations
-            .filter((conversation) => {
-              return filter?.user
-                ? conversation?.user?._id === filter?.user
-                : true;
-            })
-            .filter((conversation) => {
-              const unread = conversation?.unreadCount > 0 ? true : false;
-
-              return filter?.unread !== '' ? unread === filter?.unread : true;
-            })
-            .filter((conversation) => {
-              const conversationDate = new Date(conversation?.workAt);
-              const startDate = new Date(dateRange[0].startDate);
-              const conversationDay = new Date(conversationDate).getDate();
-              const startDay = new Date(startDate).getDate();
-              if (startDay === conversationDay) {
-                console.log('Два таймстампа находятся в один день');
-              } else {
-                console.log('Два таймстампа находятся в разные дни');
-              }
-              const endDate = new Date(dateRange[0].endDate);
-              console.log(
-                startDate.getTime(),
-                conversationDate.getTime(),
-                endDate.getTime(),
-                (conversationDate >= startDate &&
-                  conversationDate <= endDate) ||
-                  startDay === conversationDay
-              );
-              return (
-                (conversationDate >= startDate &&
-                  conversationDate <= endDate) ||
-                startDay === conversationDay
-              );
-            });
-
-          return { ...stage, conversations: filteredConversations };
-        });
-      setStatuses(filteredStages);
+      setStatuses(stages);
+      for (const stage of stages) {
+        // console.log(stage);
+        await socketRef.current.emit('status:value', { value: stage.value });
+      }
+      // setStages(stages);
+      // const filteredStages = stages
+      //   .filter((stage) => {
+      //     return filter?.stage ? stage.value === filter?.stage : true;
+      //   })
+      //   .map((stage) => {
+      //     const filteredConversations = stage.conversations
+      //       .filter((conversation) => {
+      //         return filter?.user
+      //           ? conversation?.user?._id === filter?.user
+      //           : true;
+      //       })
+      //       .filter((conversation) => {
+      //         const unread = conversation?.unreadCount > 0 ? true : false;
+      //         return filter?.unread !== '' ? unread === filter?.unread : true;
+      //       })
+      //       .filter((conversation) => {
+      //         const conversationDate = new Date(conversation?.workAt);
+      //         const startDate = new Date(dateRange[0].startDate);
+      //         const conversationDay = new Date(conversationDate).getDate();
+      //         const startDay = new Date(startDate).getDate();
+      //         const endDate = new Date(dateRange[0].endDate);
+      //         return (
+      //           (conversationDate >= startDate &&
+      //             conversationDate <= endDate) ||
+      //           startDay === conversationDay
+      //         );
+      //       });
+      //     return { ...stage, conversations: filteredConversations };
+      //   });
+      // setStatuses(filteredStages);
       setIsLoading(false);
     });
+
+    socketRef.current.on('status:updated', (updatedStatus) => {
+      console.log(updatedStatus);
+      setStatuses((prevStatuses) =>
+        prevStatuses.map((status) =>
+          status.value === updatedStatus.value ? updatedStatus : status
+        )
+      );
+    });
+
+    socketRef.current.on('status:deleted', (id) => {
+      setStatuses((prevStatuses) =>
+        prevStatuses.filter((status) => status._id !== id)
+      );
+    });
+
+    socketRef.current.on('statuses:load', ({ oldTmp, newTmp }) => {
+      setStatuses((prevStatuses) => {
+        // Находим индексы старого и нового статусов
+        const oldStatusIndex = prevStatuses.findIndex(
+          (status) => status.value === oldTmp.value
+        );
+        const newStatusIndex = prevStatuses.findIndex(
+          (status) => status.value === newTmp.value
+        );
+
+        // Создаем копию массива состояния
+        const updatedStatuses = [...prevStatuses];
+
+        // Обновляем соответствующие элементы массива
+        if (oldStatusIndex !== -1 && newStatusIndex !== -1) {
+          updatedStatuses[oldStatusIndex] = oldTmp;
+          updatedStatuses[newStatusIndex] = newTmp;
+        }
+        console.log(newTmp);
+        return updatedStatuses;
+      });
+    });
+    console.log(messages);
+
+    socketRef.current.on('status:conversation', (conversationTmp) => {
+      console.log(conversationTmp);
+      setConversations((prevConversations) =>
+        prevConversations.map((conversation) => {
+          if (conversation?._id === conversationTmp?._id) {
+            return conversationTmp;
+          }
+          return conversation;
+        })
+      );
+      setStatuses((prevStatuses) =>
+        prevStatuses.map((stage) => {
+          // Проверяем, совпадает ли stage текущего элемента stages с искомым
+          if (stage?.value === conversationTmp?.stage?.value) {
+            // Если да, используем метод map для перебора conversations внутри текущего stage
+            const updatedConversations = stage.conversations.map(
+              (conversation) => {
+                // Проверяем, совпадает ли stage текущего conversation с искомым
+                if (conversation._id === conversationTmp._id) {
+                  // Если да, обновляем значение conversation
+                  return conversationTmp;
+                }
+                // Возвращаем неизмененный conversation, если его stage не совпадает
+                return conversation;
+              }
+            );
+
+            // Возвращаем обновленный stage с обновленными conversations
+            return {
+              ...stage,
+              conversations: updatedConversations,
+            };
+          }
+
+          // Возвращаем неизмененный stage, если его stage не совпадает
+          return stage;
+        })
+      );
+    });
+
     return () => {
       socketRef.current.disconnect();
     };
-  }, [roomId, isAuth, filter, dateRange]);
+  }, [roomId, isAuth]);
+
+  useEffect(() => {
+    socketRef.current.on('status:load', (updatedStatus) => {
+      setStatuses((prevStatuses) =>
+        prevStatuses.map((status) =>
+          status.value === updatedStatus.value ? updatedStatus : status
+        )
+      );
+    });
+  }, [statuses]);
 
   const sendComment = ({
     type,
@@ -313,7 +366,7 @@ export const useChat = (roomId) => {
 
   const createStatus = async (status) => {
     await socketRef?.current?.emit('status:add', status);
-    await getStages();
+    // await getStages();
   };
 
   const refreshLink = async (chat_id) => {
@@ -322,6 +375,7 @@ export const useChat = (roomId) => {
 
   const linkUserToConversation = async (chat_id, user) => {
     await socketRef?.current?.emit('conversation:link', { chat_id, user });
+    await getMessages();
   };
 
   const readConversation = async (chat_id) => {

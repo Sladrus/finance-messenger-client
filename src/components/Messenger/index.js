@@ -28,6 +28,7 @@ export default function Messenger({
   sendComment,
   refreshLink,
   moneysend,
+  dateRange,
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
@@ -60,6 +61,8 @@ export default function Messenger({
         changeStage={changeStage}
         searchInput={searchInput}
         setSearchInput={setSearchInput}
+        filter={filter}
+        dateRange={dateRange}
       />
       <MessageList
         user={user}

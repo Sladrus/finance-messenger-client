@@ -290,7 +290,6 @@ export default function Compose({
                   onClick={() => readConversation(selectedConversation)}
                   isEnabled={conversation?.unreadCount > 0 ? false : true}
                 />
-
                 <PopoverButton
                   icon={faPaperPlane}
                   placeholder={'Moneysend'}

@@ -28,6 +28,7 @@ export default function MessageList({
     messagesEndRef.current?.scrollIntoView({
       behavior: 'smooth',
     });
+    console.log(messages);
   }, [messages]);
 
   const renderMessages = () => {

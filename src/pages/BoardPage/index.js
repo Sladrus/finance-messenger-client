@@ -30,6 +30,7 @@ export const initializeBoard = (statuses) => {
   statuses.forEach((boardSectionKey) => {
     boardSections[boardSectionKey.value] = boardSectionKey.conversations;
   });
+
   return boardSections;
 };
 
@@ -72,15 +73,44 @@ const BoardPage = ({
   selectedConversation,
   managers,
   moveStatus,
+  dateRange,
 }) => {
   const [boardSections, setBoardSections] = useState(initializeBoard(statuses));
   const [activeTaskId, setActiveTaskId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-
   const [createBoardModalIsOpen, createBoardSetIsOpen] = useState(false);
+
   useEffect(() => {
-    setBoardSections(initializeBoard(statuses));
-  }, [statuses]);
+    const filteredStages = statuses
+      .filter((stage) => {
+        return filter?.stage ? stage.value === filter?.stage : true;
+      })
+      .map((stage) => {
+        const filteredConversations = stage?.conversations
+          ?.filter((conversation) => {
+            return filter?.user
+              ? conversation?.user?._id === filter?.user
+              : true;
+          })
+          .filter((conversation) => {
+            const unread = conversation?.unreadCount > 0 ? true : false;
+            return filter?.unread !== '' ? unread === filter?.unread : true;
+          })
+          .filter((conversation) => {
+            const conversationDate = new Date(conversation?.workAt);
+            const startDate = new Date(dateRange[0].startDate);
+            const conversationDay = new Date(conversationDate).getDate();
+            const startDay = new Date(startDate).getDate();
+            const endDate = new Date(dateRange[0].endDate);
+            return (
+              (conversationDate >= startDate && conversationDate <= endDate) ||
+              startDay === conversationDay
+            );
+          });
+        return { ...stage, conversations: filteredConversations };
+      });
+    setBoardSections(initializeBoard(filteredStages));
+  }, [statuses, dateRange, filter]);
 
   const sensors = useSensors(
     useSensor(KeyboardSensor, {
@@ -89,7 +119,7 @@ const BoardPage = ({
     useSensor(TouchSensor),
     useSensor(PointerSensor, {
       activationConstraint: {
-        delay: 230,
+        delay: 200,
         tolerance: 500,
       },
       pointer: true,
@@ -218,6 +248,7 @@ const BoardPage = ({
   };
 
   const task = activeTaskId ? getTaskById(statuses, activeTaskId) : null;
+
   // console.log(statuses);
   return (
     <div className="board-page">

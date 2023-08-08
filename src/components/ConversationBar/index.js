@@ -37,14 +37,21 @@ const ConversationBar = ({
   linkUserToConversation,
   refreshLink,
 }) => {
-  const handleLinkButton = async (e) => {
-    e.stopPropagation();
-    await linkUserToConversation(selectedConversation, user);
-  };
+  // const handleLinkButton = async (e) => {
+  //   e.stopPropagation();
+  //   await linkUserToConversation(selectedConversation, user);
+  // };
+
+  const [link, setLink] = useState('');
+  const [status, setStatus] = useState('');
 
   const conversation = conversations.find(
-    (o) => o.chat_id === selectedConversation
+    (o) => o?.chat_id === selectedConversation
   );
+  useEffect(() => {
+    setLink(conversation?.link);
+    setStatus(conversation?.stage?.label);
+  }, [conversation]);
 
   const [conversationModalIsOpen, setConversationModalIsOpen] = useState(false);
 
@@ -59,7 +66,6 @@ const ConversationBar = ({
     console.log('CLOSE', conversationModalIsOpen);
     setConversationModalIsOpen(!conversationModalIsOpen);
   }
-  console.log(conversation);
   return (
     <div onClick={openModal} className="conversation-bar">
       <div className="conversation-container">
@@ -99,7 +105,7 @@ const ConversationBar = ({
             }}
             icon={faTag}
           />
-          <span style={{ fontSize: '14px' }}>{conversation?.stage?.label}</span>
+          <span style={{ fontSize: '14px' }}>{status}</span>
         </div>
       )}
 

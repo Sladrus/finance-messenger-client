@@ -47,7 +47,7 @@ export default function Message({
     if (data.type === 'photo') {
       // Запрос для получения ссылки на фото с помощью getFile
       fetch(
-        `https://api.telegram.org/bot${token}/getFile?file_id=${data.photo[2].file_id}`
+        `https://api.telegram.org/bot${token}/getFile?file_id=${data?.photo[data?.photo?.length - 1]?.file_id}`
       )
         .then((response) => response.json())
         .then((data) => {

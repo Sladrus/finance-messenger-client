@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './BoardPageContainer.css';
 import BoardPageItem from '../BoardPageItem';
 import EmptyBoard from '../EmptyBoard';
@@ -58,6 +58,7 @@ const BoardPageContainer = ({
   const handleMove = async (position, value) => {
     await moveStatus(position, value);
   };
+
 
   return (
     <div className="board-page-list-block">

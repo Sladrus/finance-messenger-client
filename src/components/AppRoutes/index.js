@@ -124,6 +124,7 @@ const AppRoutes = () => {
                     refreshLink={refreshLink}
                     moneysend={moneysend}
                     moveStatus={moveStatus}
+                    dateRange={dateRange}
                   />
                 }
                 exact

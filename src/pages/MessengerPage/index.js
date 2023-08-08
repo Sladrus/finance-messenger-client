@@ -22,6 +22,7 @@ function MessengerPage({
   sendComment,
   refreshLink,
   moneysend,
+  dateRange,
 }) {
   const navigate = useNavigate();
 
@@ -46,6 +47,7 @@ function MessengerPage({
         sendComment={sendComment}
         refreshLink={refreshLink}
         moneysend={moneysend}
+        dateRange={dateRange}
       />
     </div>
   );
