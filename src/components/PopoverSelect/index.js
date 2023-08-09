@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './PopoverSelect.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { color, motion } from 'framer-motion';
 import Select, { StylesConfig } from 'react-select';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const PopoverSelect = ({
   icon,
-  onChange,
+  placeholder,
+  onSubmit,
   isEnabled,
   options,
   conversation,
+  defaultValue,
+  isLoading,
 }) => {
   const colourStyles = {
     indicatorSeparator: (provided) => ({
@@ -84,29 +88,48 @@ const PopoverSelect = ({
       margin: '0',
     }),
   };
+
   return (
     <motion.div
-      //   onClick={onClick}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className={`popover-button ${isEnabled ? 'enabled' : 'disabled'}`}
     >
-      <FontAwesomeIcon
-        style={{
-          color: conversation?.stage?.color,
-          paddingRight: '13px',
-        }}
-        className={`popover-button-icon ${isEnabled ? 'enabled' : 'disabled'}`}
-        icon={icon}
-      />
+      {!isLoading ? (
+        <FontAwesomeIcon
+          style={{
+            color: conversation?.stage?.color,
+            paddingRight: '13px',
+          }}
+          className={`popover-button-icon ${
+            isEnabled ? 'enabled' : 'disabled'
+          }`}
+          icon={icon}
+        />
+      ) : (
+        <div
+          style={{
+            color: conversation?.stage?.color,
+            padding: '0px 16px',
+          }}
+        >
+          <ClipLoader
+            color={'#729bbd'}
+            loading={isLoading}
+            size={12}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
       <Select
-        onChange={() => {}}
-        defaultValue={{
-          value: conversation?.stage?.value,
-          label: conversation?.stage?.label,
-          color: conversation?.stage?.color,
+        menuPlacement="top"
+        onChange={(e) => {
+          onSubmit(e);
+          // setIsLoading(false);
         }}
+        defaultValue={defaultValue}
         options={options}
         styles={colourStyles}
       />

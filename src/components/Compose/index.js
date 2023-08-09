@@ -46,6 +46,9 @@ export default function Compose({
   statuses,
   sendComment,
   moneysend,
+  managers,
+  changeStage,
+  changeUserToConversation,
 }) {
   const [text, setText] = useState('');
   const [isOpen, setOpen] = useState(false);
@@ -135,7 +138,6 @@ export default function Compose({
   };
 
   const handleModalValue = (value, type) => {
-    console.log(value, type);
     setModalValue({ type, value });
     setPopoverModalIsOpen(true);
   };
@@ -196,7 +198,6 @@ export default function Compose({
     } else {
       type = 'xe.com';
     }
-    console.log(type);
     const halfLength = Math.ceil(currency.length / 2);
     const firstHalf = currency.slice(0, halfLength);
     const secondHalf = currency.slice(halfLength);
@@ -205,18 +206,15 @@ export default function Compose({
     const fakeAmount = randomIntFromInterval(1000, 100000);
 
     setIsLoading(true);
-    console.log(currencies, expression);
     try {
       const data =
         type === 'xe.com'
           ? await convertCurrencyEx(currencies, fakeAmount)
           : await convertCurrencyMoex(currencies, fakeAmount);
       const course = Number(data.course.split(' ')[0]);
-      console.log(course);
       const realAmount = expression
         ? (course / fakeAmount) * evaluate(expression)
         : course / fakeAmount;
-      console.log(realAmount);
       setFinalCourse({
         course: `${realAmount.toFixed(4)} ${currencies[1]}`,
         updated: data.updated,
@@ -244,25 +242,40 @@ export default function Compose({
     inputElement.current.style.height = '20px';
     inputElement.current.style.height = `${e.target.scrollHeight - 10}px`;
     const updatedText = e.target.value;
-    console.log(updatedText);
+
     setText(updatedText);
     setFinalCourse('');
     setIsCommand(isValidCommand(updatedText));
     await processCommand(updatedText);
   };
 
-  console.log('isCommand', isCommand);
+  const [statusIsLoading, setStatusIsLoading] = useState(false);
+  const [managerIsLoading, setManagerIsLoading] = useState(false);
+
   useEffect(() => {
     setCourseOpen(isCommand);
   }, [isCommand]);
 
-  // useEffect(() => {
-  //   if (isCommand) processCommand(text);
-  // }, [text]);
+  const managersOptions = [
+    { value: null, label: 'Нет менеджера' },
+    ...managers.map((manager) => ({
+      value: manager._id,
+      label: manager.username,
+      color: 'white',
+    })),
+  ];
 
-  // useEffect(() => {
-  //   console.log(finalCourse);
-  // }, [finalCourse]);
+  useEffect(() => {
+    // setConversationState(conversation);
+    console.log('UPDATE');
+    if (!conversation?.stage?.loading) {
+      setStatusIsLoading(false);
+    }
+    if (!conversation?.user?.loading) {
+      setManagerIsLoading(false);
+    }
+  }, [conversation]);
+
   console.log(conversation);
   return (
     <form className="compose" onSubmit={handleSendMessage}>
@@ -297,7 +310,60 @@ export default function Compose({
                   // onClick={() => readConversation(selectedConversation)}
                   // isEnabled={conversation?.unreadCount > 0 ? false : true}
                 />
-
+                {user.role === 'ADMIN' && (
+                  <PopoverSelect
+                    icon={conversation?.user ? faLink : faPlus}
+                    options={[...managersOptions]}
+                    isLoading={managerIsLoading}
+                    defaultValue={
+                      conversation?.user
+                        ? {
+                            value: conversation?.user?._id,
+                            label: conversation?.user?.username,
+                            color: 'white',
+                          }
+                        : {
+                            value: null,
+                            label: 'Нет менеджера',
+                            color: 'white',
+                          }
+                    }
+                    onSubmit={(data) => {
+                      setManagerIsLoading(true);
+                      const manager = managers.find(
+                        (o) => o._id === data.value
+                      );
+                      console.log(manager);
+                      conversation.user = {};
+                      conversation.user._id = data.value;
+                      conversation.user.username =
+                        data.label || 'Нет менеджера';
+                      changeUserToConversation(selectedConversation, manager);
+                      conversation.user.loading = true;
+                    }}
+                  />
+                )}
+                <PopoverSelect
+                  icon={faTag}
+                  placeholder={conversation.stage.label}
+                  options={[...statuses]}
+                  conversation={conversation}
+                  isLoading={statusIsLoading}
+                  onSubmit={(data) => {
+                    setStatusIsLoading(true);
+                    conversation.stage.value = data.value;
+                    conversation.stage.label = data.label;
+                    conversation.stage.color = data.color;
+                    conversation.stage.loading = true;
+                    changeStage(conversation._id, data.value, 0);
+                    console.log(data);
+                  }}
+                  defaultValue={{
+                    value: conversation?.stage?.value,
+                    label: conversation?.stage?.label,
+                    color: conversation?.stage?.color,
+                  }}
+                />
                 <PopoverInput
                   icon={faComment}
                   placeholder={'Добавить комментарий'}
@@ -310,11 +376,7 @@ export default function Compose({
                   placeholder={'Добавить задачу'}
                   onSubmit={handleModalValue}
                 />
-                <PopoverSelect
-                  icon={faTag}
-                  options={[...statuses]}
-                  conversation={conversation}
-                />
+
                 <PopoverInput icon={faTags} placeholder={'Тэги'} />
                 <PopoverInput
                   icon={faPhotoVideo}

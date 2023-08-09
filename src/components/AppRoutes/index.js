@@ -45,6 +45,7 @@ const AppRoutes = () => {
     moveStatus,
     dateRange,
     setDateRange,
+    changeUserToConversation,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -125,6 +126,7 @@ const AppRoutes = () => {
                     moneysend={moneysend}
                     moveStatus={moveStatus}
                     dateRange={dateRange}
+                    changeUserToConversation={changeUserToConversation}
                   />
                 }
                 exact

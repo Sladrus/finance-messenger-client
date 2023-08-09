@@ -124,6 +124,7 @@ export const useChat = (roomId) => {
     getStages();
     getMessages();
     getManagers();
+
     // обрабатываем получение сообщений
     socketRef.current.on('users', (users) => {
       setManagers(users);
@@ -135,58 +136,23 @@ export const useChat = (roomId) => {
 
     socketRef.current.on('messages', (messages) => {
       setMessages(messages);
-      // getConversations();
       setIsLoading(false);
     });
 
     socketRef.current.on('conversations', (conversations) => {
       setConversations(conversations);
     });
-    // console.log(stages);
+    console.log(conversations);
     socketRef.current.on('statuses', async (stages) => {
-      console.log(stages);
       setStages(stages);
       setStatuses(stages);
       for (const stage of stages) {
-        // console.log(stage);
         await socketRef.current.emit('status:value', { value: stage.value });
       }
-      // setStages(stages);
-      // const filteredStages = stages
-      //   .filter((stage) => {
-      //     return filter?.stage ? stage.value === filter?.stage : true;
-      //   })
-      //   .map((stage) => {
-      //     const filteredConversations = stage.conversations
-      //       .filter((conversation) => {
-      //         return filter?.user
-      //           ? conversation?.user?._id === filter?.user
-      //           : true;
-      //       })
-      //       .filter((conversation) => {
-      //         const unread = conversation?.unreadCount > 0 ? true : false;
-      //         return filter?.unread !== '' ? unread === filter?.unread : true;
-      //       })
-      //       .filter((conversation) => {
-      //         const conversationDate = new Date(conversation?.workAt);
-      //         const startDate = new Date(dateRange[0].startDate);
-      //         const conversationDay = new Date(conversationDate).getDate();
-      //         const startDay = new Date(startDate).getDate();
-      //         const endDate = new Date(dateRange[0].endDate);
-      //         return (
-      //           (conversationDate >= startDate &&
-      //             conversationDate <= endDate) ||
-      //           startDay === conversationDay
-      //         );
-      //       });
-      //     return { ...stage, conversations: filteredConversations };
-      //   });
-      // setStatuses(filteredStages);
       setIsLoading(false);
     });
 
     socketRef.current.on('status:updated', (updatedStatus) => {
-      console.log(updatedStatus);
       setStatuses((prevStatuses) =>
         prevStatuses.map((status) =>
           status.value === updatedStatus.value ? updatedStatus : status
@@ -222,10 +188,8 @@ export const useChat = (roomId) => {
         return updatedStatuses;
       });
     });
-    console.log(messages);
 
     socketRef.current.on('status:conversation', (conversationTmp) => {
-      console.log(conversationTmp);
       setConversations((prevConversations) =>
         prevConversations.map((conversation) => {
           if (conversation?._id === conversationTmp?._id) {
@@ -326,6 +290,7 @@ export const useChat = (roomId) => {
   };
 
   const login = async ({ username, password }) => {
+    localStorage.removeItem('token');
     socketRef.current.emit('login', { username: username, password: password });
   };
 
@@ -378,6 +343,14 @@ export const useChat = (roomId) => {
     await getMessages();
   };
 
+  const changeUserToConversation = async (chat_id, user) => {
+    await socketRef?.current?.emit('conversation:changeuser', {
+      chat_id,
+      user,
+    });
+    await getMessages();
+  };
+
   const readConversation = async (chat_id) => {
     await socketRef?.current?.emit('conversation:read', { chat_id });
   };
@@ -414,5 +387,6 @@ export const useChat = (roomId) => {
     moveStatus,
     dateRange,
     setDateRange,
+    changeUserToConversation,
   };
 };

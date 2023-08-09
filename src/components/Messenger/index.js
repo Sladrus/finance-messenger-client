@@ -29,6 +29,8 @@ export default function Messenger({
   refreshLink,
   moneysend,
   dateRange,
+  managers,
+  changeUserToConversation,
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
@@ -76,6 +78,9 @@ export default function Messenger({
         statuses={statuses}
         sendComment={sendComment}
         moneysend={moneysend}
+        managers={managers}
+        changeStage={changeStage}
+        changeUserToConversation={changeUserToConversation}
       />
     </div>
   );

@@ -15,6 +15,7 @@ import {
 } from '@dnd-kit/sortable';
 import SortableTaskItem from '../SortableTaskItem';
 import SettingsBoardItemModal from '../SettingsBoardItemModal';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function chatCount(num) {
   const lastDigit = num % 10;
@@ -55,11 +56,6 @@ const BoardPageContainer = ({
     setSettingsBoardModalIsOpen(false);
   };
 
-  const handleMove = async (position, value) => {
-    await moveStatus(position, value);
-  };
-
-
   return (
     <div className="board-page-list-block">
       <div className="board-page-list-container-info">
@@ -83,7 +79,19 @@ const BoardPageContainer = ({
             )}
           </div>
         </div>
-        <span>{`${tasks?.length} ${chatCount(tasks?.length)}`}</span>
+        <span>
+          {status?.conversations ? (
+            `${tasks?.length} ${chatCount(tasks?.length)}`
+          ) : (
+            <ClipLoader
+              color={'#729bbd'}
+              loading={true}
+              size={10}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          )}
+        </span>
         <div
           style={{
             display: 'flex',
@@ -133,7 +141,7 @@ const BoardPageContainer = ({
             ))}
           </div>
         </SortableContext>
-        {!tasks?.length && <EmptyBoard />}
+        {!tasks?.length && <EmptyBoard status={status} />}
       </div>
       <SettingsBoardItemModal
         status={status}

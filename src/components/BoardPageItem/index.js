@@ -192,71 +192,34 @@ const BoardPageItem = ({
                       className="toolbar-popover"
                       {...layerProps}
                     >
-                      {
-                        managers?.map((item, index) => (
-                          <div
-                            onClick={() => handleLinkButton(item)}
-                            key={index}
-                            className="popover-input"
+                      {managers?.map((item, index) => (
+                        <div
+                          onClick={() => handleLinkButton(item)}
+                          key={index}
+                          className="popover-input"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            className="popover-input-icon"
+                            icon={faUser}
+                          />
+                          <span
                             style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              cursor: 'pointer',
+                              color: 'white',
+                              padding: '10px 10px',
+                              fontSize: '14px',
+                              width: '100%',
                             }}
                           >
-                            <FontAwesomeIcon
-                              className="popover-input-icon"
-                              icon={faUser}
-                            />
-                            <span
-                              style={{
-                                color: 'white',
-                                padding: '10px 10px',
-                                fontSize: '14px',
-                                width: '100%',
-                              }}
-                            >
-                              {item.username}
-                            </span>
-                          </div>
-                        ))
-                        /* <PopoverInput
-                        icon={faLink}
-                        placeholder={'Закрепить'}
-                        // onChange={handleStatus}
-                        // value={label}
-                        // onKeyPress={handleKeyPress}
-                      />
-                      <PopoverInput
-                        icon={faTasks}
-                        placeholder={'Задача'}
-                        // onChange={handleStatus}
-                        // value={label}
-                        // onKeyPress={handleKeyPress}
-                      />
-                      <PopoverInput
-                        icon={faTags}
-                        placeholder={'Тэги'}
-                        // onChange={handleStatus}
-                        // value={label}
-                        // onKeyPress={handleKeyPress}
-                      />
-                      <PopoverInput
-                        icon={faComment}
-                        placeholder={'Комментарий'}
-                        // onChange={handleStatus}
-                        // value={label}
-                        // onKeyPress={handleKeyPress}
-                      />
-                      <PopoverInput
-                        icon={faInfoCircle}
-                        placeholder={'Статистика'}
-                        // onChange={handleStatus}
-                        // value={label}
-                        // onKeyPress={handleKeyPress}
-                      /> */
-                      }
+                            {item.username}
+                          </span>
+                        </div>
+                      ))}
                     </motion.div>
                   )}
                 </AnimatePresence>

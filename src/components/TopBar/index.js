@@ -42,6 +42,7 @@ const TopBar = ({
 
   const managersOptions = [
     { value: '', label: 'Все менеджеры' },
+    { value: null, label: 'Нет менеджера' },
     ...managers.map((manager) => ({
       value: manager._id,
       label: manager.username,
@@ -56,6 +57,7 @@ const TopBar = ({
 
   const handleSelectRange = (ranges) => {
     setDateRange([ranges.selection]);
+    setSelectedConversation(0);
   };
 
   const staticRanges = [

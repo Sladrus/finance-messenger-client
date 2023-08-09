@@ -23,6 +23,8 @@ function MessengerPage({
   refreshLink,
   moneysend,
   dateRange,
+  managers,
+  changeUserToConversation,
 }) {
   const navigate = useNavigate();
 
@@ -48,6 +50,8 @@ function MessengerPage({
         refreshLink={refreshLink}
         moneysend={moneysend}
         dateRange={dateRange}
+        managers={managers}
+        changeUserToConversation={changeUserToConversation}
       />
     </div>
   );

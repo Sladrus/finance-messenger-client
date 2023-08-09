@@ -19,6 +19,9 @@ export default function MessageList({
   statuses,
   sendComment,
   moneysend,
+  managers,
+  changeStage,
+  changeUserToConversation,
 }) {
   const MY_USER_ID = user._id;
 
@@ -28,7 +31,6 @@ export default function MessageList({
     messagesEndRef.current?.scrollIntoView({
       behavior: 'smooth',
     });
-    console.log(messages);
   }, [messages]);
 
   const renderMessages = () => {
@@ -117,6 +119,9 @@ export default function MessageList({
           statuses={statuses}
           sendComment={sendComment}
           moneysend={moneysend}
+          managers={managers}
+          changeStage={changeStage}
+          changeUserToConversation={changeUserToConversation}
         />
       )}
     </div>

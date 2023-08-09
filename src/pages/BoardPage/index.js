@@ -75,7 +75,7 @@ const BoardPage = ({
   moveStatus,
   dateRange,
 }) => {
-  const [boardSections, setBoardSections] = useState(initializeBoard(statuses));
+  const [boardSections, setBoardSections] = useState([]);
   const [activeTaskId, setActiveTaskId] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [createBoardModalIsOpen, createBoardSetIsOpen] = useState(false);
@@ -88,9 +88,11 @@ const BoardPage = ({
       .map((stage) => {
         const filteredConversations = stage?.conversations
           ?.filter((conversation) => {
-            return filter?.user
-              ? conversation?.user?._id === filter?.user
-              : true;
+            return filter?.user === ''
+              ? true
+              : filter?.user === null
+              ? !conversation?.user?._id
+              : conversation?.user?._id === filter?.user;
           })
           .filter((conversation) => {
             const unread = conversation?.unreadCount > 0 ? true : false;

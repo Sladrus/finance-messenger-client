@@ -16,9 +16,7 @@ export default function ConversationList({
   filter,
   dateRange,
 }) {
-  console.log(filter, dateRange);
   const [filteredConversations, setFilteredConversations] = useState([]);
-
   useEffect(() => {
     const filteredData = conversations?.filter((conversation) => {
       // Check if the conversations stage matches the filters stage
@@ -28,9 +26,12 @@ export default function ConversationList({
         : true;
 
       // Check if the conversations user matches the filters user
-      const isUserMatched = filter?.user
-        ? conversation?.user?._id === filter?.user
-        : true;
+      const isUserMatched =
+        filter?.user === ''
+          ? true
+          : filter?.user === null
+          ? !conversation?.user?._id
+          : conversation?.user?._id === filter?.user;
 
       const unread = conversation?.unreadCount > 0 ? true : false;
 
@@ -54,7 +55,6 @@ export default function ConversationList({
           return o.title.toLowerCase().includes(searchInput.toLowerCase());
         })
       : filteredData;
-    console.log(filteredData);
     setFilteredConversations(searchedConversations);
   }, [filter, dateRange, searchInput, conversations]);
 
@@ -72,9 +72,10 @@ export default function ConversationList({
               changeStage={changeStage}
             />
           ))}
-          {!isLoading && !filteredConversations.length && (
+          {!conversations.length ? (
             <div
               style={{
+                height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -82,10 +83,30 @@ export default function ConversationList({
                 background: '#101b25',
               }}
             >
-              <span style={{ padding: '15px', textAlign: 'center' }}>
-                По данному запросу результатов не найдено
-              </span>
+              <ClipLoader
+                color={'#729bbd'}
+                loading={!conversations.length}
+                size={30}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
             </div>
+          ) : (
+            !filteredConversations.length && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: '#101b25',
+                }}
+              >
+                <span style={{ padding: '15px', textAlign: 'center' }}>
+                  По данному запросу результатов не найдено
+                </span>
+              </div>
+            )
           )}
         </div>
       </div>
