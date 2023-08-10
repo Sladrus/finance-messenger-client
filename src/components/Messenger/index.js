@@ -42,6 +42,7 @@ export default function Messenger({
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
   };
+  console.log(currentPage);
 
   const [isExpanded, setIsExpanded] = useState(false);
   return (
@@ -78,7 +79,7 @@ export default function Messenger({
         filter={filter}
         dateRange={dateRange}
         getConversations={getConversations}
-        currentPag={currentPage}
+        currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         searchLoading={searchLoading}
         setSearchLoading={setSearchLoading}

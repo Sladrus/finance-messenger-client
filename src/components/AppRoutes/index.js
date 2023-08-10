@@ -135,7 +135,7 @@ const AppRoutes = () => {
                     dateRange={dateRange}
                     changeUserToConversation={changeUserToConversation}
                     getConversations={getConversations}
-                    currentPag={currentPage}
+                    currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     searchLoading={searchLoading}
                     setSearchLoading={setSearchLoading}

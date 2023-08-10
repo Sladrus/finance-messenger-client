@@ -48,7 +48,7 @@ const ConversationBar = ({
   const [link, setLink] = useState('');
   const [status, setStatus] = useState('');
 
-  const conversation = conversations.find(
+  const conversation = conversations?.find(
     (o) => o?.chat_id === selectedConversation
   );
   useEffect(() => {

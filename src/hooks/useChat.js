@@ -72,6 +72,7 @@ export const useChat = (roomId) => {
   const getManagers = async () => {
     socketRef.current.emit('user:get');
   };
+  console.log(currentPage);
 
   // const updateEndDate = () => {
   //   const updatedDateRange = [...dateRange]; // Create a copy of the original dateRange

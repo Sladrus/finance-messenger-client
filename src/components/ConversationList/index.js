@@ -79,12 +79,12 @@ export default function ConversationList({
         container.scrollTop + container.clientHeight >=
         container.scrollHeight
       ) {
+        console.log(currentPage);
         setNextPageLoading(true);
         setCurrentPage(currentPage + 1);
         getConversations(currentPage + 1, searchInput);
       }
     };
-
     const container = containerRef.current;
     container.addEventListener('scroll', handleScroll);
 
