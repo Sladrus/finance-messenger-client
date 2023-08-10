@@ -54,6 +54,7 @@ export default function Messenger({
         setSearchInput={setSearchInput}
         searchLoading={searchLoading}
         setSearchLoading={setSearchLoading}
+        setCurrentPage={setCurrentPage}
       />
       <ConversationBar
         isLoading={isLoading}

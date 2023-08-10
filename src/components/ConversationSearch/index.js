@@ -15,14 +15,17 @@ export default function ConversationSearch({
   setSearchInput,
   searchLoading,
   setSearchLoading,
+  setCurrentPage,
 }) {
   const handleChange = (event) => {
     setSearchInput(event.target.value);
     setSearchLoading(true);
+    setCurrentPage(1);
   };
 
   const handleClick = () => {
     setIsExpanded(!isExpanded);
+    setCurrentPage(1);
   };
 
   return (
