@@ -32,6 +32,7 @@ function MessengerPage({
   setSearchLoading,
   nextPageLoading,
   setNextPageLoading,
+  conversationsCount,
 }) {
   const navigate = useNavigate();
   console.log(currentPage);
@@ -67,6 +68,7 @@ function MessengerPage({
         setSearchLoading={setSearchLoading}
         nextPageLoading={nextPageLoading}
         setNextPageLoading={setNextPageLoading}
+        conversationsCount={conversationsCount}
       />
     </div>
   );

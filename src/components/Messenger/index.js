@@ -38,6 +38,7 @@ export default function Messenger({
   setSearchLoading,
   nextPageLoading,
   setNextPageLoading,
+  conversationsCount,
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
@@ -67,6 +68,7 @@ export default function Messenger({
         searchLoading={searchLoading}
         nextPageLoading={nextPageLoading}
         setNextPageLoading={setNextPageLoading}
+        conversationsCount={conversationsCount}
       />
       <ConversationList
         isLoading={isLoading}

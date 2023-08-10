@@ -39,6 +39,7 @@ const ConversationBar = ({
   searchLoading,
   nextPageLoading,
   setNextPageLoading,
+  conversationsCount,
 }) => {
   // const handleLinkButton = async (e) => {
   //   e.stopPropagation();
@@ -73,9 +74,9 @@ const ConversationBar = ({
       <div className="conversation-container">
         <span className="conversation-bar-title">
           {!conversation
-            ? `По данному запросу найдено ${conversations?.length} ${chatCount(
+            ? `По данному запросу загружено ${
                 conversations?.length
-              )}`
+              } ${chatCount(conversations?.length)} из ${conversationsCount}`
             : conversation?.title}
         </span>
         {!nextPageLoading && !searchLoading ? (

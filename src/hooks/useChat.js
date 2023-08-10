@@ -31,6 +31,7 @@ export const useChat = (roomId) => {
   const [boardSections, setBoardSections] = useState({});
   // локальное состояние для диалогов
   const [conversations, setConversations] = useState([]);
+  const [conversationsCount, setConversationsCount] = useState(0);
   // локальное состояние для сообщений
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -142,8 +143,9 @@ export const useChat = (roomId) => {
       setIsLoading(false);
     });
 
-    socketRef.current.on('conversations', (conversations) => {
+    socketRef.current.on('conversations', ({ conversations, count }) => {
       setConversations(conversations);
+      setConversationsCount(count);
       setSearchLoading(false);
       setNextPageLoading(false);
     });
@@ -400,5 +402,6 @@ export const useChat = (roomId) => {
     setSearchLoading,
     nextPageLoading,
     setNextPageLoading,
+    conversationsCount
   };
 };
