@@ -345,7 +345,7 @@ export default function Compose({
                 )}
                 <PopoverSelect
                   icon={faTag}
-                  placeholder={conversation.stage.label}
+                  placeholder={conversation?.stage?.label}
                   options={[...statuses]}
                   conversation={conversation}
                   isLoading={statusIsLoading}

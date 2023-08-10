@@ -72,15 +72,6 @@ export const useChat = (roomId) => {
   const getManagers = async () => {
     socketRef.current.emit('user:get');
   };
-  console.log(currentPage);
-
-  // const updateEndDate = () => {
-  //   const updatedDateRange = [...dateRange]; // Create a copy of the original dateRange
-  //   updatedDateRange[0].endDate = new Date(); // Update the endDate in the copied array
-
-  //   setDateRange(updatedDateRange); // Set the updated dateRange using the setter function
-  // };
-  // const notify = (message) => toast('Wow so easy!');
 
   useEffect(() => {
     setIsLoading(true);
@@ -128,7 +119,7 @@ export const useChat = (roomId) => {
         // при размонтировании компонента выполняем отключение сокета
         socketRef.current.disconnect();
       };
-    getConversations(1, searchInput);
+    getConversations(currentPage, searchInput);
     getStages();
     getMessages();
     getManagers();

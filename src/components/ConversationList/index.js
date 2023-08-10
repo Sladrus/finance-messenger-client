@@ -65,12 +65,17 @@ export default function ConversationList({
           return o.title.toLowerCase().includes(searchInput.toLowerCase());
         })
       : filteredData;
-    setFilteredConversations(searchedConversations);
+    setFilteredConversations(filteredData);
   }, [filter, dateRange, searchInput, conversations]);
 
   useEffect(() => {
     getConversations(currentPage, searchInput);
   }, [searchInput]);
+
+  // useEffect(() => {
+  //   console.log('LOADING');
+  //   getConversations(currentPage, searchInput);
+  // }, [isLoading]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,7 +84,7 @@ export default function ConversationList({
         container.scrollTop + container.clientHeight >=
         container.scrollHeight
       ) {
-        console.log(currentPage);
+        // console.log(currentPage);
         setNextPageLoading(true);
         setCurrentPage(currentPage + 1);
         getConversations(currentPage + 1, searchInput);
