@@ -56,9 +56,12 @@ export const useChat = (roomId) => {
   const navigate = useNavigate();
 
   const getConversations = async (page, searchInput) => {
-    setIsLoading(true);
-    socketRef.current.emit('conversation:get', { page, searchInput });
-    setIsLoading(false);
+    socketRef.current.emit('conversation:get', {
+      page,
+      searchInput,
+      filter,
+      dateRange,
+    });
   };
 
   const getMessages = async () => {
@@ -119,6 +122,7 @@ export const useChat = (roomId) => {
         // при размонтировании компонента выполняем отключение сокета
         socketRef.current.disconnect();
       };
+
     getConversations(currentPage, searchInput);
     getStages();
     getMessages();

@@ -28,49 +28,50 @@ export default function ConversationList({
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const filteredData = conversations?.filter((conversation) => {
-      // Check if the conversations stage matches the filters stage
+    // const filteredData = conversations?.filter((conversation) => {
+    //   // Check if the conversations stage matches the filters stage
 
-      const isStageMatched = filter?.stage
-        ? conversation?.stage?.value === filter?.stage
-        : true;
+    //   const isStageMatched = filter?.stage
+    //     ? conversation?.stage?.value === filter?.stage
+    //     : true;
 
-      // Check if the conversations user matches the filters user
-      const isUserMatched =
-        filter?.user === ''
-          ? true
-          : filter?.user === null
-          ? !conversation?.user?._id
-          : conversation?.user?._id === filter?.user;
+    //   // Check if the conversations user matches the filters user
+    //   const isUserMatched =
+    //     filter?.user === ''
+    //       ? true
+    //       : filter?.user === null
+    //       ? !conversation?.user?._id
+    //       : conversation?.user?._id === filter?.user;
 
-      const unread = conversation?.unreadCount > 0 ? true : false;
+    //   const unread = conversation?.unreadCount > 0 ? true : false;
 
-      const isUnreadMatched =
-        filter?.unread !== '' ? unread === filter?.unread : true;
-      const conversationDate = new Date(conversation?.workAt).getTime();
-      const startDate = new Date(dateRange[0].startDate).getTime();
-      const conversationDay = new Date(conversationDate).getDate();
-      const startDay = new Date(startDate).getDate();
-      const endDate = new Date(dateRange[0].endDate).getTime();
-      const isDateMatched =
-        (conversationDate >= startDate && conversationDate <= endDate) ||
-        startDay === conversationDay;
+    //   const isUnreadMatched =
+    //     filter?.unread !== '' ? unread === filter?.unread : true;
+    //   const conversationDate = new Date(conversation?.workAt).getTime();
+    //   const startDate = new Date(dateRange[0].startDate).getTime();
+    //   const conversationDay = new Date(conversationDate).getDate();
+    //   const startDay = new Date(startDate).getDate();
+    //   const endDate = new Date(dateRange[0].endDate).getTime();
+    //   const isDateMatched =
+    //     (conversationDate >= startDate && conversationDate <= endDate) ||
+    //     startDay === conversationDay;
 
-      return (
-        isStageMatched && isUserMatched && isUnreadMatched && isDateMatched
-      );
-    });
-    const searchedConversations = searchInput
-      ? filteredData.filter((o) => {
-          return o.title.toLowerCase().includes(searchInput.toLowerCase());
-        })
-      : filteredData;
-    setFilteredConversations(filteredData);
-  }, [filter, dateRange, searchInput, conversations]);
+    //   return (
+    //     isStageMatched && isUserMatched && isUnreadMatched && isDateMatched
+    //   );
+    // });
+    // const searchedConversations = searchInput
+    //   ? filteredData.filter((o) => {
+    //       return o.title.toLowerCase().includes(searchInput.toLowerCase());
+    //     })
+    //   : filteredData;
+    setFilteredConversations(conversations);
+  }, [searchInput, conversations]);
 
   useEffect(() => {
+    setSearchLoading(true);
     getConversations(currentPage, searchInput);
-  }, [searchInput]);
+  }, [searchInput, filter, dateRange, currentPage]);
 
   // useEffect(() => {
   //   console.log('LOADING');
@@ -87,7 +88,7 @@ export default function ConversationList({
         // console.log(currentPage);
         setNextPageLoading(true);
         setCurrentPage(currentPage + 1);
-        getConversations(currentPage + 1, searchInput);
+        // getConversations(currentPage + 1, searchInput);
       }
     };
     const container = containerRef.current;
@@ -121,7 +122,7 @@ export default function ConversationList({
               />
             </div>
           ) : (
-            filteredConversations.map((conversation) => (
+            filteredConversations?.map((conversation) => (
               <ConversationListItem
                 key={conversation.chat_id}
                 statuses={statuses}
@@ -132,7 +133,7 @@ export default function ConversationList({
               />
             ))
           )}
-          {!searchLoading && !filteredConversations.length && (
+          {!searchLoading && !filteredConversations?.length && (
             <div
               style={{
                 display: 'flex',

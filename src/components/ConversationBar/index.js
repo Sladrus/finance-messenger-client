@@ -73,8 +73,8 @@ const ConversationBar = ({
       <div className="conversation-container">
         <span className="conversation-bar-title">
           {!conversation
-            ? `По данному запросу найдено ${conversations.length} ${chatCount(
-                conversations.length
+            ? `По данному запросу найдено ${conversations?.length} ${chatCount(
+                conversations?.length
               )}`
             : conversation?.title}
         </span>
