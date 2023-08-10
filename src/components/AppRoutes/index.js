@@ -46,6 +46,13 @@ const AppRoutes = () => {
     dateRange,
     setDateRange,
     changeUserToConversation,
+    getConversations,
+    currentPage,
+    setCurrentPage,
+    searchLoading,
+    setSearchLoading,
+    nextPageLoading,
+    setNextPageLoading,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -127,6 +134,13 @@ const AppRoutes = () => {
                     moveStatus={moveStatus}
                     dateRange={dateRange}
                     changeUserToConversation={changeUserToConversation}
+                    getConversations={getConversations}
+                    currentPag={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    searchLoading={searchLoading}
+                    setSearchLoading={setSearchLoading}
+                    nextPageLoading={nextPageLoading}
+                    setNextPageLoading={setNextPageLoading}
                   />
                 }
                 exact

@@ -36,6 +36,9 @@ const ConversationBar = ({
   user,
   linkUserToConversation,
   refreshLink,
+  searchLoading,
+  nextPageLoading,
+  setNextPageLoading,
 }) => {
   // const handleLinkButton = async (e) => {
   //   e.stopPropagation();
@@ -56,8 +59,6 @@ const ConversationBar = ({
   const [conversationModalIsOpen, setConversationModalIsOpen] = useState(false);
 
   function openModal() {
-    console.log('OPEN', conversationModalIsOpen);
-
     if (selectedConversation) setConversationModalIsOpen(true);
   }
 
@@ -66,6 +67,7 @@ const ConversationBar = ({
     console.log('CLOSE', conversationModalIsOpen);
     setConversationModalIsOpen(!conversationModalIsOpen);
   }
+
   return (
     <div onClick={openModal} className="conversation-bar">
       <div className="conversation-container">
@@ -76,7 +78,7 @@ const ConversationBar = ({
               )}`
             : conversation?.title}
         </span>
-        {!isLoading ? (
+        {!nextPageLoading && !searchLoading ? (
           <span className="conversation-title-info">
             {conversation &&
               `${messagesCount || 0} ${getMessageEnding(messagesCount)}`}
@@ -85,7 +87,7 @@ const ConversationBar = ({
           <div style={{ height: '16px' }}>
             <ClipLoader
               color={'#729bbd'}
-              loading={isLoading}
+              loading={true}
               size={10}
               aria-label="Loading Spinner"
               data-testid="loader"

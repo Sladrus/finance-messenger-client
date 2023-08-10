@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ConversationListItem from '../ConversationListItem';
 
 import './ConversationList.css';
@@ -15,8 +15,18 @@ export default function ConversationList({
   setSearchInput,
   filter,
   dateRange,
+  getConversations,
+  currentPage,
+  setCurrentPage,
+  searchLoading,
+  setSearchLoading,
+  nextPageLoading,
+  setNextPageLoading,
 }) {
   const [filteredConversations, setFilteredConversations] = useState([]);
+
+  const containerRef = useRef(null);
+
   useEffect(() => {
     const filteredData = conversations?.filter((conversation) => {
       // Check if the conversations stage matches the filters stage
@@ -58,21 +68,35 @@ export default function ConversationList({
     setFilteredConversations(searchedConversations);
   }, [filter, dateRange, searchInput, conversations]);
 
+  useEffect(() => {
+    getConversations(currentPage, searchInput);
+  }, [searchInput]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const container = containerRef.current;
+      if (
+        container.scrollTop + container.clientHeight >=
+        container.scrollHeight
+      ) {
+        setNextPageLoading(true);
+        setCurrentPage(currentPage + 1);
+        getConversations(currentPage + 1, searchInput);
+      }
+    };
+
+    const container = containerRef.current;
+    container.addEventListener('scroll', handleScroll);
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }, [currentPage]);
   return (
-    <div className="conversation-list">
+    <div ref={containerRef} className="conversation-list">
       <div className="topbar">
         <div className="conversation-list-container">
-          {filteredConversations.map((conversation) => (
-            <ConversationListItem
-              key={conversation.chat_id}
-              statuses={statuses}
-              selectedConversation={selectedConversation}
-              handleButtonClick={handleButtonClick}
-              data={conversation}
-              changeStage={changeStage}
-            />
-          ))}
-          {!conversations.length ? (
+          {!nextPageLoading && searchLoading ? (
             <div
               style={{
                 height: '100%',
@@ -85,28 +109,38 @@ export default function ConversationList({
             >
               <ClipLoader
                 color={'#729bbd'}
-                loading={!conversations.length}
+                loading={searchLoading}
                 size={30}
                 aria-label="Loading Spinner"
                 data-testid="loader"
               />
             </div>
           ) : (
-            !filteredConversations.length && (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: '#101b25',
-                }}
-              >
-                <span style={{ padding: '15px', textAlign: 'center' }}>
-                  По данному запросу результатов не найдено
-                </span>
-              </div>
-            )
+            filteredConversations.map((conversation) => (
+              <ConversationListItem
+                key={conversation.chat_id}
+                statuses={statuses}
+                selectedConversation={selectedConversation}
+                handleButtonClick={handleButtonClick}
+                data={conversation}
+                changeStage={changeStage}
+              />
+            ))
+          )}
+          {!searchLoading && !filteredConversations.length && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#101b25',
+              }}
+            >
+              <span style={{ padding: '15px', textAlign: 'center' }}>
+                По данному запросу результатов не найдено
+              </span>
+            </div>
           )}
         </div>
       </div>

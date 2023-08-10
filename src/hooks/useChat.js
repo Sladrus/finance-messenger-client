@@ -15,6 +15,11 @@ import { initializeBoard } from '../pages/BoardPage';
 export const useChat = (roomId) => {
   // локальное состояние для пользователей
   const [searchInput, setSearchInput] = useState('');
+  const [searchLoading, setSearchLoading] = useState(true);
+  const [nextPageLoading, setNextPageLoading] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [filter, setFilter] = useState({ user: '', stage: '', unread: '' });
   const [user, setUser] = useState();
   const [managers, setManagers] = useState([]);
@@ -50,8 +55,10 @@ export const useChat = (roomId) => {
   const socketRef = useRef(null);
   const navigate = useNavigate();
 
-  const getConversations = async () => {
-    socketRef.current.emit('conversation:get');
+  const getConversations = async (page, searchInput) => {
+    setIsLoading(true);
+    socketRef.current.emit('conversation:get', { page, searchInput });
+    setIsLoading(false);
   };
 
   const getMessages = async () => {
@@ -120,7 +127,7 @@ export const useChat = (roomId) => {
         // при размонтировании компонента выполняем отключение сокета
         socketRef.current.disconnect();
       };
-    getConversations();
+    getConversations(1, searchInput);
     getStages();
     getMessages();
     getManagers();
@@ -141,8 +148,10 @@ export const useChat = (roomId) => {
 
     socketRef.current.on('conversations', (conversations) => {
       setConversations(conversations);
+      setSearchLoading(false);
+      setNextPageLoading(false);
     });
-    console.log(conversations);
+
     socketRef.current.on('statuses', async (stages) => {
       setStages(stages);
       setStatuses(stages);
@@ -388,5 +397,12 @@ export const useChat = (roomId) => {
     dateRange,
     setDateRange,
     changeUserToConversation,
+    getConversations,
+    currentPage,
+    setCurrentPage,
+    searchLoading,
+    setSearchLoading,
+    nextPageLoading,
+    setNextPageLoading,
   };
 };

@@ -31,6 +31,13 @@ export default function Messenger({
   dateRange,
   managers,
   changeUserToConversation,
+  getConversations,
+  currentPage,
+  setCurrentPage,
+  searchLoading,
+  setSearchLoading,
+  nextPageLoading,
+  setNextPageLoading,
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
@@ -44,6 +51,8 @@ export default function Messenger({
         setIsExpanded={setIsExpanded}
         searchInput={searchInput}
         setSearchInput={setSearchInput}
+        searchLoading={searchLoading}
+        setSearchLoading={setSearchLoading}
       />
       <ConversationBar
         isLoading={isLoading}
@@ -53,6 +62,9 @@ export default function Messenger({
         user={user}
         linkUserToConversation={linkUserToConversation}
         refreshLink={refreshLink}
+        searchLoading={searchLoading}
+        nextPageLoading={nextPageLoading}
+        setNextPageLoading={setNextPageLoading}
       />
       <ConversationList
         isLoading={isLoading}
@@ -65,6 +77,13 @@ export default function Messenger({
         setSearchInput={setSearchInput}
         filter={filter}
         dateRange={dateRange}
+        getConversations={getConversations}
+        currentPag={currentPage}
+        setCurrentPage={setCurrentPage}
+        searchLoading={searchLoading}
+        setSearchLoading={setSearchLoading}
+        nextPageLoading={nextPageLoading}
+        setNextPageLoading={setNextPageLoading}
       />
       <MessageList
         user={user}

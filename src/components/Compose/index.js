@@ -394,7 +394,7 @@ export default function Compose({
         rows={1}
         cols={1}
         value={text}
-        multiline={true}
+        // multiline={true}
         onKeyDown={handleKeyDown}
         onChange={handleChangeText}
         className="compose-input"

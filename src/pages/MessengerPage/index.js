@@ -25,6 +25,13 @@ function MessengerPage({
   dateRange,
   managers,
   changeUserToConversation,
+  getConversations,
+  currentPage,
+  setCurrentPage,
+  searchLoading,
+  setSearchLoading,
+  nextPageLoading,
+  setNextPageLoading,
 }) {
   const navigate = useNavigate();
 
@@ -52,6 +59,13 @@ function MessengerPage({
         dateRange={dateRange}
         managers={managers}
         changeUserToConversation={changeUserToConversation}
+        getConversations={getConversations}
+        currentPag={currentPage}
+        setCurrentPage={setCurrentPage}
+        searchLoading={searchLoading}
+        setSearchLoading={setSearchLoading}
+        nextPageLoading={nextPageLoading}
+        setNextPageLoading={setNextPageLoading}
       />
     </div>
   );

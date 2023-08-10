@@ -13,9 +13,12 @@ export default function ConversationSearch({
   setIsExpanded,
   searchInput,
   setSearchInput,
+  searchLoading,
+  setSearchLoading,
 }) {
   const handleChange = (event) => {
     setSearchInput(event.target.value);
+    setSearchLoading(true);
   };
 
   const handleClick = () => {
@@ -34,7 +37,13 @@ export default function ConversationSearch({
           placeholder="Search"
         />
         {searchInput && (
-          <ToolbarButton onClick={() => setSearchInput('')} icon={faXmark} />
+          <ToolbarButton
+            onClick={() => {
+              setSearchInput('');
+              setSearchLoading(true);
+            }}
+            icon={faXmark}
+          />
         )}
       </div>
     </div>
