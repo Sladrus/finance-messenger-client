@@ -108,10 +108,10 @@ const TaskModal = ({
               selected={dateTime}
               onChange={(date) => setDateTime(date)}
               showTimeSelect
-              timeFormat="HH:MM"
+              timeFormat="HH:mm"
               timeIntervals={30}
               timeCaption="time"
-              dateFormat="MMMM d, yyyy HH:MM"
+              dateFormat="MMMM d, yyyy HH:mm"
             />
           </div>
           <ModalInput
