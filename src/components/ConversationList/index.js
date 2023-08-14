@@ -65,6 +65,12 @@ export default function ConversationList({
     //       return o.title.toLowerCase().includes(searchInput.toLowerCase());
     //     })
     //   : filteredData;
+    // const filteredData =
+    //   filter.task !== ''
+    //     ? conversations.filter((conversation) => {
+    //         if (filter.task !== '') return conversation?.tasks?.length;
+    //       })
+    //     : conversations;
     setFilteredConversations(conversations);
   }, [searchInput, conversations]);
 

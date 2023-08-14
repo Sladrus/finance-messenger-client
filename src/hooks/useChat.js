@@ -6,10 +6,6 @@ import env from 'react-dotenv';
 
 import { useLocalStorage } from './useLocalStorage';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import { initializeBoard } from '../pages/BoardPage';
-
-// const SERVER_URL = 'http://socket.1210059-cn07082.tw1.ru';
 
 // хук принимает название комнаты
 export const useChat = (roomId) => {
@@ -20,7 +16,12 @@ export const useChat = (roomId) => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [filter, setFilter] = useState({ user: '', stage: '', unread: '' });
+  const [filter, setFilter] = useState({
+    user: '',
+    stage: '',
+    unread: '',
+    task: '',
+  });
   const [user, setUser] = useState();
   const [managers, setManagers] = useState([]);
 
@@ -362,6 +363,14 @@ export const useChat = (roomId) => {
     await socketRef?.current?.emit('conversation:read', { chat_id });
   };
 
+  const createTask = async (task) => {
+    await socketRef?.current?.emit('conversation:taskCreate', {
+      task,
+      chat_id: roomId,
+      user,
+    });
+  };
+
   return {
     filter,
     setFilter,
@@ -402,6 +411,7 @@ export const useChat = (roomId) => {
     setSearchLoading,
     nextPageLoading,
     setNextPageLoading,
-    conversationsCount
+    conversationsCount,
+    createTask,
   };
 };

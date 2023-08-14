@@ -4,7 +4,7 @@ import './ConversationListItem.css';
 import StatusSelect from '../StatusSelect';
 import moment from 'moment-timezone';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLink, faTag } from '@fortawesome/free-solid-svg-icons';
 
 export default function ConversationListItem({
   selectedConversation,
@@ -79,9 +79,19 @@ export default function ConversationListItem({
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ color: data.stage?.color }} className="status-dot">
+              <FontAwesomeIcon
+                style={{
+                  color: data.stage?.color,
+                  // paddingTop: '2px',
+                  paddingRight: '10px',
+                  width: '15px',
+                  height: '15px',
+                }}
+                icon={faTag}
+              />
+              {/* <span style={{ color: data.stage?.color }} className="status-dot">
                 &#8226;
-              </span>
+              </span> */}
               <h1 className="conversation-title">{data.title}</h1>
             </div>
 

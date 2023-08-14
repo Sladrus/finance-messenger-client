@@ -108,6 +108,51 @@ const BoardPage = ({
               (conversationDate >= startDate && conversationDate <= endDate) ||
               startDay === conversationDay
             );
+          })
+          .filter((conversation) => {
+            // console.log(filter);
+
+            return filter?.task === ''
+              ? true
+              : conversation?.tasks?.some((task) => {
+                  if (filter?.task === 'today') {
+                    console.log(task);
+
+                    // Фильтровать задачи, у которых крайний срок сегодня
+                    const today = new Date().setHours(0, 0, 0, 0);
+                    const deadline = new Date(task?.endAt).setHours(0, 0, 0, 0);
+                    return deadline === today;
+                  }
+                  if (filter?.task === 'tomorrow') {
+                    // Фильтровать задачи, у которых крайний срок завтра
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(0, 0, 0, 0);
+                    const tomorrowDeadline = new Date(task?.endAt).setHours(
+                      0,
+                      0,
+                      0,
+                      0
+                    );
+                    return tomorrowDeadline === tomorrow.getTime();
+                  }
+                  if (filter?.task === 'late') {
+                    // Фильтровать просроченные задачи
+                    const todayDate = new Date().setHours(0, 0, 0, 0);
+                    const taskDeadline = new Date(task?.endAt).setHours(
+                      0,
+                      0,
+                      0,
+                      0
+                    );
+                    return taskDeadline < todayDate;
+                  }
+                  if (filter?.task === 'done') {
+                    // Фильтровать выполненные задачи
+                    return task?.done;
+                  }
+                  return true; // Возвращать все разговоры по умолчанию
+                });
           });
         return { ...stage, conversations: filteredConversations };
       });

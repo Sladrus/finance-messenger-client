@@ -33,9 +33,9 @@ function MessengerPage({
   nextPageLoading,
   setNextPageLoading,
   conversationsCount,
+  createTask,
 }) {
   const navigate = useNavigate();
-  console.log(currentPage);
 
   return (
     <div className="messenger-page">
@@ -69,6 +69,7 @@ function MessengerPage({
         nextPageLoading={nextPageLoading}
         setNextPageLoading={setNextPageLoading}
         conversationsCount={conversationsCount}
+        createTask={createTask}
       />
     </div>
   );

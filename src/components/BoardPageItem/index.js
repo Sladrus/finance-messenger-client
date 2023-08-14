@@ -145,11 +145,79 @@ const BoardPageItem = ({
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex' }}>
-        {task?.user && (
-          <div className="board-user">
-            <FontAwesomeIcon className="board-user-icon" icon={faUser} />
-            <span>{task?.user?.username}</span>
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: task?.tasks?.length ? 'space-between' : 'end',
+        }}
+      >
+        {(task?.user || task?.tasks?.length) && (
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: task?.tasks?.length ? 'space-between' : 'end',
+            }}
+          >
+            <div style={{ paddingLeft: '5px' }}>
+              {task?.tasks?.map((o, index) => {
+                var currentDate = new Date();
+
+                // Парсим значение endAt в объект Date
+                var endDate = new Date(o.endAt);
+
+                // Сравниваем текущую дату с endDate (без времени)
+                var currentDateWithoutTime = new Date(
+                  currentDate.getFullYear(),
+                  currentDate.getMonth(),
+                  currentDate.getDate()
+                );
+                var endDateWithoutTime = new Date(
+                  endDate.getFullYear(),
+                  endDate.getMonth(),
+                  endDate.getDate()
+                );
+                var color = 'white';
+                if (
+                  currentDate.getFullYear() === endDate.getFullYear() &&
+                  currentDate.getMonth() === endDate.getMonth() &&
+                  currentDate.getDay() === endDate.getDay()
+                ) {
+                  // Если текущая дата точно равна endDate, то это означает сегодня
+                  var color = '#7AB476';
+                } else if (
+                  currentDateWithoutTime.getTime() ===
+                  endDateWithoutTime.getTime() - 86400000
+                ) {
+                  // Если текущая дата на следующий день после endDate (без времени), то это означает завтра
+                  var color = '#FFC784';
+                } else if (
+                  currentDateWithoutTime.getTime() >
+                  endDateWithoutTime.getTime()
+                ) {
+                  // В противном случае, если время прошло, то цвет будет серым
+                  var color = '#FF1700';
+                }
+
+                return (
+                  <span
+                    key={index}
+                    style={{ color: color }}
+                    className="status-dot"
+                  >
+                    &#8226;
+                  </span>
+                );
+              })}
+            </div>
+
+            <div className="board-user">
+              <FontAwesomeIcon className="board-user-icon" icon={faUser} />
+              <span>{task?.user?.username}</span>
+            </div>
           </div>
         )}
         {user?.role === 'ADMIN' && task?.user && showButton && (

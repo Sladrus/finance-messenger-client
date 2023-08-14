@@ -40,6 +40,12 @@ const TopBar = ({
     setSelectedConversation(0);
   };
 
+  const handleSelectChangeTask = (data) => {
+    // console.log(data);
+    setFilter((prev) => ({ ...prev, task: data.value }));
+    setSelectedConversation(0);
+  };
+
   const managersOptions = [
     { value: '', label: 'Все менеджеры' },
     { value: null, label: 'Нет менеджера' },
@@ -376,25 +382,16 @@ const TopBar = ({
         onChange={handleSelectChangeTags}
         label={'Тэги'}
         placeholder={'Выберите теги из списка...'}
-        options={[
-          { value: 'kasklfnklas', label: 'Наличка Европа' },
-          { value: 'asdfasfasf', label: 'Наличка РФ' },
-          { value: 'asdfasfasf1', label: 'Наличка РФ2' },
-          { value: 'asdfasfasf2', label: 'Наличка РФ3' },
-          { value: 'asdfasfasf3', label: 'Наличка РФ4' },
-          { value: 'asdfasfas123f', label: 'Наличка РФ' },
-          { value: 'asdfasf4123asf1', label: 'Наличка РФ2' },
-          { value: 'asdfasfa21sf2', label: 'Наличка РФ3' },
-          { value: 'asdfasf123asf3', label: 'Наличка РФ4' },
-        ]}
+        options={[]}
       />
       <FilterSingleSelect
+        onChange={handleSelectChangeTask}
         label={'Задачи'}
         options={[
           { value: '', label: 'Все задачи', color: 'white' },
-          { value: 'tomorrow', label: 'Завтра', color: 'orange' },
-          { value: 'today', label: 'Сегодня', color: 'green' },
-          { value: 'late', label: 'Просроченная', color: 'red' },
+          { value: 'tomorrow', label: 'Завтра', color: '#FFC784' },
+          { value: 'today', label: 'Сегодня', color: '#7AB476' },
+          { value: 'late', label: 'Просроченная', color: '#FF1700' },
           { value: 'done', label: 'Выполненная', color: 'grey' },
         ]}
       />

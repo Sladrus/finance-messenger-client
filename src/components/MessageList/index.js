@@ -22,6 +22,8 @@ export default function MessageList({
   managers,
   changeStage,
   changeUserToConversation,
+  createTask,
+  getConversations,
 }) {
   const MY_USER_ID = user._id;
 
@@ -122,6 +124,8 @@ export default function MessageList({
           managers={managers}
           changeStage={changeStage}
           changeUserToConversation={changeUserToConversation}
+          createTask={createTask}
+          getConversations={getConversations}
         />
       )}
     </div>

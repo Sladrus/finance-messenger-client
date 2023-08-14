@@ -39,11 +39,11 @@ export default function Messenger({
   nextPageLoading,
   setNextPageLoading,
   conversationsCount,
+  createTask,
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
   };
-  console.log(currentPage);
 
   const [isExpanded, setIsExpanded] = useState(false);
   return (
@@ -104,6 +104,8 @@ export default function Messenger({
         managers={managers}
         changeStage={changeStage}
         changeUserToConversation={changeUserToConversation}
+        createTask={createTask}
+        getConversations={getConversations}
       />
     </div>
   );

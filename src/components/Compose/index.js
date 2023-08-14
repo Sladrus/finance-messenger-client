@@ -30,6 +30,7 @@ import axios from 'axios';
 import ClipLoader from 'react-spinners/ClipLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MoneysendModal from '../MoneysendModal';
+import TaskModal from '../TaskModal';
 
 function randomIntFromInterval(min, max) {
   // min and max included
@@ -49,6 +50,8 @@ export default function Compose({
   managers,
   changeStage,
   changeUserToConversation,
+  createTask,
+  getConversations,
 }) {
   const [text, setText] = useState('');
   const [isOpen, setOpen] = useState(false);
@@ -64,6 +67,7 @@ export default function Compose({
   const [popoverModalIsOpen, setPopoverModalIsOpen] = useState(false);
   const [modalValue, setModalValue] = useState();
   const [isMoneysendOpen, setIsMoneysendOpen] = useState(false);
+  const [isTaskOpen, setTaskOpen] = useState(false);
 
   const inputElement = useRef(null);
   useEffect(() => {
@@ -74,9 +78,18 @@ export default function Compose({
     e.stopPropagation();
     setIsMoneysendOpen(true);
   };
+  const openTask = (e) => {
+    e.stopPropagation();
+    setTaskOpen(true);
+  };
   const closeMoneysend = (e) => {
     e.stopPropagation();
     setIsMoneysendOpen(false);
+  };
+
+  const closeTask = (e) => {
+    e.stopPropagation();
+    setTaskOpen(false);
   };
   const handleSendMessage = (e) => {
     console.log(e);
@@ -371,11 +384,18 @@ export default function Compose({
                   onSubmit={handleModalValue}
                   sendMessage={sendMessage}
                 />
-                <PopoverInput
+                <PopoverButton
+                  icon={faTasks}
+                  placeholder={'Добавить задачу'}
+                  onClick={openTask}
+                  // onClick={() => readConversation(selectedConversation)}
+                  // isEnabled={conversation?.unreadCount > 0 ? false : true}
+                />
+                {/* <PopoverInput
                   icon={faTasks}
                   placeholder={'Добавить задачу'}
                   onSubmit={handleModalValue}
-                />
+                /> */}
 
                 <PopoverInput icon={faTags} placeholder={'Тэги'} />
                 <PopoverInput
@@ -532,6 +552,16 @@ export default function Compose({
         conversation={conversation}
         user={user}
         sendMessage={sendMessage}
+      />
+      <TaskModal
+        modalIsOpen={isTaskOpen}
+        closeModal={closeTask}
+        createTask={createTask}
+        getConversations={getConversations}
+        // tas={moneysend}
+        // conversation={conversation}
+        // user={user}
+        // sendMessage={sendMessage}
       />
     </form>
   );

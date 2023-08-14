@@ -6,7 +6,11 @@ import {
   faLink,
   faIdCard,
   faRefresh,
+  faTasks,
+  faDotCircle,
+  faListDots,
 } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment-timezone';
 
 const ConversationModalForm = ({ closeModal, conversation, refreshLink }) => {
   return (
@@ -73,7 +77,60 @@ const ConversationModalForm = ({ closeModal, conversation, refreshLink }) => {
             Chat ID: {conversation.chat_id}
           </span>
         </div>
+        {conversation?.tasks?.length && (
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start',
+              justifyContent: 'space-between',
+              margin: '0',
+            }}
+          >
+            <span style={{ color: 'white' }}>Список задач:</span>
+            {conversation?.tasks.map((task) => {
+              const convertedDate = moment(task.endAt).format(
+                'DD.MM.YY, HH:MM'
+              );
+
+              return (
+                <div
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    margin: '0',
+                    borderBottom: '1px solid black',
+                    borderColor: '#ccc',
+                  }}
+                >
+                  <span
+                    style={{
+                      color: 'white',
+                      fontSize: '14px',
+                      padding: '5px 10px 0px 0px',
+                    }}
+                  >
+                    {task.text}
+                  </span>
+                  <span
+                    style={{
+                      color: 'white',
+                      fontSize: '14px',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {convertedDate}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
+
       {/* <div className="popover-confiramtion-form-content"></div> */}
       {/* <div style={{ width: '100%', display: 'flex' }}>
         <ModalButton variant="simple">Да</ModalButton>
