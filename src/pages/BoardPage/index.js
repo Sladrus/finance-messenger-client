@@ -114,6 +114,8 @@ const BoardPage = ({
 
             return filter?.task === ''
               ? true
+              : filter?.task === null
+              ? conversation?.tasks?.length === 0
               : conversation?.tasks?.some((task) => {
                   if (filter?.task === 'today') {
                     // Фильтровать задачи, у которых крайний срок сегодня

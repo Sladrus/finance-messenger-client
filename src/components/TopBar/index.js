@@ -389,6 +389,7 @@ const TopBar = ({
         label={'Задачи'}
         options={[
           { value: '', label: 'Все задачи', color: 'white' },
+          { value: null, label: 'Без задачи', color: 'black' },
           { value: 'tomorrow', label: 'Завтра', color: '#FFC784' },
           { value: 'today', label: 'Сегодня', color: '#7AB476' },
           { value: 'late', label: 'Просроченная', color: '#FF1700' },
