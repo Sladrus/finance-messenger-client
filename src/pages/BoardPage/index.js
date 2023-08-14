@@ -116,8 +116,6 @@ const BoardPage = ({
               ? true
               : conversation?.tasks?.some((task) => {
                   if (filter?.task === 'today') {
-                    console.log(task);
-
                     // Фильтровать задачи, у которых крайний срок сегодня
                     const today = new Date().setHours(0, 0, 0, 0);
                     const deadline = new Date(task?.endAt).setHours(0, 0, 0, 0);

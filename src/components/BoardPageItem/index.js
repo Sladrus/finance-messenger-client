@@ -184,7 +184,7 @@ const BoardPageItem = ({
                 if (
                   currentDate.getFullYear() === endDate.getFullYear() &&
                   currentDate.getMonth() === endDate.getMonth() &&
-                  currentDate.getDay() === endDate.getDay()
+                  currentDate.getDate() === endDate.getDate()
                 ) {
                   // Если текущая дата точно равна endDate, то это означает сегодня
                   var color = '#7AB476';
