@@ -153,7 +153,7 @@ const BoardPageItem = ({
           justifyContent: task?.tasks?.length ? 'space-between' : 'end',
         }}
       >
-        {(task?.user || task?.tasks?.length) && (
+        {(task?.user || task?.tasks?.length > 0) && (
           <div
             style={{
               width: '100%',
