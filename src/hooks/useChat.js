@@ -197,7 +197,7 @@ export const useChat = (roomId) => {
       });
     });
 
-    socketRef.current.on('status:conversation', (conversationTmp) => {
+    socketRef.current.on('status:conversation', async (conversationTmp) => {
       setConversations((prevConversations) =>
         prevConversations.map((conversation) => {
           if (conversation?._id === conversationTmp?._id) {
@@ -206,6 +206,7 @@ export const useChat = (roomId) => {
           return conversation;
         })
       );
+
       setStatuses((prevStatuses) =>
         prevStatuses.map((stage) => {
           // Проверяем, совпадает ли stage текущего элемента stages с искомым
@@ -234,6 +235,7 @@ export const useChat = (roomId) => {
           return stage;
         })
       );
+      await getConversations(currentPage, searchInput);
     });
 
     return () => {
@@ -248,9 +250,9 @@ export const useChat = (roomId) => {
           status.value === updatedStatus.value ? updatedStatus : status
         )
       );
+      console.log(updatedStatus);
     });
   }, [statuses]);
-
   const sendComment = ({
     type,
     text,
