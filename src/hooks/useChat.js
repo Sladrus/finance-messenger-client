@@ -250,7 +250,6 @@ export const useChat = (roomId) => {
           status.value === updatedStatus.value ? updatedStatus : status
         )
       );
-      console.log(updatedStatus);
     });
   }, [statuses]);
   const sendComment = ({
