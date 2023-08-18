@@ -5,7 +5,7 @@ window.env = {
   "BOT_TOKEN": "5986400520:AAHd61GLW0C2TXQpSAtS4FSVkNvPWGn0MM0",
   "ChocolateyInstall": "C:\\ProgramData\\chocolatey",
   "ChocolateyLastPathUpdate": "133102319197299719",
-  "CHROME_CRASHPAD_PIPE_NAME": "\\\\.\\pipe\\LOCAL\\crashpad_20968_LEOWCEGYIELKRUBQ",
+  "CHROME_CRASHPAD_PIPE_NAME": "\\\\.\\pipe\\LOCAL\\crashpad_22024_TIUTDZFEGHUBPXOU",
   "COLOR": "1",
   "COLORTERM": "truecolor",
   "CommonProgramFiles": "C:\\Program Files\\Common Files",

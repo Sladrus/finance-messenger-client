@@ -77,7 +77,8 @@ export default function ConversationList({
   useEffect(() => {
     setSearchLoading(true);
     getConversations(currentPage, searchInput);
-  }, [searchInput, filter, dateRange, currentPage]);
+    console.log(dateRange);
+  }, [searchInput, filter, dateRange, currentPage, selectedConversation]);
 
   // useEffect(() => {
   //   console.log('LOADING');

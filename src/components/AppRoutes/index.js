@@ -55,6 +55,7 @@ const AppRoutes = () => {
     setNextPageLoading,
     conversationsCount,
     createTask,
+    tasks,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -145,6 +146,7 @@ const AppRoutes = () => {
                     setNextPageLoading={setNextPageLoading}
                     conversationsCount={conversationsCount}
                     createTask={createTask}
+                    tasks={tasks}
                   />
                 }
                 exact

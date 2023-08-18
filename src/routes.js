@@ -1,8 +1,14 @@
-import { AUTH_ROUTE, BOARD_ROUTE, MESSENGER_ROUTE } from './utils/consts';
+import {
+  AUTH_ROUTE,
+  BOARD_ROUTE,
+  MESSENGER_ROUTE,
+  TASKS_ROUTE,
+} from './utils/consts';
 
 import AuthPage from './pages/AuthPage';
 import MessengerPage from './pages/MessengerPage';
 import BoardPage from './pages/BoardPage';
+import TaskPage from './pages/TaskPage';
 
 export const authRoutes = [
   {
@@ -12,6 +18,10 @@ export const authRoutes = [
   {
     path: BOARD_ROUTE,
     Component: BoardPage,
+  },
+  {
+    path: TASKS_ROUTE,
+    Component: TaskPage,
   },
 ];
 

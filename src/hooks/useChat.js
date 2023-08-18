@@ -23,6 +23,8 @@ export const useChat = (roomId) => {
     task: '',
   });
   const [user, setUser] = useState();
+  const [tasks, setTasks] = useState([]);
+
   const [managers, setManagers] = useState([]);
 
   const [statuses, setStatuses] = useState([]);
@@ -64,6 +66,10 @@ export const useChat = (roomId) => {
       filter,
       dateRange,
     });
+  };
+
+  const getTasks = async () => {
+    socketRef.current.emit('task:get');
   };
 
   const getMessages = async () => {
@@ -129,7 +135,7 @@ export const useChat = (roomId) => {
     getStages();
     getMessages();
     getManagers();
-
+    getTasks();
     // обрабатываем получение сообщений
     socketRef.current.on('users', (users) => {
       setManagers(users);
@@ -149,6 +155,10 @@ export const useChat = (roomId) => {
       setConversationsCount(count);
       setSearchLoading(false);
       setNextPageLoading(false);
+    });
+
+    socketRef.current.on('tasks', (tasks) => {
+      setTasks(tasks);
     });
 
     socketRef.current.on('statuses', async (stages) => {
@@ -242,7 +252,6 @@ export const useChat = (roomId) => {
       socketRef.current.disconnect();
     };
   }, [roomId, isAuth]);
-
   useEffect(() => {
     socketRef.current.on('status:load', (updatedStatus) => {
       setStatuses((prevStatuses) =>
@@ -414,5 +423,6 @@ export const useChat = (roomId) => {
     setNextPageLoading,
     conversationsCount,
     createTask,
+    tasks,
   };
 };
