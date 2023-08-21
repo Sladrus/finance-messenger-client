@@ -33,6 +33,8 @@ export const useChat = (roomId) => {
 
   const [isAuth, setAuth] = useState(false);
   const [boardSections, setBoardSections] = useState({});
+  const [conversation, setConversation] = useState({});
+
   // локальное состояние для диалогов
   const [conversations, setConversations] = useState([]);
   const [conversationsCount, setConversationsCount] = useState(0);
@@ -66,6 +68,12 @@ export const useChat = (roomId) => {
       searchInput,
       filter,
       dateRange,
+    });
+  };
+
+  const getConversation = async () => {
+    socketRef.current.emit('conversation:getOne', {
+      chat_id: roomId,
     });
   };
 
@@ -135,7 +143,7 @@ export const useChat = (roomId) => {
         // при размонтировании компонента выполняем отключение сокета
         socketRef.current.disconnect();
       };
-
+    getConversation();
     getConversations(currentPage, searchInput);
     getStages();
     getMessages();
@@ -161,6 +169,10 @@ export const useChat = (roomId) => {
       setConversationsCount(count);
       setSearchLoading(false);
       setNextPageLoading(false);
+    });
+
+    socketRef.current.on('conversation', ({ conversation }) => {
+      setConversation(conversation);
     });
 
     socketRef.current.on('tasks', (tasks) => {
@@ -262,6 +274,7 @@ export const useChat = (roomId) => {
       socketRef.current.disconnect();
     };
   }, [roomId, isAuth]);
+
   useEffect(() => {
     socketRef.current.on('status:load', (updatedStatus) => {
       setStatuses((prevStatuses) =>
@@ -271,6 +284,7 @@ export const useChat = (roomId) => {
       );
     });
   }, [statuses]);
+
   const sendComment = ({
     type,
     text,
@@ -465,5 +479,6 @@ export const useChat = (roomId) => {
     createTag,
     addTag,
     removeTag,
+    conversation,
   };
 };

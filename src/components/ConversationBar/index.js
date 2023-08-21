@@ -40,18 +40,12 @@ const ConversationBar = ({
   nextPageLoading,
   setNextPageLoading,
   conversationsCount,
+  conversation,
 }) => {
-  // const handleLinkButton = async (e) => {
-  //   e.stopPropagation();
-  //   await linkUserToConversation(selectedConversation, user);
-  // };
-
+  console.log(conversation);
   const [link, setLink] = useState('');
   const [status, setStatus] = useState('');
 
-  const conversation = conversations?.find(
-    (o) => o?.chat_id === selectedConversation
-  );
   useEffect(() => {
     setLink(conversation?.link);
     setStatus(conversation?.stage?.label);
@@ -73,7 +67,7 @@ const ConversationBar = ({
     <div onClick={openModal} className="conversation-bar">
       <div className="conversation-container">
         <span className="conversation-bar-title">
-          {!conversation
+          {!selectedConversation
             ? `По данному запросу загружено ${
                 conversations?.length
               } ${chatCount(conversations?.length)} из ${conversationsCount}`

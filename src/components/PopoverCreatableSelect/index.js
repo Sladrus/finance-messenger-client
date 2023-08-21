@@ -15,7 +15,6 @@ const PopoverCreatableSelect = ({
   values,
   onChange,
 }) => {
-  console.log(values);
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState([]);
   const [prevValue, setPrevValue] = useState([]);

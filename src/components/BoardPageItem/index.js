@@ -227,7 +227,6 @@ const BoardPageItem = ({
             alignItems: 'center',
             justifyContent: 'space-between',
             wordBreak: 'break-all',
-            // overflowWrap: 'break-all',
           }}
         >
           <div>

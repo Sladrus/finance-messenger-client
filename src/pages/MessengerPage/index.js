@@ -38,6 +38,7 @@ function MessengerPage({
   createTag,
   addTag,
   removeTag,
+  conversation,
 }) {
   const navigate = useNavigate();
 
@@ -78,6 +79,7 @@ function MessengerPage({
         createTag={createTag}
         addTag={addTag}
         removeTag={removeTag}
+        conversation={conversation}
       />
     </div>
   );

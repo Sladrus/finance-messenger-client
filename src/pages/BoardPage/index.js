@@ -158,6 +158,7 @@ const BoardPage = ({
                   return true; // Возвращать все разговоры по умолчанию
                 });
           });
+
         return { ...stage, conversations: filteredConversations };
       });
     setBoardSections(initializeBoard(filteredStages));

@@ -57,6 +57,7 @@ export default function Compose({
   createTag,
   addTag,
   removeTag,
+  conversation,
 }) {
   const [text, setText] = useState('');
   const [isOpen, setOpen] = useState(false);
@@ -146,10 +147,6 @@ export default function Compose({
     containerOffset: 20,
     arrowOffset: 0,
   });
-
-  const conversation = conversations.find(
-    (o) => o.chat_id === selectedConversation
-  );
 
   const isValidCommand = (input) => {
     return /^\/[a-z]{6}[ ]?\d*([+\-*\/]\d+|\d*[.,]?\d+)*%?/.test(input);
@@ -302,7 +299,6 @@ export default function Compose({
     }
   }, [conversation]);
 
-  console.log(conversation);
   return (
     <form className="compose" onSubmit={handleSendMessage}>
       <div>
@@ -333,8 +329,6 @@ export default function Compose({
                   icon={faPaperPlane}
                   placeholder={'Moneysend'}
                   onClick={openMoneysend}
-                  // onClick={() => readConversation(selectedConversation)}
-                  // isEnabled={conversation?.unreadCount > 0 ? false : true}
                 />
                 {user.role === 'ADMIN' && (
                   <PopoverSelect
@@ -359,7 +353,6 @@ export default function Compose({
                       const manager = managers.find(
                         (o) => o._id === data.value
                       );
-                      console.log(manager);
                       conversation.user = {};
                       conversation.user._id = data.value;
                       conversation.user.username =
@@ -382,7 +375,6 @@ export default function Compose({
                     conversation.stage.color = data.color;
                     conversation.stage.loading = true;
                     changeStage(conversation._id, data.value, 0);
-                    console.log(data);
                   }}
                   defaultValue={{
                     value: conversation?.stage?.value,
@@ -426,7 +418,6 @@ export default function Compose({
                     }
                     if (removedItems?.length) {
                       removeTag(removedItems[0]);
-                      console.log();
                       conversation.tags = conversation.tags.filter(
                         (tag) =>
                           tag._id.toString() !==
@@ -595,10 +586,6 @@ export default function Compose({
         closeModal={closeTask}
         createTask={createTask}
         getConversations={getConversations}
-        // tas={moneysend}
-        // conversation={conversation}
-        // user={user}
-        // sendMessage={sendMessage}
       />
     </form>
   );

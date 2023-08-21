@@ -28,6 +28,7 @@ export default function MessageList({
   createTag,
   addTag,
   removeTag,
+  conversation,
 }) {
   const MY_USER_ID = user._id;
 
@@ -134,6 +135,7 @@ export default function MessageList({
           createTag={createTag}
           addTag={addTag}
           removeTag={removeTag}
+          conversation={conversation}
         />
       )}
     </div>
