@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 export const useChat = (roomId) => {
   // локальное состояние для пользователей
   const [searchInput, setSearchInput] = useState('');
-  const [searchLoading, setSearchLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [nextPageLoading, setNextPageLoading] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,6 +34,7 @@ export const useChat = (roomId) => {
   const [isAuth, setAuth] = useState(false);
   const [boardSections, setBoardSections] = useState({});
   const [conversation, setConversation] = useState(null);
+  const [conversationLoading, setConversationLoading] = useState(false);
 
   // локальное состояние для диалогов
   const [conversations, setConversations] = useState([]);
@@ -72,6 +73,7 @@ export const useChat = (roomId) => {
   };
 
   const getConversation = async () => {
+    setConversationLoading(true);
     socketRef.current.emit('conversation:getOne', {
       chat_id: roomId,
     });
@@ -171,8 +173,10 @@ export const useChat = (roomId) => {
       setNextPageLoading(false);
     });
 
-    socketRef.current.on('conversation', ({ conversation }) => {
-      setConversation(conversation);
+    socketRef.current.on('conversation', ({ conversationTmp }) => {
+      console.log(conversationTmp);
+      setConversation(conversationTmp);
+      setConversationLoading(false);
     });
 
     socketRef.current.on('tasks', (tasks) => {
@@ -481,5 +485,7 @@ export const useChat = (roomId) => {
     removeTag,
     conversation,
     setConversation,
+    conversationLoading,
+    setConversationLoading,
   };
 };

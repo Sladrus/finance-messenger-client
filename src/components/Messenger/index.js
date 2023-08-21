@@ -46,6 +46,8 @@ export default function Messenger({
   removeTag,
   conversation,
   setConversation,
+  conversationLoading,
+  setConversationLoading,
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
@@ -77,6 +79,8 @@ export default function Messenger({
         setNextPageLoading={setNextPageLoading}
         conversationsCount={conversationsCount}
         conversation={conversation}
+        conversationLoading={conversationLoading}
+        setConversationLoading={setConversationLoading}
       />
       <ConversationList
         isLoading={isLoading}

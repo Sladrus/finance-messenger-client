@@ -40,6 +40,8 @@ function MessengerPage({
   removeTag,
   conversation,
   setConversation,
+  conversationLoading,
+  setConversationLoading,
 }) {
   const navigate = useNavigate();
 
@@ -82,6 +84,8 @@ function MessengerPage({
         removeTag={removeTag}
         conversation={conversation}
         setConversation={setConversation}
+        conversationLoading={conversationLoading}
+        setConversationLoading={setConversationLoading}
       />
     </div>
   );

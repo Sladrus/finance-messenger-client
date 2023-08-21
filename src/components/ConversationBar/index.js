@@ -41,6 +41,8 @@ const ConversationBar = ({
   setNextPageLoading,
   conversationsCount,
   conversation,
+  conversationLoading,
+  setConversationLoading,
 }) => {
   console.log(conversation);
   const [link, setLink] = useState('');
@@ -67,11 +69,23 @@ const ConversationBar = ({
     <div onClick={openModal} className="conversation-bar">
       <div className="conversation-container">
         <span className="conversation-bar-title">
-          {conversation === null
-            ? `По данному запросу загружено ${
+          {conversation === null ? (
+            !conversationLoading ? (
+              `По данному запросу загружено ${
                 conversations?.length
               } ${chatCount(conversations?.length)} из ${conversationsCount}`
-            : conversation?.title}
+            ) : (
+              <ClipLoader
+                color={'#729bbd'}
+                loading={true}
+                size={10}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            )
+          ) : (
+            conversation?.title
+          )}
         </span>
         {!nextPageLoading && !searchLoading ? (
           <span className="conversation-title-info">
