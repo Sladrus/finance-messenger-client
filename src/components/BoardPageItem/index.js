@@ -108,7 +108,7 @@ const BoardPageItem = ({
                 alignItems: 'center',
               }}
             >
-              {task?.tasks?.length && (
+              {task?.tasks?.length > 0 && (
                 <div style={{ paddingLeft: '5px' }}>
                   {task?.tasks?.map((o, index) => {
                     var currentDate = new Date();
