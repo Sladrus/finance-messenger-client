@@ -18,32 +18,38 @@ const TopBar = ({
   setSelectedConversation,
   dateRange,
   setDateRange,
+  setConversation,
 }) => {
   const handleSelectChangeUser = (data) => {
     setFilter((prev) => ({ ...prev, user: data.value }));
     setSelectedConversation(0);
+    setConversation(null);
   };
 
   const handleSelectChangeStatus = (data) => {
     setFilter((prev) => ({ ...prev, stage: data.value }));
     setSelectedConversation(0);
+    setConversation(null);
   };
 
   const handleSelectChangeUnread = (data) => {
     setFilter((prev) => ({ ...prev, unread: data.value }));
     setSelectedConversation(0);
+    setConversation(null);
   };
 
   const handleSelectChangeTags = (data) => {
     // console.log(data);
     setFilter((prev) => ({ ...prev, tags: data }));
     setSelectedConversation(0);
+    setConversation(null);
   };
 
   const handleSelectChangeTask = (data) => {
     // console.log(data);
     setFilter((prev) => ({ ...prev, task: data.value }));
     setSelectedConversation(0);
+    setConversation(null);
   };
 
   const managersOptions = [
@@ -64,6 +70,7 @@ const TopBar = ({
   const handleSelectRange = (ranges) => {
     setDateRange([ranges.selection]);
     setSelectedConversation(0);
+    setConversation(null);
   };
 
   const staticRanges = [

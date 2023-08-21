@@ -33,7 +33,7 @@ export const useChat = (roomId) => {
 
   const [isAuth, setAuth] = useState(false);
   const [boardSections, setBoardSections] = useState({});
-  const [conversation, setConversation] = useState({});
+  const [conversation, setConversation] = useState(null);
 
   // локальное состояние для диалогов
   const [conversations, setConversations] = useState([]);
@@ -480,5 +480,6 @@ export const useChat = (roomId) => {
     addTag,
     removeTag,
     conversation,
+    setConversation,
   };
 };

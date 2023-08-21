@@ -67,7 +67,7 @@ const ConversationBar = ({
     <div onClick={openModal} className="conversation-bar">
       <div className="conversation-container">
         <span className="conversation-bar-title">
-          {!selectedConversation
+          {conversation === null
             ? `По данному запросу загружено ${
                 conversations?.length
               } ${chatCount(conversations?.length)} из ${conversationsCount}`

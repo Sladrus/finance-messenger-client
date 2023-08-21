@@ -115,7 +115,7 @@ export default function MessageList({
           <span>{`Привет, ${user?.username}, выбери чат, чтобы начать общение.`}</span>
         </div>
       )}
-      {selectedConversation !== 0 && (
+      {selectedConversation !== 0 && conversation && (
         <Compose
           user={user}
           selectedConversation={selectedConversation}

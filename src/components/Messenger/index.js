@@ -45,9 +45,11 @@ export default function Messenger({
   addTag,
   removeTag,
   conversation,
+  setConversation,
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
+    setConversation(null);
   };
 
   const [isExpanded, setIsExpanded] = useState(false);
