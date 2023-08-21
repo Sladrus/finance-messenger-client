@@ -180,6 +180,13 @@ const BoardPageItem = ({
                   endDate.getMonth(),
                   endDate.getDate()
                 );
+                if (
+                  currentDateWithoutTime.getTime() >
+                  endDateWithoutTime.getTime() + 86400000
+                ) {
+                  // Если просрочено больше чем на день
+                  return;
+                }
                 var color = 'white';
                 if (
                   currentDate.getFullYear() === endDate.getFullYear() &&

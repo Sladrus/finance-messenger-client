@@ -137,7 +137,7 @@ const BoardPage = ({
                     return tomorrowDeadline === tomorrow.getTime();
                   }
                   if (filter?.task === 'late') {
-                    // Фильтровать просроченные задачи
+                    // Фильтровать задачи, просроченные не более чем на один день
                     const todayDate = new Date().setHours(0, 0, 0, 0);
                     const taskDeadline = new Date(task?.endAt).setHours(
                       0,
@@ -145,7 +145,10 @@ const BoardPage = ({
                       0,
                       0
                     );
-                    return taskDeadline < todayDate;
+                    const differenceInDays = Math.floor(
+                      (todayDate - taskDeadline) / (1000 * 60 * 60 * 24)
+                    );
+                    return differenceInDays <= 1;
                   }
                   if (filter?.task === 'done') {
                     // Фильтровать выполненные задачи
