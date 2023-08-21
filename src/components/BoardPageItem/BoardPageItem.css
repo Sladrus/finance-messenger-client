@@ -102,12 +102,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* width: 220px; */
+  width: 160px;
 }
 
 .board-time {
   white-space: nowrap;
-
+  /* width: 100px; */
   font-size: 14px;
   color: #778d9f;
   margin: 0;
