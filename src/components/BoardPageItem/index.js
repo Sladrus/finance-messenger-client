@@ -18,6 +18,7 @@ const BoardPageItem = ({
   isEmpty,
   selectedConversation,
   managers,
+  setConversation,
 }) => {
   const [showButton, setShowButton] = useState(false);
   const [isOpen, setOpen] = useState(false);
@@ -52,6 +53,7 @@ const BoardPageItem = ({
   const navigateToConversation = (chat_id) => {
     navigate('/messenger');
     setSelectedConversation(chat_id);
+    setConversation(null);
   };
 
   function close() {

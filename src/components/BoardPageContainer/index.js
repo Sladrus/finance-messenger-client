@@ -41,6 +41,7 @@ const BoardPageContainer = ({
   deleteStage,
   managers,
   moveStatus,
+  setConversation,
 }) => {
   const { setNodeRef } = useDroppable({
     id,
@@ -135,6 +136,7 @@ const BoardPageContainer = ({
                     isDraggin={isDragging}
                     selectedConversation={selectedConversation}
                     managers={managers}
+                    setConversation={setConversation}
                   />
                 </SortableTaskItem>
               </div>

@@ -74,6 +74,7 @@ const BoardPage = ({
   managers,
   moveStatus,
   dateRange,
+  setConversation,
 }) => {
   const [boardSections, setBoardSections] = useState([]);
   const [activeTaskId, setActiveTaskId] = useState(null);
@@ -334,6 +335,7 @@ const BoardPage = ({
                   deleteStage={deleteStage}
                   managers={managers}
                   moveStatus={moveStatus}
+                  setConversation={setConversation}
                 />
               );
             })}
