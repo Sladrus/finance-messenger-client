@@ -56,6 +56,10 @@ const AppRoutes = () => {
     conversationsCount,
     createTask,
     tasks,
+    tags,
+    createTag,
+    addTag,
+    removeTag,
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
@@ -147,6 +151,10 @@ const AppRoutes = () => {
                     conversationsCount={conversationsCount}
                     createTask={createTask}
                     tasks={tasks}
+                    tags={tags}
+                    createTag={createTag}
+                    addTag={addTag}
+                    removeTag={removeTag}
                   />
                 }
                 exact

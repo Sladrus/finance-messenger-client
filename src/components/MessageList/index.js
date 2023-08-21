@@ -24,6 +24,10 @@ export default function MessageList({
   changeUserToConversation,
   createTask,
   getConversations,
+  tags,
+  createTag,
+  addTag,
+  removeTag,
 }) {
   const MY_USER_ID = user._id;
 
@@ -126,6 +130,10 @@ export default function MessageList({
           changeUserToConversation={changeUserToConversation}
           createTask={createTask}
           getConversations={getConversations}
+          tags={tags}
+          createTag={createTag}
+          addTag={addTag}
+          removeTag={removeTag}
         />
       )}
     </div>

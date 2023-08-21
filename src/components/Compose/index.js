@@ -31,6 +31,7 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MoneysendModal from '../MoneysendModal';
 import TaskModal from '../TaskModal';
+import PopoverCreatableSelect from '../PopoverCreatableSelect';
 
 function randomIntFromInterval(min, max) {
   // min and max included
@@ -52,6 +53,10 @@ export default function Compose({
   changeUserToConversation,
   createTask,
   getConversations,
+  tags,
+  createTag,
+  addTag,
+  removeTag,
 }) {
   const [text, setText] = useState('');
   const [isOpen, setOpen] = useState(false);
@@ -278,6 +283,14 @@ export default function Compose({
     })),
   ];
 
+  const tagsOptions = [
+    ...tags.map((tag) => ({
+      value: tag._id,
+      label: tag.value,
+      color: 'white',
+    })),
+  ];
+
   useEffect(() => {
     // setConversationState(conversation);
     console.log('UPDATE');
@@ -391,13 +404,37 @@ export default function Compose({
                   // onClick={() => readConversation(selectedConversation)}
                   // isEnabled={conversation?.unreadCount > 0 ? false : true}
                 />
-                {/* <PopoverInput
-                  icon={faTasks}
-                  placeholder={'Добавить задачу'}
-                  onSubmit={handleModalValue}
-                /> */}
-
-                <PopoverInput icon={faTags} placeholder={'Тэги'} />
+                <PopoverCreatableSelect
+                  icon={faTags}
+                  placeholder={'Добавить тэг'}
+                  options={[...tagsOptions]}
+                  values={[
+                    ...conversation?.tags?.map((tag) => ({
+                      value: tag._id,
+                      label: tag.value,
+                      color: 'white',
+                    })),
+                  ]}
+                  onCreate={createTag}
+                  onChange={({ addedItems, removedItems }) => {
+                    if (addedItems?.length) {
+                      addTag(addedItems[0]);
+                      conversation.tags.push({
+                        _id: addedItems[0].value,
+                        value: addedItems[0].label,
+                      });
+                    }
+                    if (removedItems?.length) {
+                      removeTag(removedItems[0]);
+                      console.log();
+                      conversation.tags = conversation.tags.filter(
+                        (tag) =>
+                          tag._id.toString() !==
+                          removedItems[0]?.value.toString()
+                      );
+                    }
+                  }}
+                />
                 <PopoverInput
                   icon={faPhotoVideo}
                   placeholder={'Фото или видео'}

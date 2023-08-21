@@ -40,6 +40,10 @@ export default function Messenger({
   setNextPageLoading,
   conversationsCount,
   createTask,
+  tags,
+  createTag,
+  addTag,
+  removeTag,
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
@@ -106,6 +110,10 @@ export default function Messenger({
         changeUserToConversation={changeUserToConversation}
         createTask={createTask}
         getConversations={getConversations}
+        tags={tags}
+        createTag={createTag}
+        addTag={addTag}
+        removeTag={removeTag}
       />
     </div>
   );

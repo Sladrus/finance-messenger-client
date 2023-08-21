@@ -24,6 +24,7 @@ export const useChat = (roomId) => {
   });
   const [user, setUser] = useState();
   const [tasks, setTasks] = useState([]);
+  const [tags, setTags] = useState([]);
 
   const [managers, setManagers] = useState([]);
 
@@ -70,6 +71,10 @@ export const useChat = (roomId) => {
 
   const getTasks = async () => {
     socketRef.current.emit('task:get');
+  };
+
+  const getTags = async () => {
+    socketRef.current.emit('tags:get');
   };
 
   const getMessages = async () => {
@@ -136,6 +141,7 @@ export const useChat = (roomId) => {
     getMessages();
     getManagers();
     getTasks();
+    getTags();
     // обрабатываем получение сообщений
     socketRef.current.on('users', (users) => {
       setManagers(users);
@@ -159,6 +165,10 @@ export const useChat = (roomId) => {
 
     socketRef.current.on('tasks', (tasks) => {
       setTasks(tasks);
+    });
+
+    socketRef.current.on('tags', (tags) => {
+      setTags(tags);
     });
 
     socketRef.current.on('statuses', async (stages) => {
@@ -381,6 +391,33 @@ export const useChat = (roomId) => {
     });
   };
 
+  const createTag = async (value) => {
+    console.log(value);
+    await socketRef?.current?.emit('tags:create', {
+      value,
+      chat_id: roomId,
+      user,
+    });
+  };
+
+  const addTag = async (value) => {
+    console.log(value);
+    await socketRef?.current?.emit('tags:add', {
+      value,
+      chat_id: roomId,
+      user,
+    });
+  };
+
+  const removeTag = async (value) => {
+    console.log(value);
+    await socketRef?.current?.emit('tags:remove', {
+      value,
+      chat_id: roomId,
+      user,
+    });
+  };
+
   return {
     filter,
     setFilter,
@@ -424,5 +461,9 @@ export const useChat = (roomId) => {
     conversationsCount,
     createTask,
     tasks,
+    tags,
+    createTag,
+    addTag,
+    removeTag,
   };
 };

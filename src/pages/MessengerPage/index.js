@@ -34,6 +34,10 @@ function MessengerPage({
   setNextPageLoading,
   conversationsCount,
   createTask,
+  tags,
+  createTag,
+  addTag,
+  removeTag,
 }) {
   const navigate = useNavigate();
 
@@ -70,6 +74,10 @@ function MessengerPage({
         setNextPageLoading={setNextPageLoading}
         conversationsCount={conversationsCount}
         createTask={createTask}
+        tags={tags}
+        createTag={createTag}
+        addTag={addTag}
+        removeTag={removeTag}
       />
     </div>
   );
