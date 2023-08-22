@@ -199,7 +199,7 @@ export const useChat = (roomId) => {
 
     socketRef.current.on('status:updated', (updatedStatus) => {
       setStatuses((prevStatuses) =>
-        prevStatuses.map((status) =>
+        prevStatuses?.map((status) =>
           status.value === updatedStatus.value ? updatedStatus : status
         )
       );
@@ -236,7 +236,7 @@ export const useChat = (roomId) => {
 
     socketRef.current.on('status:conversation', async (conversationTmp) => {
       setConversations((prevConversations) =>
-        prevConversations.map((conversation) => {
+        prevConversations?.map((conversation) => {
           if (conversation?._id === conversationTmp?._id) {
             return conversationTmp;
           }
@@ -245,11 +245,11 @@ export const useChat = (roomId) => {
       );
 
       setStatuses((prevStatuses) =>
-        prevStatuses.map((stage) => {
+        prevStatuses?.map((stage) => {
           // Проверяем, совпадает ли stage текущего элемента stages с искомым
           if (stage?.value === conversationTmp?.stage?.value) {
             // Если да, используем метод map для перебора conversations внутри текущего stage
-            const updatedConversations = stage.conversations.map(
+            const updatedConversations = stage?.conversations?.map(
               (conversation) => {
                 // Проверяем, совпадает ли stage текущего conversation с искомым
                 if (conversation._id === conversationTmp._id) {
@@ -283,7 +283,7 @@ export const useChat = (roomId) => {
   useEffect(() => {
     socketRef.current.on('status:load', (updatedStatus) => {
       setStatuses((prevStatuses) =>
-        prevStatuses.map((status) =>
+        prevStatuses?.map((status) =>
           status.value === updatedStatus.value ? updatedStatus : status
         )
       );
