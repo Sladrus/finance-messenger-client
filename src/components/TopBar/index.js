@@ -19,6 +19,7 @@ const TopBar = ({
   dateRange,
   setDateRange,
   setConversation,
+  tags,
 }) => {
   const handleSelectChangeUser = (data) => {
     setFilter((prev) => ({ ...prev, user: data.value }));
@@ -38,6 +39,7 @@ const TopBar = ({
     setConversation(null);
   };
 
+  // console.log(filter);
   const handleSelectChangeTags = (data) => {
     // console.log(data);
     setFilter((prev) => ({ ...prev, tags: data }));
@@ -58,6 +60,13 @@ const TopBar = ({
     ...managers.map((manager) => ({
       value: manager._id,
       label: manager.username,
+    })),
+  ];
+
+  const tagsOptions = [
+    ...tags.map((tag) => ({
+      value: tag._id,
+      label: tag.value,
     })),
   ];
 
@@ -389,7 +398,7 @@ const TopBar = ({
         onChange={handleSelectChangeTags}
         label={'Тэги'}
         placeholder={'Выберите теги из списка...'}
-        options={[]}
+        options={[...tagsOptions]}
       />
       <FilterSingleSelect
         onChange={handleSelectChangeTask}

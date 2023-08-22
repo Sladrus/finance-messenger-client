@@ -235,8 +235,9 @@ const BoardPageItem = ({
           }}
         >
           <div>
-            {task?.tags?.map((tag) => (
+            {task?.tags?.map((tag, index) => (
               <span
+                key={index}
                 style={{
                   display: 'inline-block',
                   padding: '2px 4px',

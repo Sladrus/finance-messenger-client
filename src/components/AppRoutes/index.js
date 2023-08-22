@@ -96,6 +96,7 @@ const AppRoutes = () => {
             dateRange={dateRange}
             setDateRange={setDateRange}
             setConversation={setConversation}
+            tags={tags}
           />
         )}
 

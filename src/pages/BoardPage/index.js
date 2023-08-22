@@ -158,8 +158,14 @@ const BoardPage = ({
                   }
                   return true; // Возвращать все разговоры по умолчанию
                 });
+          })
+          .filter((conversation) => {
+            return filter?.tags?.length === 0
+              ? true
+              : conversation?.tags?.some((tag) =>
+                  filter.tags.some((filterTag) => filterTag.label === tag.value)
+                );
           });
-
         return { ...stage, conversations: filteredConversations };
       });
     setBoardSections(initializeBoard(filteredStages));

@@ -21,6 +21,7 @@ export const useChat = (roomId) => {
     stage: '',
     unread: '',
     task: '',
+    tags: [],
   });
   const [user, setUser] = useState();
   const [tasks, setTasks] = useState([]);
