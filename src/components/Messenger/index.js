@@ -51,7 +51,7 @@ export default function Messenger({
 }) {
   const handleButtonClick = (id) => {
     setSelectedConversation(id);
-    setConversation(null);
+    if (conversation?.chat_id !== id) setConversation(null);
   };
 
   const [isExpanded, setIsExpanded] = useState(false);

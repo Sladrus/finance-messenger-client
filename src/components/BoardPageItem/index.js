@@ -53,7 +53,7 @@ const BoardPageItem = ({
   const navigateToConversation = (chat_id) => {
     navigate('/messenger');
     setSelectedConversation(chat_id);
-    setConversation(null);
+    if (task?.chat_id !== chat_id) setConversation(null);
   };
 
   function close() {
