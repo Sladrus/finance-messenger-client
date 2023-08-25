@@ -6,9 +6,12 @@ import interactionPlugin from '@fullcalendar/interaction'; // needed for dayClic
 
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const TaskPage = ({ tasks }) => {
+const TaskPage = ({ tasks, setSelectedConversation }) => {
   const [events, setEvents] = useState([]);
+  const navigate = useNavigate();
+
   console.log(tasks);
   useEffect(() => {
     setEvents(
@@ -22,6 +25,8 @@ const TaskPage = ({ tasks }) => {
 
   const handleDateClick = (arg) => {
     console.log(arg.event);
+    navigate('/messenger');
+    setSelectedConversation(Number(arg.event.id));
   };
 
   return (

@@ -14,6 +14,49 @@
   height: 100%;
 }
 
+.fc-event {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  cursor: pointer;
+}
+
+.fc-event:hover {
+  color: white;
+  background-color: #53abf3;
+}
+
 .fc-event-title {
+  order: 2;
   white-space: normal;
+}
+
+.fc-event-time {
+  order: 1; /* порядок элемента - задайте нужное значение */
+}
+
+.fc-daygrid-event-dot {
+  margin: 0;
+  display: none;
+}
+
+.fc-daygrid-day-frame {
+  overflow: auto;
+  margin: 0;
+  height: 100px;
+}
+
+.fc-scrollgrid-sync-inner::-webkit-scrollbar {
+  background: transparent;
+  width: 5px; /* Ширина скроллбара */
+}
+
+.fc-scrollgrid-sync-inner::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fc-scrollgrid-sync-inner::-webkit-scrollbar-thumb {
+  background: #778d9f57;
+  border-radius: 10px;
 }

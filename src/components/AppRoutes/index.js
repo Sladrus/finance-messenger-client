@@ -67,7 +67,7 @@ const AppRoutes = () => {
   } = useChat(selectedConversation);
   const location = useLocation();
   const navigate = useNavigate();
-
+  console.log(selectedConversation);
   useEffect(() => {
     if (location.pathname === '/') return navigate('/messenger');
 
