@@ -45,6 +45,32 @@ const TaskPage = ({ tasks, setSelectedConversation }) => {
           }}
           eventClick={handleDateClick}
         />
+        {/* <div
+          style={{
+            padding: '25px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'start',
+            justifyContent: 'start',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '26px',
+              fontWeight: 600,
+              marginBottom: '20px',
+            }}
+          >
+            Список задач
+          </span>
+          <div>
+            {tasks?.map((task) => (
+              <div key={task._id}>
+                <span>{task.text}</span>
+              </div>
+            ))}
+          </div>
+        </div> */}
       </div>
     </div>
   );
