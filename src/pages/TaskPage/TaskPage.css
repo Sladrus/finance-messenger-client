@@ -1,15 +1,19 @@
 .calendar-container {
   display: flex;
-  /* min-height: 100%; */
-  /* width: 100%; */
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   color: white;
-  margin: 20px;
+  width: 100%;
+  height: 100%;
 }
 
 .fc {
-  width: 1200px;
-  height: 850px;
+  padding: 25px;
+  width: 1000px;
+  height: 100%;
+}
+
+.fc-event-title {
+  white-space: normal;
 }

@@ -82,7 +82,6 @@ const AppRoutes = () => {
           display: 'flex',
           flexDirection: 'column',
           width: 'calc(100% - 85px)',
-          minHeight: '100%',
         }}
       >
         {location.pathname !== '/auth' && (

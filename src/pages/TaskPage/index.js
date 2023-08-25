@@ -25,7 +25,7 @@ const TaskPage = ({ tasks }) => {
   };
 
   return (
-    <div style={{ height: '100%', width: '100%' }}>
+    <div style={{ height: 'calc(100% - 66px)' }}>
       <div className="calendar-container">
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}
@@ -38,7 +38,6 @@ const TaskPage = ({ tasks }) => {
             omitZeroMinute: false,
             hour12: false,
           }}
-          // dateClick={handleDateClick}
           eventClick={handleDateClick}
         />
       </div>

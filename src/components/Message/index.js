@@ -47,7 +47,9 @@ export default function Message({
     if (data.type === 'photo') {
       // Запрос для получения ссылки на фото с помощью getFile
       fetch(
-        `https://api.telegram.org/bot${token}/getFile?file_id=${data?.photo[data?.photo?.length - 1]?.file_id}`
+        `https://api.telegram.org/bot${token}/getFile?file_id=${
+          data?.photo[data?.photo?.length - 1]?.file_id
+        }`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -133,15 +135,6 @@ export default function Message({
           >
             {data.text}
           </pre>
-
-          {/* <div
-            style={{
-              display: 'flex',
-            }}
-            className="bubble-time"
-          >
-            <span>{formattedDate}</span>
-          </div> */}
         </div>
       )}
       <div
@@ -165,12 +158,21 @@ export default function Message({
         {data.type === 'photo' && (
           <>
             <div className="bubble-photo">
-              <img
-                className="message-photo"
-                src={photoUrl}
-                alt={photoUrl}
-                // onClick={handleClickPhoto}
-              />
+              {photoUrl ? (
+                <img
+                  className="message-photo"
+                  src={photoUrl}
+                  alt={photoUrl}
+                />
+              ) : (
+                <ClipLoader
+                  color={'#729bbd'}
+                  loading={true}
+                  size={20}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              )}
               {data.text && (
                 <div
                   style={{
@@ -199,20 +201,6 @@ export default function Message({
                   width: '100%',
                 }}
               >
-                {/* <div className="bubble-title">
-                  {!isMine && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <span style={{ color }} className="bubble-name">
-                        {data.from.first_name}
-                      </span>
-                    </div>
-                  )}
-                </div> */}
                 {documentUrl && (
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <FontAwesomeIcon
