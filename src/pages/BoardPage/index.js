@@ -102,13 +102,8 @@ const BoardPage = ({
           .filter((conversation) => {
             const conversationDate = new Date(conversation?.workAt);
             const startDate = new Date(dateRange[0].startDate);
-            const conversationDay = new Date(conversationDate).getDate();
-            const startDay = new Date(startDate).getDate();
             const endDate = new Date(dateRange[0].endDate);
-            return (
-              (conversationDate >= startDate && conversationDate <= endDate) ||
-              startDay === conversationDay
-            );
+            return conversationDate >= startDate && conversationDate <= endDate;
           })
           .filter((conversation) => {
             // console.log(filter);
